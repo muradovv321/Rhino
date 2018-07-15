@@ -1,0 +1,43 @@
+{
+  "project_info": {
+    "project_number": "128005929221",
+    "firebase_url": "https://remote-job.firebaseio.com",
+    "project_id": "remote-job",
+    "storage_bucket": "remote-job.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:128005929221:android:f637cbde55bd6178",
+        "android_client_info": {
+          "package_name": "app.ogasimli.remoter.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id":
+            "128005929221-2mu46plki7i3l0um50l9cv8iq54lklmh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDw_vuFMMfwmb0X9_1TL6bQlVTsJagW2Dc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
