@@ -1,4 +1,5 @@
-<p align="center"><img src="logo/512px.png" alt="wifiauto" height="200px"></p>
+<p align="center"><img src="./misc/images/logo/256px_w.png" alt="app logo" height="200px" align="center"></p>
 
 # Remoter
+
 Android app intended for remote job search
