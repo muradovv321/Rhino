@@ -68,6 +68,10 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 androidExtensions {
@@ -81,7 +85,7 @@ ext {
     espressoVersion = '3.1.0-alpha3'
     ankoVersion = '0.10.3'
     androidXVersion = '1.0.0-beta01'
-    daggerVersion = '2.13'
+    daggerVersion = '2.16'
     roomVersion = '2.0.0-beta01'
     retrofitVersion = '2.3.0'
     glideVersion = '4.7.1'
