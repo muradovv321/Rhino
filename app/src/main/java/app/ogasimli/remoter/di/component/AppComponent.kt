@@ -7,13 +7,14 @@
 
 package app.ogasimli.remoter.di.component
 
+import android.app.Application
 import app.ogasimli.remoter.app.RemoterApp
 import app.ogasimli.remoter.di.module.ActivityBuilderModule
 import app.ogasimli.remoter.di.module.AppModule
 import app.ogasimli.remoter.di.module.ViewModelModule
 import app.ogasimli.remoter.di.scope.ApplicationScope
+import dagger.BindsInstance
 import dagger.Component
-import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 
 /**
@@ -27,8 +28,15 @@ import dagger.android.support.AndroidSupportInjectionModule
     AppModule::class,
     ActivityBuilderModule::class,
     ViewModelModule::class])
-interface AppComponent: AndroidInjector<RemoterApp> {
+interface AppComponent {
 
     @Component.Builder
-    abstract class Builder: AndroidInjector.Builder<RemoterApp>()
+    interface Builder {
+        @BindsInstance
+        fun application(application: Application): Builder
+
+        fun build(): AppComponent
+    }
+
+    fun inject(app: RemoterApp)
 }

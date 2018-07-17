@@ -11,6 +11,7 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -25,10 +26,14 @@ import kotlinx.android.parcel.Parcelize
 data class Job(
         @PrimaryKey
         val id: String,
+        val slug: String,
+        @SerializedName("epoch")
         val postingTime: Long,
+        @SerializedName("date")
         val postingDate: String,
-        val companyName: String,
+        val company: String,
         val position: String,
-        val description: String,
         val tags: List<String>,
+        val logo: String?,
+        val description: String,
         val url: String) : Parcelable

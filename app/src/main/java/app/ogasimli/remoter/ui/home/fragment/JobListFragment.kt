@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -18,9 +19,9 @@ import app.ogasimli.remoter.R
 import app.ogasimli.remoter.helper.utils.inflate
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.ui.base.BaseFragment
-import app.ogasimli.remoter.ui.home.HomeViewModel
 import app.ogasimli.remoter.ui.home.JobsAdapter
 import kotlinx.android.synthetic.main.fragment_job_list.*
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -36,7 +37,7 @@ class JobListFragment : BaseFragment() {
     @Inject
     lateinit var dummyJobList: List<Job>
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var viewModel: JobListViewModel
 
     @Inject
     lateinit var jobsAdapter: JobsAdapter
@@ -54,10 +55,6 @@ class JobListFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        homeViewModel = ViewModelProviders
-                .of(this, viewModelFactory)
-                .get(HomeViewModel::class.java)
-
         // Setup RecyclerView
         with(recycler_view) {
             setHasFixedSize(true)
@@ -65,6 +62,20 @@ class JobListFragment : BaseFragment() {
             adapter = jobsAdapter
         }
 
-        jobsAdapter.jobs = dummyJobList
+        viewModel = ViewModelProviders
+                .of(this, viewModelFactory)
+                .get(JobListViewModel::class.java)
+
+        viewModel.fetchJobs()
+
+        viewModel.jobList.observe(this, Observer {
+            it?.let {
+                Timber.i("repo count received  ${it.size}")
+                jobsAdapter.jobs = it
+            }
+        })
+
+
+//        jobsAdapter.jobs = dummyJobList
     }
 }

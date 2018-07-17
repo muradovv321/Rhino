@@ -28,7 +28,7 @@ class HomeActivity : BaseActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var viewModel: HomeViewModel
 
     private val mOnNavigationItemSelectedListener =
             BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -53,7 +53,7 @@ class HomeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        homeViewModel = ViewModelProviders
+        viewModel = ViewModelProviders
                 .of(this, viewModelFactory)
                 .get(HomeViewModel::class.java)
 

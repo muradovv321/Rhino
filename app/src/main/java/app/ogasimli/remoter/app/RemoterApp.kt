@@ -7,8 +7,9 @@
 
 package app.ogasimli.remoter.app
 
+import android.app.Activity
 import android.content.Context
-import androidx.multidex.MultiDex
+import androidx.multidex.MultiDexApplication
 import app.ogasimli.remoter.BuildConfig
 import app.ogasimli.remoter.di.component.DaggerAppComponent
 import app.ogasimli.remoter.helper.timber.DebugLogTree
@@ -16,20 +17,37 @@ import app.ogasimli.remoter.helper.timber.ReleaseLogTree
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 import dagger.android.AndroidInjector
-import dagger.android.support.DaggerApplication
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasActivityInjector
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Application class
  *
  * @author Orkhan Gasimli on 16.07.2018.
  */
-class RemoterApp : DaggerApplication() {
+class RemoterApp : MultiDexApplication(), HasActivityInjector {
+
+    @Inject
+    lateinit var activityInjector: DispatchingAndroidInjector<Activity>
 
     private lateinit var refWatcher: RefWatcher
 
+    companion object {
+        fun getRefWatcher(context: Context): RefWatcher =
+                (context.applicationContext as RemoterApp).refWatcher
+    }
+
+    override fun activityInjector(): AndroidInjector<Activity> {
+        return activityInjector
+    }
+
     override fun onCreate() {
         super.onCreate()
+
+        // Inject Dagger
+        injectDagger()
 
         // Plant Timber
         plantTimber()
@@ -38,17 +56,15 @@ class RemoterApp : DaggerApplication() {
         initLeakCanary()
     }
 
-    override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base)
-        // Enable MultiDex
-        MultiDex.install(this)
-    }
-
     /**
-     * Injects DaggerAppComponent
+     * Helper method to inject DaggerAppComponent
      */
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        return DaggerAppComponent.builder().create(this)
+    private fun injectDagger() {
+        DaggerAppComponent
+                .builder()
+                .application(this)
+                .build()
+                .inject(this)
     }
 
     /**
@@ -64,6 +80,7 @@ class RemoterApp : DaggerApplication() {
             Timber.plant(ReleaseLogTree())
         }
     }
+
     /**
      * Helper method to initialize LeakCanary.
      */
@@ -74,10 +91,5 @@ class RemoterApp : DaggerApplication() {
             return
         }
         refWatcher = LeakCanary.install(this)
-    }
-
-    companion object {
-        fun getRefWatcher(context: Context): RefWatcher =
-                (context.applicationContext as RemoterApp).refWatcher
     }
 }

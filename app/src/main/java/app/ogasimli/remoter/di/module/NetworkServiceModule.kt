@@ -7,26 +7,23 @@
 
 package app.ogasimli.remoter.di.module
 
-import android.app.Application
-import android.content.Context
-import app.ogasimli.remoter.di.qualifier.ApplicationContext
 import app.ogasimli.remoter.di.scope.ApplicationScope
+import app.ogasimli.remoter.model.data.api.JobsApiService
 import dagger.Module
 import dagger.Provides
+import retrofit2.Retrofit
 
 /**
- * DI Module providing app-level dependencies
+ * DI Module providing app-level network services
  *
- * @author Orkhan Gasimli on 16.07.2018.
+ * @author Orkhan Gasimli on 14.02.2018.
  */
-@Module(includes = [NetworkServiceModule::class])
-class AppModule {
+@Module(includes = [NetworkModule::class])
+class NetworkServiceModule {
 
-    /**
-     * Provide app context
-     */
     @ApplicationScope
     @Provides
-    @ApplicationContext
-    fun provideAppContext(app: Application): Context = app
+    fun provideJobsApiService(retrofit: Retrofit): JobsApiService {
+        return retrofit.create(JobsApiService::class.java)
+    }
 }

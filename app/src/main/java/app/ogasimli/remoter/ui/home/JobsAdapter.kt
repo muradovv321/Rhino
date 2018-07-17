@@ -65,7 +65,7 @@ class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
         fun bindJob(job: Job) {
 //            GlideApp.with(itemView).load(coin.imageUrl).into(itemView.coin_item_image)
             itemView.position.text = job.position
-            itemView.company_name.text = job.companyName
+            itemView.company_name.text = job.company
             itemView.job_description.text = job.description
             itemView.posting_date.text = "${job.postingDate.daysTillNow()} d"
         }
