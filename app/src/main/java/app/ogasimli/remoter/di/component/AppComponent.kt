@@ -7,23 +7,21 @@
 
 package app.ogasimli.remoter.di.component
 
-import android.app.Application
 import app.ogasimli.remoter.app.RemoterApp
 import app.ogasimli.remoter.di.module.ActivityBuilderModule
 import app.ogasimli.remoter.di.module.AppModule
 import app.ogasimli.remoter.di.module.ViewModelModule
-import dagger.BindsInstance
+import app.ogasimli.remoter.di.scope.ApplicationScope
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
-import javax.inject.Singleton
 
 /**
  * DI Component providing app-level dependencies
  *
  * @author Orkhan Gasimli on 16.07.2018.
  */
-@Singleton
+@ApplicationScope
 @Component(modules = [
     AndroidSupportInjectionModule::class,
     AppModule::class,
@@ -32,10 +30,5 @@ import javax.inject.Singleton
 interface AppComponent: AndroidInjector<RemoterApp> {
 
     @Component.Builder
-    interface Builder {
-        @BindsInstance
-        fun application(application: Application): Builder
-
-        fun build(): AppComponent
-    }
+    abstract class Builder: AndroidInjector.Builder<RemoterApp>()
 }

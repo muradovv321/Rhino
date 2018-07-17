@@ -7,11 +7,10 @@
 
 package app.ogasimli.remoter.ui.base
 
-import android.content.Context
-import androidx.fragment.app.Fragment
+import app.ogasimli.remoter.app.RemoterApp
 import com.squareup.leakcanary.RefWatcher
 import dagger.android.support.AndroidSupportInjection
-import javax.inject.Inject
+import dagger.android.support.DaggerFragment
 
 /**
  * Base class for all fragments.
@@ -22,19 +21,11 @@ import javax.inject.Inject
  *
  * @author Orkhan Gasimli on 23.02.2018.
  */
-abstract class BaseFragment: Fragment() {
-
-    @Inject
-    lateinit var refWatcher: RefWatcher
-
-    override fun onAttach(context: Context?) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
+abstract class BaseFragment: DaggerFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
         // Watch memory leaks
-        refWatcher.watch(this)
+        RemoterApp.getRefWatcher(context!!).watch(this)
     }
 }

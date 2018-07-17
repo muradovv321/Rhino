@@ -7,11 +7,16 @@
 
 package app.ogasimli.remoter.app
 
-import androidx.multidex.MultiDexApplication
+import android.content.Context
+import androidx.multidex.MultiDex
 import app.ogasimli.remoter.BuildConfig
 import app.ogasimli.remoter.di.component.DaggerAppComponent
 import app.ogasimli.remoter.helper.timber.DebugLogTree
 import app.ogasimli.remoter.helper.timber.ReleaseLogTree
+import com.squareup.leakcanary.LeakCanary
+import com.squareup.leakcanary.RefWatcher
+import dagger.android.AndroidInjector
+import dagger.android.support.DaggerApplication
 import timber.log.Timber
 
 /**
@@ -19,27 +24,31 @@ import timber.log.Timber
  *
  * @author Orkhan Gasimli on 16.07.2018.
  */
-class RemoterApp : MultiDexApplication() {
+class RemoterApp : DaggerApplication() {
+
+    private lateinit var refWatcher: RefWatcher
 
     override fun onCreate() {
         super.onCreate()
 
-        // Inject Dagger
-        injectDagger()
-
         // Plant Timber
         plantTimber()
+
+        //Initialize LeakCanary
+        initLeakCanary()
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        // Enable MultiDex
+        MultiDex.install(this)
     }
 
     /**
-     * Helper method to inject DaggerAppComponent
+     * Injects DaggerAppComponent
      */
-    private fun injectDagger() {
-        DaggerAppComponent
-                .builder()
-                .application(this)
-                .build()
-                .inject(this)
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        return DaggerAppComponent.builder().create(this)
     }
 
     /**
@@ -54,5 +63,21 @@ class RemoterApp : MultiDexApplication() {
         } else {
             Timber.plant(ReleaseLogTree())
         }
+    }
+    /**
+     * Helper method to initialize LeakCanary.
+     */
+    private fun initLeakCanary() {
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return
+        }
+        refWatcher = LeakCanary.install(this)
+    }
+
+    companion object {
+        fun getRefWatcher(context: Context): RefWatcher =
+                (context.applicationContext as RemoterApp).refWatcher
     }
 }

@@ -7,9 +7,8 @@
 
 package app.ogasimli.remoter.ui.base
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import dagger.android.AndroidInjection
+import dagger.android.support.DaggerAppCompatActivity
 
 /**
  * Base class for all activities.
@@ -19,11 +18,7 @@ import dagger.android.AndroidInjection
  *
  * @author Orkhan Gasimli on 23.02.2018.
  */
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : DaggerAppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        // Inject external dependencies
-        AndroidInjection.inject(this)
-        super.onCreate(savedInstanceState)
-    }
+
 }

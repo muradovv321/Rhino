@@ -11,7 +11,9 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import app.ogasimli.remoter.R
-import app.ogasimli.remoter.ui.base.BaseDiActivity
+import app.ogasimli.remoter.helper.utils.replaceFragment
+import app.ogasimli.remoter.ui.base.BaseActivity
+import app.ogasimli.remoter.ui.home.fragment.JobListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_home.*
 import javax.inject.Inject
@@ -21,7 +23,7 @@ import javax.inject.Inject
  *
  * @author Orkhan Gasimli on 17.07.2018.
  */
-class HomeActivity : BaseDiActivity() {
+class HomeActivity : BaseActivity() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -32,15 +34,15 @@ class HomeActivity : BaseDiActivity() {
             BottomNavigationView.OnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.navigation_home -> {
-                        message.setText(R.string.title_home)
+//                        message.setText(R.string.title_home)
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.navigation_dashboard -> {
-                        message.setText(R.string.title_dashboard)
+//                        message.setText(R.string.title_dashboard)
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.navigation_notifications -> {
-                        message.setText(R.string.title_notifications)
+//                        message.setText(R.string.title_notifications)
                         return@OnNavigationItemSelectedListener true
                     }
                 }
@@ -54,6 +56,13 @@ class HomeActivity : BaseDiActivity() {
         homeViewModel = ViewModelProviders
                 .of(this, viewModelFactory)
                 .get(HomeViewModel::class.java)
+
+        if (null == savedInstanceState) {
+            replaceFragment<JobListFragment>(
+                    R.id.home_fragment_container,
+                    JobListFragment.TAG,
+                    false)
+        }
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
