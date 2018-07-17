@@ -10,8 +10,11 @@ package app.ogasimli.remoter.di.module
 import android.app.Application
 import android.content.Context
 import app.ogasimli.remoter.di.scope.ApplicationScope
+import com.squareup.leakcanary.LeakCanary
+import com.squareup.leakcanary.RefWatcher
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 /**
  * DI Module providing app-level dependencies
@@ -27,4 +30,11 @@ class AppModule {
     @Provides
     @ApplicationScope
     fun provideAppContext(app: Application): Context = app
+
+    /**
+     * Provide {@link RefWatcher} for watching memory leaks
+     */
+    @Singleton
+    @Provides
+    fun provideRefWatcher(app: Application): RefWatcher = LeakCanary.install(app)
 }
