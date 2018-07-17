@@ -18,10 +18,6 @@ import app.ogasimli.remoter.di.component.DaggerAppComponent
  */
 class RemoterApp : MultiDexApplication() {
 
-    companion object {
-        lateinit var appComponent: AppComponent
-    }
-
     override fun onCreate() {
         super.onCreate()
 
@@ -33,10 +29,9 @@ class RemoterApp : MultiDexApplication() {
      * Helper method to inject DaggerAppComponent
      */
     private fun injectDagger() {
-        appComponent = DaggerAppComponent
+        DaggerAppComponent
                 .builder()
                 .application(this)
                 .build()
-        appComponent.inject(this)
     }
 }
