@@ -7,6 +7,7 @@
 
 package app.ogasimli.remoter.di.module
 
+import app.ogasimli.remoter.di.scope.ActivityScope
 import app.ogasimli.remoter.ui.home.HomeActivity
 import app.ogasimli.remoter.ui.home.HomeActivityModule
 import app.ogasimli.remoter.ui.home.HomeFragmentProviderModule
@@ -19,8 +20,9 @@ import dagger.android.ContributesAndroidInjector
  * @author Orkhan Gasimli on 16.07.2018.
  */
 @Module
-abstract class ActivityBuilder {
+abstract class ActivityBuilderModule {
 
+    @ActivityScope
     @ContributesAndroidInjector(modules = [
         HomeActivityModule::class,
         HomeFragmentProviderModule::class])

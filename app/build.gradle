@@ -14,14 +14,10 @@ android {
         applicationId "app.ogasimli.remoter"
         minSdkVersion 19
         targetSdkVersion 28
+        multiDexEnabled true
         versionCode rootProject.versionCode
         versionName "$rootProject.versionName"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
-            }
-        }
         vectorDrawables.useSupportLibrary = true
     }
     signingConfigs {
@@ -109,13 +105,13 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
-    implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
-
-    // Android-Debug-Database
-    debugImplementation 'com.amitshekhar.android:debug-db:1.0.3'
+//    implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+
+    // Multidex support
+    implementation 'com.android.support:multidex:1.0.3'
 
     // Kotlin Anko
     implementation "org.jetbrains.anko:anko-commons:$ankoVersion"
@@ -130,16 +126,21 @@ dependencies {
     implementation "androidx.gridlayout:gridlayout:$androidXVersion"
     implementation "androidx.constraintlayout:constraintlayout:2.0.0-alpha1"
 
+    // ViewModel and LiveData
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    implementation "android.arch.lifecycle:common-java8:1.1.1"
+    implementation "android.arch.lifecycle:reactivestreams:1.1.1"
+
     // Firebase Crashlytics
     implementation 'com.google.firebase:firebase-core:15.0.2'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
 
     // Dagger 2
     implementation "com.google.dagger:dagger:$daggerVersion"
+//    implementation "com.google.dagger:dagger-android:$daggerVersion"
     implementation "com.google.dagger:dagger-android-support:$daggerVersion"
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-    compileOnly 'javax.annotation:jsr250-api:1.0'
 
     // Room ORM
     implementation "androidx.room:room-runtime:$roomVersion"
@@ -149,6 +150,7 @@ dependencies {
     // RxJava/RxAndroid
     implementation 'io.reactivex.rxjava2:rxjava:2.1.7'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
@@ -177,6 +179,9 @@ dependencies {
     // LeakCanary
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+
+    // Android-Debug-Database
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.3'
 }
 
 // Ensure the no-op dependency is always used in JVM tests.

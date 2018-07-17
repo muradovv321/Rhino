@@ -7,31 +7,19 @@
 
 package app.ogasimli.remoter.app
 
-import android.app.Activity
-import android.app.Application
+import androidx.multidex.MultiDexApplication
 import app.ogasimli.remoter.di.component.AppComponent
 import app.ogasimli.remoter.di.component.DaggerAppComponent
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
-import javax.inject.Inject
 
 /**
  * Application class
  *
  * @author Orkhan Gasimli on 16.07.2018.
  */
-class RemoterApp : Application(), HasActivityInjector {
-
-    @Inject
-    lateinit var activityInjector: DispatchingAndroidInjector<Activity>
+class RemoterApp : MultiDexApplication() {
 
     companion object {
         lateinit var appComponent: AppComponent
-    }
-
-    override fun activityInjector(): AndroidInjector<Activity> {
-        return activityInjector
     }
 
     override fun onCreate() {
@@ -51,5 +39,4 @@ class RemoterApp : Application(), HasActivityInjector {
                 .build()
         appComponent.inject(this)
     }
-
 }

@@ -8,12 +8,25 @@
 package app.ogasimli.remoter.ui.home
 
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import app.ogasimli.remoter.R
 import app.ogasimli.remoter.ui.base.BaseDiActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_home.*
+import javax.inject.Inject
 
+/**
+ * Home screen activity
+ *
+ * @author Orkhan Gasimli on 17.07.2018.
+ */
 class HomeActivity : BaseDiActivity() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private lateinit var homeViewModel: HomeViewModel
 
     private val mOnNavigationItemSelectedListener =
             BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -37,6 +50,10 @@ class HomeActivity : BaseDiActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        homeViewModel = ViewModelProviders
+                .of(this, viewModelFactory)
+                .get(HomeViewModel::class.java)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }

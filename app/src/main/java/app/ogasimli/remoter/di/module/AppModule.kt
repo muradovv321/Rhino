@@ -9,7 +9,7 @@ package app.ogasimli.remoter.di.module
 
 import android.app.Application
 import android.content.Context
-import app.ogasimli.remoter.di.qualifier.ApplicationContext
+import app.ogasimli.remoter.di.scope.ApplicationScope
 import dagger.Module
 import dagger.Provides
 
@@ -25,6 +25,6 @@ class AppModule {
      * Provide app context
      */
     @Provides
-    @ApplicationContext
+    @ApplicationScope
     fun provideAppContext(app: Application): Context = app
 }
