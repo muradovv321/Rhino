@@ -81,6 +81,7 @@ ext {
     espressoVersion = '3.1.0-alpha3'
     ankoVersion = '0.10.3'
     androidXVersion = '1.0.0-beta01'
+    lifecycleVersion = '2.0.0-beta01'
     daggerVersion = '2.16'
     roomVersion = '2.0.0-beta01'
     retrofitVersion = '2.3.0'
@@ -127,9 +128,9 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:2.0.0-alpha1"
 
     // ViewModel and LiveData
-    implementation "android.arch.lifecycle:extensions:1.1.1"
-    implementation "android.arch.lifecycle:common-java8:1.1.1"
-    implementation "android.arch.lifecycle:reactivestreams:1.1.1"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams:$lifecycleVersion"
 
     // Firebase Crashlytics
     implementation 'com.google.firebase:firebase-core:15.0.2'
