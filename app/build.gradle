@@ -108,7 +108,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
     // Multidex support
-    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'androidx.multidex:multidex:2.0.0'
 
     // Kotlin Anko
     implementation "org.jetbrains.anko:anko-commons:$ankoVersion"
