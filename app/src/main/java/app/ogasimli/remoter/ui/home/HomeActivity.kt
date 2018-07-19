@@ -8,15 +8,13 @@
 package app.ogasimli.remoter.ui.home
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import app.ogasimli.remoter.R
 import app.ogasimli.remoter.helper.utils.replaceFragment
+import app.ogasimli.remoter.helper.utils.viewModelProvider
 import app.ogasimli.remoter.ui.base.BaseActivity
 import app.ogasimli.remoter.ui.home.fragment.JobListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_home.*
-import javax.inject.Inject
 
 /**
  * Home screen activity
@@ -24,9 +22,6 @@ import javax.inject.Inject
  * @author Orkhan Gasimli on 17.07.2018.
  */
 class HomeActivity : BaseActivity() {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var viewModel: HomeViewModel
 
@@ -53,9 +48,8 @@ class HomeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        viewModel = ViewModelProviders
-                .of(this, viewModelFactory)
-                .get(HomeViewModel::class.java)
+        // Bind ViewModel
+        viewModel = viewModelProvider(this, viewModelFactory)
 
         if (null == savedInstanceState) {
             replaceFragment<JobListFragment>(

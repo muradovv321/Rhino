@@ -7,10 +7,12 @@
 
 package app.ogasimli.remoter.ui.base
 
+import androidx.lifecycle.ViewModelProvider
 import app.ogasimli.remoter.app.RemoterApp
 import com.squareup.leakcanary.RefWatcher
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
 /**
  * Base class for all fragments.
@@ -22,6 +24,9 @@ import dagger.android.support.DaggerFragment
  * @author Orkhan Gasimli on 23.02.2018.
  */
 abstract class BaseFragment: DaggerFragment() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override fun onDestroy() {
         super.onDestroy()

@@ -12,14 +12,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import app.ogasimli.remoter.R
 import app.ogasimli.remoter.helper.utils.inflate
-import app.ogasimli.remoter.model.models.Job
+import app.ogasimli.remoter.helper.utils.viewModelProvider
 import app.ogasimli.remoter.ui.base.BaseFragment
-import app.ogasimli.remoter.ui.home.JobsAdapter
+import app.ogasimli.remoter.ui.home.fragment.adapter.JobsAdapter
 import kotlinx.android.synthetic.main.fragment_job_list.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -30,12 +28,6 @@ import javax.inject.Inject
  * @author Orkhan Gasimli on 17.07.2018.
  */
 class JobListFragment : BaseFragment() {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    @Inject
-    lateinit var dummyJobList: List<Job>
 
     private lateinit var viewModel: JobListViewModel
 
@@ -56,26 +48,35 @@ class JobListFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Setup RecyclerView
+        setupRecyclerView()
+
+        // Bind ViewModel
+        viewModel = viewModelProvider(this, viewModelFactory)
+
+        // Fetch jobs
+        viewModel.fetchJobs()
+
+        // Observe jobs LiveData
+        observeJobs()
+    }
+
+    /**
+     * Helper function to setup RecyclerView
+     */
+    private fun setupRecyclerView() {
         with(recycler_view) {
             setHasFixedSize(true)
             itemAnimator = DefaultItemAnimator()
             adapter = jobsAdapter
         }
+    }
 
-        viewModel = ViewModelProviders
-                .of(this, viewModelFactory)
-                .get(JobListViewModel::class.java)
-
-        viewModel.fetchJobs()
-
+    private fun observeJobs() {
         viewModel.jobList.observe(this, Observer {
             it?.let {
-                Timber.i("repo count received  ${it.size}")
+                Timber.d("${it.size} jobs received")
                 jobsAdapter.jobs = it
             }
         })
-
-
-//        jobsAdapter.jobs = dummyJobList
     }
 }

@@ -7,8 +7,10 @@
 
 package app.ogasimli.remoter.ui.base
 
+import androidx.lifecycle.ViewModelProvider
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
+import javax.inject.Inject
 
 /**
  * Base class for all activities.
@@ -20,5 +22,6 @@ import dagger.android.support.DaggerAppCompatActivity
  */
 abstract class BaseActivity : DaggerAppCompatActivity() {
 
-
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 }

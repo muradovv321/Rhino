@@ -25,6 +25,9 @@ class JobListViewModel @Inject constructor(private val dataManager: DataManager)
 
     var jobList: MutableLiveData<List<Job>> = MutableLiveData()
 
+    /**
+     * Fetches jobs, updates local DB and serves them
+     */
     fun fetchJobs() {
         compositeDisposable.add(dataManager.getJobList()
                 .subscribeOn(Schedulers.io())

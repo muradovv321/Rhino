@@ -5,22 +5,19 @@
  * Written by Orkhan Gasimli orkhan.gasimli@gmail.com in 2018.
  */
 
-package app.ogasimli.remoter.ui.home
+package app.ogasimli.remoter.ui.home.fragment.adapter
 
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.ogasimli.remoter.R
 import app.ogasimli.remoter.di.module.GlideApp
+import app.ogasimli.remoter.helper.utils.getFirstLetters
 import app.ogasimli.remoter.helper.utils.inflate
 import app.ogasimli.remoter.model.models.Job
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import kotlinx.android.synthetic.main.job_item_card.view.*
-import org.joda.time.DateTime
-import org.joda.time.DateTimeZone
-import org.joda.time.Days
-import org.joda.time.format.ISODateTimeFormat
 
 /**
  * Adapter class for RecyclerView displaying job list
@@ -50,8 +47,8 @@ class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
             View.OnClickListener,
             View.OnLongClickListener {
 
-        val colorGenerator = ColorGenerator.MATERIAL
-        val builder = TextDrawable.builder()
+        private val colorGenerator: ColorGenerator = ColorGenerator.MATERIAL
+        private val builder: TextDrawable.IBuilder = TextDrawable.builder()
                 .beginConfig()
                 .withBorder(4)
                 .endConfig()
@@ -72,10 +69,19 @@ class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
+        /**
+         * Binds jobs to the view
+         *
+         * @param job   {@link Job} item served to the adapter
+         */
         fun bindJob(job: Job) {
-            loadCompanyLogo(itemView, job)
+            // Load company logo
+            loadCompanyLogo(job)
+            // Bind position
             itemView.position.text = job.position
+            // Bind company name
             itemView.company_name.text = job.company
+            // Bind job description
             itemView.job_description.text = job.description
             itemView.posting_date.text = "${job.postingDate.daysTillNow()} d"
         }
@@ -89,21 +95,33 @@ class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
         }
 
         private fun loadCompanyLogo(itemView: View, job: Job) {
+        /**
+         * Loads company logo to the View
+         *
+         * @param job               {@link Job} item served to the adapter
+         */
+        private fun loadCompanyLogo(job: Job) {
+            // Generate placeholder image using TextDrawable
             val placeholder = generatePlaceholderImage(colorGenerator, builder, job.company)
+            // Load company logo via Glide
             GlideApp.with(itemView)
                     .load(job.logo)
                     .placeholder(placeholder)
                     .into(itemView.company_logo)
         }
 
+        /**
+         * Generates placeholder image for company logo
+         *
+         * @param colorGenerator    {@link ColorGenerator} color generator for image background
+         * @param builder           {@link TextDrawable.IBuilder} text drawable builder
+         * @param companyName       name of the company
+         */
         private fun generatePlaceholderImage(colorGenerator: ColorGenerator,
                                              builder: TextDrawable.IBuilder,
-                                             company: String): TextDrawable? {
-            val text = company
-                    .split(" ")
-                    .map { it[0].toUpperCase() }
-                    .joinToString("")
-            return builder.build(text, colorGenerator.getColor(company))
+                                             companyName: String): TextDrawable? {
+            val text = companyName.getFirstLetters()
+            return builder.build(text, colorGenerator.getColor(companyName))
         }
     }
 }
