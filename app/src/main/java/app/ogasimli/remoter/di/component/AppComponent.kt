@@ -11,6 +11,7 @@ import android.app.Application
 import app.ogasimli.remoter.app.RemoterApp
 import app.ogasimli.remoter.di.module.ActivityBuilderModule
 import app.ogasimli.remoter.di.module.AppModule
+import app.ogasimli.remoter.di.module.GlideModule
 import app.ogasimli.remoter.di.module.ViewModelModule
 import app.ogasimli.remoter.di.scope.ApplicationScope
 import dagger.BindsInstance
@@ -39,4 +40,6 @@ interface AppComponent {
     }
 
     fun inject(app: RemoterApp)
+
+    fun inject(glide: GlideModule)
 }

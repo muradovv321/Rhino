@@ -11,6 +11,7 @@ import android.app.Activity
 import android.content.Context
 import androidx.multidex.MultiDexApplication
 import app.ogasimli.remoter.BuildConfig
+import app.ogasimli.remoter.di.component.AppComponent
 import app.ogasimli.remoter.di.component.DaggerAppComponent
 import app.ogasimli.remoter.helper.timber.DebugLogTree
 import app.ogasimli.remoter.helper.timber.ReleaseLogTree
@@ -35,6 +36,9 @@ class RemoterApp : MultiDexApplication(), HasActivityInjector {
     private lateinit var refWatcher: RefWatcher
 
     companion object {
+
+        lateinit var appComponent: AppComponent
+
         fun getRefWatcher(context: Context): RefWatcher =
                 (context.applicationContext as RemoterApp).refWatcher
     }
@@ -60,11 +64,11 @@ class RemoterApp : MultiDexApplication(), HasActivityInjector {
      * Helper method to inject DaggerAppComponent
      */
     private fun injectDagger() {
-        DaggerAppComponent
+        appComponent = DaggerAppComponent
                 .builder()
                 .application(this)
                 .build()
-                .inject(this)
+        appComponent.inject(this)
     }
 
     /**
@@ -80,7 +84,6 @@ class RemoterApp : MultiDexApplication(), HasActivityInjector {
             Timber.plant(ReleaseLogTree())
         }
     }
-
     /**
      * Helper method to initialize LeakCanary.
      */
