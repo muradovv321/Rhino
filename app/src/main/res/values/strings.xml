@@ -11,4 +11,13 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="company_logo_content_description">Company Logo</string>
+
+    <!-- String resources for showing elapsed time since posting date -->
+    <string name="posting_sec">"> %d s"</string>
+    <string name="posting_min">> "%d min"</string>
+    <string name="posting_hour">> "%d h"</string>
+    <string name="posting_day">"> %d d"</string>
+    <string name="posting_week">"> %d w"</string>
+    <string name="posting_month">"> %d m"</string>
+    <string name="posting_year">"> %d y"</string>
 </resources>

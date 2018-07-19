@@ -14,6 +14,7 @@ import app.ogasimli.remoter.R
 import app.ogasimli.remoter.di.module.GlideApp
 import app.ogasimli.remoter.helper.utils.getFirstLetters
 import app.ogasimli.remoter.helper.utils.inflate
+import app.ogasimli.remoter.helper.utils.periodTillNow
 import app.ogasimli.remoter.model.models.Job
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
@@ -83,18 +84,10 @@ class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
             itemView.company_name.text = job.company
             // Bind job description
             itemView.job_description.text = job.description
-            itemView.posting_date.text = "${job.postingDate.daysTillNow()} d"
+            // Calculate and bind passed time since job posting
+            itemView.posting_date.text = periodTillNow(itemView.context, job.postingDate)
         }
 
-        fun String.daysTillNow(): Int {
-            val df = ISODateTimeFormat.dateTime()
-            val postingDay = DateTime().toDateTime(DateTimeZone.UTC)
-            val today = DateTime(DateTimeZone.UTC)
-            val passedDays = Days.daysBetween(postingDay, today)
-            return passedDays.days
-        }
-
-        private fun loadCompanyLogo(itemView: View, job: Job) {
         /**
          * Loads company logo to the View
          *
