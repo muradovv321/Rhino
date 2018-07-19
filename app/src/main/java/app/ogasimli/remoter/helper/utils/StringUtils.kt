@@ -17,5 +17,8 @@ package app.ogasimli.remoter.helper.utils
  * Extension function to extract first letters of words
  * capitalize and join them back to one string
  */
-fun String.getFirstLetters(): String =
-        this.split(" ").map { it[0].toUpperCase() }.joinToString("")
+fun String.getFirstLetters(): String {
+    // Return X if company name is blank
+    if (this.isBlank()) return "X"
+    return this.trim().split(" ").map { it[0].toUpperCase() }.joinToString("")
+}
