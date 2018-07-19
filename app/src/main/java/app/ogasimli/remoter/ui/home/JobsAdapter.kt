@@ -11,8 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.ogasimli.remoter.R
+import app.ogasimli.remoter.di.module.GlideApp
 import app.ogasimli.remoter.helper.utils.inflate
 import app.ogasimli.remoter.model.models.Job
+import com.amulyakhare.textdrawable.TextDrawable
+import com.amulyakhare.textdrawable.util.ColorGenerator
 import kotlinx.android.synthetic.main.job_item_card.view.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
@@ -47,6 +50,13 @@ class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
             View.OnClickListener,
             View.OnLongClickListener {
 
+        val colorGenerator = ColorGenerator.MATERIAL
+        val builder = TextDrawable.builder()
+                .beginConfig()
+                .withBorder(4)
+                .endConfig()
+                .rect()
+
         init {
             with(itemView) {
                 setOnClickListener(this@ViewHolder)
@@ -63,7 +73,7 @@ class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
         }
 
         fun bindJob(job: Job) {
-//            GlideApp.with(itemView).load(coin.imageUrl).into(itemView.coin_item_image)
+            loadCompanyLogo(itemView, job)
             itemView.position.text = job.position
             itemView.company_name.text = job.company
             itemView.job_description.text = job.description
@@ -76,6 +86,24 @@ class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
             val today = DateTime(DateTimeZone.UTC)
             val passedDays = Days.daysBetween(postingDay, today)
             return passedDays.days
+        }
+
+        private fun loadCompanyLogo(itemView: View, job: Job) {
+            val placeholder = generatePlaceholderImage(colorGenerator, builder, job.company)
+            GlideApp.with(itemView)
+                    .load(job.logo)
+                    .placeholder(placeholder)
+                    .into(itemView.company_logo)
+        }
+
+        private fun generatePlaceholderImage(colorGenerator: ColorGenerator,
+                                             builder: TextDrawable.IBuilder,
+                                             company: String): TextDrawable? {
+            val text = company
+                    .split(" ")
+                    .map { it[0].toUpperCase() }
+                    .joinToString("")
+            return builder.build(text, colorGenerator.getColor(company))
         }
     }
 }
