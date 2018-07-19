@@ -19,6 +19,15 @@ allprojects {
         jcenter()
         google()
         maven { url 'https://jitpack.io' }
+        // For downloading snapshot version of Glide
+        maven {
+            name 'glide-snapshot'
+            url 'http://oss.sonatype.org/content/repositories/snapshots'
+        }
+        // For TextDrawable library
+        maven {
+            url 'http://dl.bintray.com/amulyakhare/maven'
+        }
     }
 }
 
