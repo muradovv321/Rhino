@@ -19,7 +19,7 @@ import dagger.Provides
  *
  * @author Orkhan Gasimli on 16.07.2018.
  */
-@Module(includes = [NetworkServiceModule::class])
+@Module(includes = [NetworkServiceModule::class, RoomModule::class])
 class AppModule {
 
     /**
