@@ -29,11 +29,11 @@ class JobListViewModel @Inject constructor(private val dataManager: DataManager)
      * Fetches jobs, updates local DB and serves them
      */
     fun fetchJobs() {
-        compositeDisposable.add(dataManager.getJobList()
+        compositeDisposable.add(dataManager.getAllJobs()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { jobList.postValue(it) },
+                        { jobList.postValue(it.jobs) },
                         { Timber.e(it) }
                 )
         )

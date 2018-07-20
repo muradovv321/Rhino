@@ -10,6 +10,7 @@ package app.ogasimli.remoter.model.data.api
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.model.models.JobInfo
 import io.reactivex.Observable
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -26,7 +27,7 @@ interface JobsApiService {
      * @return              Observable holding the job list retrieved from API
      */
     @GET("jobs")
-    fun getJobList(): Observable<List<Job>>
+    fun getJobList(): Observable<Response<List<Job>>>
 
     /**
      * Request the additional job info

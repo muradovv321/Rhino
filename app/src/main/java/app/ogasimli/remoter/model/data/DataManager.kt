@@ -8,7 +8,6 @@
 package app.ogasimli.remoter.model.data
 
 import app.ogasimli.remoter.di.scope.ApplicationScope
-import app.ogasimli.remoter.model.data.api.JobsApiService
 import javax.inject.Inject
 
 /**
@@ -17,20 +16,14 @@ import javax.inject.Inject
  * @author Orkhan Gasimli on 17.07.2018.
  */
 @ApplicationScope
-class DataManager @Inject constructor(private val apiService: JobsApiService) {
+class DataManager @Inject constructor(private val jobRepository: JobRepository) {
 
-    /* ___________________ API ___________________*/
-    /**
-     * Request the list of remote jobs
-     *
-     * @return              Observable holding the job list retrieved from API
-     */
-    fun getJobList() = apiService.getJobList()
+    /* ___________________ Job ___________________*/
 
     /**
-     * Request the additional job info
+     * Request list of jobs from DB & API
      *
-     * @return              Observable holding the additional job info retrieved from API
+     * @return          Observable holding list of jobs retrieved from API or DB
      */
-    fun getJobInfo(url: String) = apiService.getJobInfo(url)
+    fun getAllJobs() = jobRepository.getAllJobs()
 }
