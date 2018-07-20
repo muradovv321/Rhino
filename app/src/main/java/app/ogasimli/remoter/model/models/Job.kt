@@ -21,7 +21,7 @@ import kotlinx.android.parcel.Parcelize
  * @author Orkhan Gasimli on 20.03.2018.
  */
 @Parcelize
-@Entity(tableName = "cars",
+@Entity(tableName = "jobs",
         // Index id fields and force them to be unique
         indices = [(Index(value = ["id"], unique = true))])
 data class Job(
