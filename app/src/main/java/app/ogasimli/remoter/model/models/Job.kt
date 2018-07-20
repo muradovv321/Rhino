@@ -8,6 +8,7 @@
 package app.ogasimli.remoter.model.models
 
 import android.os.Parcelable
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -36,4 +37,5 @@ data class Job(
         val tags: List<String>,
         val logo: String?,
         val description: String,
-        val url: String) : Parcelable
+        val url: String,
+        @Embedded var additionalInfo: JobInfo?) : Parcelable
