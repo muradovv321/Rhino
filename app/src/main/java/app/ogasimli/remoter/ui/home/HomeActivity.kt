@@ -52,10 +52,7 @@ class HomeActivity : BaseActivity() {
         viewModel = viewModelProvider(this, viewModelFactory)
 
         if (null == savedInstanceState) {
-            replaceFragment<JobListFragment>(
-                    R.id.home_fragment_container,
-                    JobListFragment.TAG,
-                    false)
+            replaceFragment<JobListFragment>(R.id.home_fragment_container, false)
         }
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)

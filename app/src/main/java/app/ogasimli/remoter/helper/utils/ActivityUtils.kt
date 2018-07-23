@@ -34,14 +34,15 @@ fun AppCompatActivity.currentFragmentOf(@IdRes resId: Int): Fragment? {
  * Helper method to replace fragments
  *
  * @param resId             resource id of container
- * @param tag               the tag of the fragment
  * @param addToBackStack    boolean indicating the necessity to add the fragment to back-stack
+ * @param params            additional data that should be passed into Fragment
+ * @param tag               the tag of the fragment
  */
 inline fun <reified T : Fragment> AppCompatActivity.replaceFragment(
         @IdRes resId: Int,
-        tag: String?,
         addToBackStack: Boolean = true,
-        vararg params: Pair<String, Any>) {
+        vararg params: Pair<String, Any>,
+        tag: String? = T::class.java.simpleName) {
 
     Handler().postDelayed({
         val ft = this.supportFragmentManager.beginTransaction()

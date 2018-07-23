@@ -34,11 +34,6 @@ class JobListFragment : BaseFragment() {
     @Inject
     lateinit var jobsAdapter: JobsAdapter
 
-    companion object {
-        // Teg used for back-stack management
-        val TAG: String = JobListFragment::class.java.simpleName
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return container?.inflate(R.layout.fragment_job_list)
