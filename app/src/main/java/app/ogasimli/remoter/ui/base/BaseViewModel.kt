@@ -9,18 +9,20 @@ package app.ogasimli.remoter.ui.base
 
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
+import javax.inject.Inject
 
 /**
  * BaseViewModel class
  *
  * @author Orkhan Gasimli on 17.07.2018.
  */
-open class BaseViewModel: ViewModel() {
+open class BaseViewModel : ViewModel() {
 
-    var compositeDisposable: CompositeDisposable = CompositeDisposable()
+    @Inject
+    lateinit var disposable: CompositeDisposable
 
     override fun onCleared() {
         super.onCleared()
-        compositeDisposable.clear()
+        this.disposable.clear()
     }
 }

@@ -17,6 +17,7 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -28,7 +29,8 @@ import javax.inject.Inject
  * @author Orkhan Gasimli on 20.07.2018.
  */
 @ApplicationScope
-class JobRepository @Inject constructor(private val apiService: JobsApiService,
+class JobRepository @Inject constructor(private val disposable: CompositeDisposable,
+                                        private val apiService: JobsApiService,
                                         private val jobDao: JobDao) {
 
     /**
