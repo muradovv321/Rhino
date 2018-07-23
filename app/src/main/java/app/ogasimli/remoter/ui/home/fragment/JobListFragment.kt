@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.ogasimli.remoter.R
 import app.ogasimli.remoter.helper.utils.inflate
 import app.ogasimli.remoter.helper.utils.viewModelProvider
@@ -27,7 +28,7 @@ import javax.inject.Inject
  *
  * @author Orkhan Gasimli on 17.07.2018.
  */
-class JobListFragment : BaseFragment() {
+class JobListFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var viewModel: JobListViewModel
 
@@ -48,11 +49,19 @@ class JobListFragment : BaseFragment() {
         // Bind ViewModel
         viewModel = viewModelProvider(this, viewModelFactory)
 
+        // Set refresh listener
+        swipe_refresh_layout.setOnRefreshListener(this)
+
         // Fetch jobs
-        viewModel.fetchJobs()
+        fetchJobs()
 
         // Observe jobs LiveData
         observeJobs()
+    }
+
+    // Callback function called when refreshing is triggered
+    override fun onRefresh() {
+        fetchJobs()
     }
 
     /**
@@ -66,12 +75,44 @@ class JobListFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Helper function to fetch jobs
+     */
+    private fun fetchJobs() {
+        // Show loading
+        showLoadingView()
+        // Fetch jobs
+        viewModel.fetchJobs()
+    }
+
+    /**
+     * Helper function to observe jobs LiveData
+     */
     private fun observeJobs() {
         viewModel.jobList.observe(this, Observer {
             it?.let {
                 Timber.d("${it.size} jobs received")
                 jobsAdapter.jobs = it
             }
+            // Hide loading
+            hideLoadingView()
         })
+    }
+
+    /**
+     * Method to start SwipeRefreshLayout
+     */
+    private fun showLoadingView() {
+        if (!swipe_refresh_layout.isRefreshing) {
+            swipe_refresh_layout.isRefreshing = true
+        }
+    }
+
+    /**
+     * Method to cancel SwipeRefreshLayout
+     */    private fun hideLoadingView() {
+        if (swipe_refresh_layout.isRefreshing) {
+            swipe_refresh_layout.isRefreshing = false
+        }
     }
 }
