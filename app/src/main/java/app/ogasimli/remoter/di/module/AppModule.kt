@@ -13,6 +13,7 @@ import app.ogasimli.remoter.di.qualifier.ApplicationContext
 import app.ogasimli.remoter.di.scope.ApplicationScope
 import dagger.Module
 import dagger.Provides
+import io.reactivex.disposables.CompositeDisposable
 
 /**
  * DI Module providing app-level dependencies
@@ -23,10 +24,16 @@ import dagger.Provides
 class AppModule {
 
     /**
-     * Provide app context
+     * Provides app context
      */
     @ApplicationScope
     @Provides
     @ApplicationContext
     fun provideAppContext(app: Application): Context = app
+
+    /**
+     * Inject global CompositeDisposable
+     */
+    @Provides
+    fun provideCompositeDisposable() = CompositeDisposable()
 }
