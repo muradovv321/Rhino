@@ -16,7 +16,6 @@ import app.ogasimli.remoter.model.models.JobList
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -63,8 +62,6 @@ class JobRepository @Inject constructor(private val disposable: CompositeDisposa
                 //Drop DB data if we can fetch item fast enough from the API
                 //to avoid UI flickers
                 .debounce(400, TimeUnit.MILLISECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
     }
 
     /**
@@ -74,8 +71,6 @@ class JobRepository @Inject constructor(private val disposable: CompositeDisposa
      */
     private fun getAllJobsFromDb(): Flowable<JobList> {
         return jobDao.getAllJobs()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .filter { it.isNotEmpty() } // Filter empty results
                 .toObservable() // convert back to observable
                 .toFlowable(BackpressureStrategy.MISSING)
@@ -103,8 +98,6 @@ class JobRepository @Inject constructor(private val disposable: CompositeDisposa
      */
     private fun getAllJobsFromApi(): Flowable<JobList> {
         return apiService.getJobList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .filter { it.body() != null } // Filter results which has null body
                 .toFlowable(BackpressureStrategy.MISSING)
                 .map {
@@ -139,11 +132,21 @@ class JobRepository @Inject constructor(private val disposable: CompositeDisposa
      * @param jobs      list of all jobs fetched from API
      */
     private fun insertNewJobsToDb(jobs: List<Job>) {
-        Observable.fromCallable { jobDao.insertJob(*(jobs.toTypedArray())) }
+        disposable.add(Observable.fromCallable { jobDao.insertJob(*(jobs.toTypedArray())) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe { Timber.d("Inserted ${it.size} new jobs to DB...") }
-                .dispose()
+                .doOnComplete {
+                    disposable.clear()
+                }
+                .subscribe(
+                        {
+                            Timber.d("Inserted ${it.size} new jobs to DB...")
+                        },
+                        {
+                            Timber.e(it)
+                        }
+                )
+        )
     }
 
     /**
@@ -152,10 +155,20 @@ class JobRepository @Inject constructor(private val disposable: CompositeDisposa
      * @param jobs      list of all jobs fetched from API
      */
     private fun deleteOldJobsFromDb(jobs: List<Job>) {
-        Observable.fromCallable { jobDao.deleteOldJobs(jobs.map { it.id }) }
+        disposable.add(Observable.fromCallable { jobDao.deleteOldJobs(jobs.map { it.id }) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe { Timber.d("Deleted $it old jobs from DB...") }
-                .dispose()
+                .doOnComplete {
+                    disposable.clear()
+                }
+                .subscribe(
+                        {
+                            Timber.d("Deleted $it old jobs from DB...")
+                        },
+                        {
+                            Timber.e(it)
+                        }
+                )
+        )
     }
 }
