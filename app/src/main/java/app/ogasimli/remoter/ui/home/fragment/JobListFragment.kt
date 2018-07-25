@@ -17,8 +17,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.ogasimli.remoter.R
 import app.ogasimli.remoter.helper.utils.inflate
 import app.ogasimli.remoter.helper.utils.viewModelProvider
+import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.ui.base.BaseFragment
 import app.ogasimli.remoter.ui.home.fragment.adapter.JobsAdapter
+import app.ogasimli.remoter.ui.home.fragment.adapter.JobsAdapterCallback
 import kotlinx.android.synthetic.main.fragment_job_list.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -28,7 +30,7 @@ import javax.inject.Inject
  *
  * @author Orkhan Gasimli on 17.07.2018.
  */
-class JobListFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
+class JobListFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, JobsAdapterCallback {
 
     private lateinit var viewModel: JobListViewModel
 
@@ -114,5 +116,17 @@ class JobListFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         if (swipe_refresh_layout.isRefreshing) {
             swipe_refresh_layout.isRefreshing = false
         }
+    }
+    /* Callback functions invoked through JobsAdapter */
+    override fun onJobSaveClick(job: Job) {
+        viewModel.bookmarkJob(job)
+    }
+
+    override fun onDetailsClick(job: Job) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onApplyClick(job: Job) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

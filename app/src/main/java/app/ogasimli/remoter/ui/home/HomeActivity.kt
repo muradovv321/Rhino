@@ -28,16 +28,12 @@ class HomeActivity : BaseActivity() {
     private val mOnNavigationItemSelectedListener =
             BottomNavigationView.OnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
-                    R.id.navigation_home -> {
+                    R.id.bottom_nav_jobs -> {
 //                        message.setText(R.string.title_home)
                         return@OnNavigationItemSelectedListener true
                     }
-                    R.id.navigation_dashboard -> {
+                    R.id.bottom_nav_saved -> {
 //                        message.setText(R.string.title_dashboard)
-                        return@OnNavigationItemSelectedListener true
-                    }
-                    R.id.navigation_notifications -> {
-//                        message.setText(R.string.title_notifications)
                         return@OnNavigationItemSelectedListener true
                     }
                 }

@@ -29,6 +29,14 @@ interface JobDao {
     fun getAllJobs(): Flowable<List<Job>>
 
     /**
+     * Get all job data from the table.
+     *
+     * @return          the list of jobs retrieved from the table
+     */
+    @Query("SELECT * FROM jobs ORDER BY postingTime DESC")
+    fun getAllJobsInChronologicalOrder(): Flowable<List<Job>>
+
+    /**
      * Get data of a specific job from the table.
      *
      * @param jobId     id of the job to be deleted

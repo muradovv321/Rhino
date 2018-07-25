@@ -9,7 +9,13 @@ package app.ogasimli.remoter.ui.home.fragment.adapter
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.constraintlayout.widget.Group
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionManager
 import app.ogasimli.remoter.R
 import app.ogasimli.remoter.di.module.GlideApp
 import app.ogasimli.remoter.helper.utils.getFirstLetters
@@ -25,7 +31,22 @@ import kotlinx.android.synthetic.main.job_item_card.view.*
  *
  * @author Orkhan Gasimli on 17.07.2018.
  */
-class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
+class JobsAdapter(private val callback: JobsAdapterCallback) :
+        RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
+
+    private lateinit var viewGroup: ViewGroup
+    private var expandedPosition = -1
+    private var isExpanded = false
+
+    // {@link ColorGenerator} color generator for image background
+    private val colorGenerator: ColorGenerator = ColorGenerator.MATERIAL
+
+    // {@link TextDrawable.IBuilder} text drawable textBuilder
+    private val textBuilder: TextDrawable.IBuilder = TextDrawable.builder()
+            .beginConfig()
+            .withBorder(4)
+            .endConfig()
+            .rect()
 
     var jobs: List<Job> = emptyList()
         set(value) {
@@ -35,57 +56,67 @@ class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflatedView = parent.inflate(R.layout.job_item_card)
+        viewGroup = parent
         return ViewHolder(inflatedView)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindJob(jobs[position])
+        val job = jobs[position]
+        with(holder) {
+            // Load image resource of the save button
+            loadSaveButtonsImage(job, saveBtn)
+            // Attach ClickListener to save button
+            saveBtn?.setOnClickListener {
+                callback.onJobSaveClick(job)
+            }
+            // Load company logo
+            loadCompanyLogo(job)
+            // Bind position
+            positionName?.text = job.position
+            // Bind company name
+            companyName?.text = job.company
+            // Bind job description
+            jobDescription?.text = job.description
+            // Calculate and bind passed time since job posting
+            postingDate?.text = periodTillNow(itemView.context, job.postingDate)
+
+            isExpanded = position == expandedPosition
+            group?.visibility = if (isExpanded) View.VISIBLE else View.GONE
+            itemView.setOnClickListener {
+                expandedPosition = if (isExpanded) -1 else position
+                TransitionManager.beginDelayedTransition(viewGroup)
+                notifyItemChanged(position)
+            }
+        }
     }
 
     override fun getItemCount() = jobs.size
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-            View.OnClickListener,
-            View.OnLongClickListener {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val colorGenerator: ColorGenerator = ColorGenerator.MATERIAL
-        private val builder: TextDrawable.IBuilder = TextDrawable.builder()
-                .beginConfig()
-                .withBorder(4)
-                .endConfig()
-                .rect()
-
-        init {
-            with(itemView) {
-                setOnClickListener(this@ViewHolder)
-                setOnLongClickListener(this@ViewHolder)
-            }
-        }
-
-        override fun onClick(v: View?) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
-
-        override fun onLongClick(v: View?): Boolean {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
+        val positionName: TextView? = itemView.position
+        val companyName: TextView? = itemView.company_name
+        val postingDate: TextView? = itemView.posting_date
+        val jobDescription: TextView? = itemView.job_description
+        val logo: ImageView? = itemView.company_logo
+        val saveBtn: ImageButton? = itemView.save_btn
+        val detailsBtn: Button? = itemView.details_button
+        val applyBtn: Button? = itemView.apply_button
+        val group: Group? = itemView.group
 
         /**
-         * Binds jobs to the view
+         * Determine and set the image resource of the save button
          *
-         * @param job   {@link Job} item served to the adapter
+         * @param job               {@link Job} item served to the adapter
+         * @param button            button whose image resource will be set
          */
-        fun bindJob(job: Job) {
-            // Load company logo
-            loadCompanyLogo(job)
-            // Bind position
-            itemView.position.text = job.position
-            // Bind company name
-            itemView.company_name.text = job.company
-            // Bind job description
-            itemView.job_description.text = job.description
-            // Calculate and bind passed time since job posting
-            itemView.posting_date.text = periodTillNow(itemView.context, job.postingDate)
+        internal fun loadSaveButtonsImage(job: Job, button: ImageButton?) {
+            val saveBtnImg = if (job.isBookmarked) {
+                R.drawable.ic_menu_saved
+            } else {
+                R.drawable.ic_unsaved
+            }
+            button?.setImageResource(saveBtnImg)
         }
 
         /**
@@ -93,9 +124,9 @@ class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
          *
          * @param job               {@link Job} item served to the adapter
          */
-        private fun loadCompanyLogo(job: Job) {
+        internal fun loadCompanyLogo(job: Job) {
             // Generate placeholder image using TextDrawable
-            val placeholder = generatePlaceholderImage(colorGenerator, builder, job.company)
+            val placeholder = generatePlaceholderImage(job.company)
             // Load company logo via Glide
             GlideApp.with(itemView)
                     .load(job.logo)
@@ -106,15 +137,11 @@ class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
         /**
          * Generates placeholder image for company logo
          *
-         * @param colorGenerator    {@link ColorGenerator} color generator for image background
-         * @param builder           {@link TextDrawable.IBuilder} text drawable builder
          * @param companyName       name of the company
          */
-        private fun generatePlaceholderImage(colorGenerator: ColorGenerator,
-                                             builder: TextDrawable.IBuilder,
-                                             companyName: String): TextDrawable? {
+        private fun generatePlaceholderImage(companyName: String): TextDrawable? {
             val text = companyName.getFirstLetters()
-            return builder.build(text, colorGenerator.getColor(companyName))
+            return textBuilder.build(text, colorGenerator.getColor(companyName))
         }
     }
 }

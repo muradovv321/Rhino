@@ -33,8 +33,31 @@ class JobListViewModel @Inject constructor(private val dataManager: DataManager)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { jobList.postValue(it.jobs) },
-                        { Timber.e(it) }
+                        {
+                            jobList.postValue(it.jobs)
+                        },
+                        {
+                            Timber.e(it)
+                        }
+                )
+        )
+    }
+
+    /**
+     * Fetches jobs, updates local DB and serves them
+     */
+    fun bookmarkJob(job: Job) {
+        job.isBookmarked = !job.isBookmarked
+        disposable.add(dataManager.updateJob(job)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            Timber.d("${it.size} jobs updated in the DB...")
+                        },
+                        {
+                            Timber.e(it)
+                        }
                 )
         )
     }

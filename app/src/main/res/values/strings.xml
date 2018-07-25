@@ -7,10 +7,11 @@
 
 <resources>
     <string name="app_name">Remoter</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="company_logo_content_description">Company Logo</string>
+
+    <!-- Bottom Navigation menu string resources -->
+    <string name="bottom_nav_jobs">Jobs</string>
+    <string name="bottom_nav_saved">Saved</string>
 
     <!-- String resources for showing elapsed time since posting date -->
     <string name="posting_sec">"> %d s"</string>
@@ -20,4 +21,5 @@
     <string name="posting_week">"> %d w"</string>
     <string name="posting_month">"> %d m"</string>
     <string name="posting_year">"> %d y"</string>
+    <string name="job_save_btn_content_description">Button to save job</string>
 </resources>

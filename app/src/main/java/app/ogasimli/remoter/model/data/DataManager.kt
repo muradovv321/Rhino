@@ -8,6 +8,7 @@
 package app.ogasimli.remoter.model.data
 
 import app.ogasimli.remoter.di.scope.ApplicationScope
+import app.ogasimli.remoter.model.models.Job
 import javax.inject.Inject
 
 /**
@@ -26,4 +27,11 @@ class DataManager @Inject constructor(private val jobRepository: JobRepository) 
      * @return          Observable holding list of jobs retrieved from API or DB
      */
     fun getAllJobs() = jobRepository.getAllJobs()
+
+    /**
+     * Update job
+     *
+     * @return          Observable holding list of indexes of updated items
+     */
+    fun updateJob(vararg job: Job) = jobRepository.updateJob(*job)
 }

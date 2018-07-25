@@ -19,8 +19,7 @@ import dagger.Provides
  */
 @Module
 class JobListFragmentModule {
-
     @FragmentScope
     @Provides
-    fun provideJobsAdapter() = JobsAdapter()
+    fun provideJobsAdapter(fragment: JobListFragment) = JobsAdapter(fragment)
 }

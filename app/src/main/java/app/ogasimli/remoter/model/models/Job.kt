@@ -38,4 +38,5 @@ data class Job(
         val logo: String?,
         val description: String,
         val url: String,
-        @Embedded var additionalInfo: JobInfo?) : Parcelable
+        @Embedded var additionalInfo: JobInfo?,
+        var isBookmarked: Boolean = false) : Parcelable

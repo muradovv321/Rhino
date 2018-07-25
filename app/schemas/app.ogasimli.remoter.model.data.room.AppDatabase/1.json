@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c7bc99cc13ad20764d6f7a3c8d266a9a",
+    "identityHash": "44ab9bcdbb78d0750261c05c1d0d951a",
     "entities": [
       {
         "tableName": "jobs",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `slug` TEXT NOT NULL, `postingTime` INTEGER NOT NULL, `postingDate` TEXT NOT NULL, `company` TEXT NOT NULL, `position` TEXT NOT NULL, `tags` TEXT NOT NULL, `logo` TEXT, `description` TEXT NOT NULL, `url` TEXT NOT NULL, `jobDesc` TEXT, `applyInstruction` TEXT, `applyUrl` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `slug` TEXT NOT NULL, `postingTime` INTEGER NOT NULL, `postingDate` TEXT NOT NULL, `company` TEXT NOT NULL, `position` TEXT NOT NULL, `tags` TEXT NOT NULL, `logo` TEXT, `description` TEXT NOT NULL, `url` TEXT NOT NULL, `isBookmarked` INTEGER NOT NULL, `jobDesc` TEXT, `applyInstruction` TEXT, `applyUrl` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -69,6 +69,12 @@
             "notNull": true
           },
           {
+            "fieldPath": "isBookmarked",
+            "columnName": "isBookmarked",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
             "fieldPath": "additionalInfo.jobDesc",
             "columnName": "jobDesc",
             "affinity": "TEXT",
@@ -108,7 +114,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"c7bc99cc13ad20764d6f7a3c8d266a9a\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"44ab9bcdbb78d0750261c05c1d0d951a\")"
     ]
   }
 }

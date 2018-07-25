@@ -16,6 +16,7 @@ import app.ogasimli.remoter.model.models.JobList
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -38,9 +39,9 @@ class JobRepository @Inject constructor(private val disposable: CompositeDisposa
      * @return          Observable holding list of jobs retrieved from API or DB
      */
     fun getAllJobs(): Flowable<JobList> {
-        return Flowable.concatArray(
+        return Flowable.concatArrayEager(
                 getAllJobsFromDb(),
-                getAllJobsFromApi())
+                getAllJobsFromApi()
 /*              // wrap the observed object types into an observable Notification object
                 // on which we can check whether the onNext, onError and/or onComplete
                 // methods are called
@@ -62,7 +63,7 @@ class JobRepository @Inject constructor(private val disposable: CompositeDisposa
                 //Drop DB data if we can fetch item fast enough from the API
                 //to avoid UI flickers
                 .debounce(400, TimeUnit.MILLISECONDS)
-    }
+        )}
 
     /**
      * Request list of jobs from DB
@@ -70,10 +71,10 @@ class JobRepository @Inject constructor(private val disposable: CompositeDisposa
      * @return          Observable holding list of jobs retrieved from DB
      */
     private fun getAllJobsFromDb(): Flowable<JobList> {
-        return jobDao.getAllJobs()
+        return jobDao.getAllJobsInChronologicalOrder()
                 .filter { it.isNotEmpty() } // Filter empty results
                 .toObservable() // convert back to observable
-                .toFlowable(BackpressureStrategy.MISSING)
+                .toFlowable(BackpressureStrategy.BUFFER)
                 .map {
                     Timber.d("Mapping items to JobList...")
                     // Wrap list of jobs to JobList object
@@ -99,7 +100,7 @@ class JobRepository @Inject constructor(private val disposable: CompositeDisposa
     private fun getAllJobsFromApi(): Flowable<JobList> {
         return apiService.getJobList()
                 .filter { it.body() != null } // Filter results which has null body
-                .toFlowable(BackpressureStrategy.MISSING)
+                .toFlowable(BackpressureStrategy.BUFFER)
                 .map {
                     Timber.d("Mapping items to JobList...")
                     // Distinguish between cache response and network response
@@ -171,4 +172,12 @@ class JobRepository @Inject constructor(private val disposable: CompositeDisposa
                 )
         )
     }
+
+    /**
+     * Update job in the DB
+     *
+     * @param job       job that should be updated
+     * @return          Observable holding list of indexes of updated items
+     */
+    fun updateJob(vararg job: Job): Single<LongArray> = Single.fromCallable { jobDao.upsertJob(*job) }
 }
