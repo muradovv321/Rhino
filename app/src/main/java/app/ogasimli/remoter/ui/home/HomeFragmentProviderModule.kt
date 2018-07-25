@@ -8,8 +8,8 @@
 package app.ogasimli.remoter.ui.home
 
 import app.ogasimli.remoter.di.scope.FragmentScope
-import app.ogasimli.remoter.ui.home.fragment.JobListFragment
-import app.ogasimli.remoter.ui.home.fragment.JobListFragmentModule
+import app.ogasimli.remoter.ui.home.fragment.joblist.JobListFragment
+import app.ogasimli.remoter.ui.home.fragment.joblist.JobListFragmentModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

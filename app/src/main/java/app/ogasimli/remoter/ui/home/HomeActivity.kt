@@ -12,7 +12,7 @@ import app.ogasimli.remoter.R
 import app.ogasimli.remoter.helper.utils.replaceFragment
 import app.ogasimli.remoter.helper.utils.viewModelProvider
 import app.ogasimli.remoter.ui.base.BaseActivity
-import app.ogasimli.remoter.ui.home.fragment.JobListFragment
+import app.ogasimli.remoter.ui.home.fragment.joblist.JobListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_home.*
 

@@ -5,7 +5,7 @@
  * Written by Orkhan Gasimli orkhan.gasimli@gmail.com in 2018.
  */
 
-package app.ogasimli.remoter.ui.home.fragment
+package app.ogasimli.remoter.ui.home.fragment.joblist
 
 import app.ogasimli.remoter.di.scope.FragmentScope
 import app.ogasimli.remoter.ui.home.fragment.adapter.JobsAdapter
