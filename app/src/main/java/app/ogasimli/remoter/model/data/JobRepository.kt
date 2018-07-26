@@ -63,7 +63,8 @@ class JobRepository @Inject constructor(private val disposable: CompositeDisposa
                 //Drop DB data if we can fetch item fast enough from the API
                 //to avoid UI flickers
                 .debounce(400, TimeUnit.MILLISECONDS)
-        )}
+        )
+    }
 
     /**
      * Request list of jobs from DB
@@ -180,4 +181,28 @@ class JobRepository @Inject constructor(private val disposable: CompositeDisposa
      * @return          Observable holding list of indexes of updated items
      */
     fun updateJob(vararg job: Job): Single<LongArray> = Single.fromCallable { jobDao.upsertJob(*job) }
+
+    /**
+     * Request list of bookmarked jobs from DB
+     *
+     * @return          Observable holding list of bookmarked jobs retrieved from DB
+     */
+    fun getAllSavedJobs(): Flowable<JobList> {
+        return jobDao.getAllSavedJobs()
+                .map {
+                    Timber.d("Mapping items to JobList...")
+                    // Wrap list of jobs to JobList object
+                    JobList(it, DataSource.DB)
+                }
+                .onErrorReturn {
+                    Timber.e(it, "Error occurred while fetching from DB.")
+                    JobList(
+                            source = DataSource.DB,
+                            message = "Error occurred while fetching from DB.",
+                            error = it)
+                }
+                .doOnNext {
+                    Timber.d("Dispatching ${it.jobs.size} jobs from DB...")
+                }
+    }
 }

@@ -125,7 +125,6 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidXVersion"
     implementation "androidx.cardview:cardview:$androidXVersion"
     implementation "com.google.android.material:material:$androidXVersion"
-    implementation "androidx.gridlayout:gridlayout:$androidXVersion"
     implementation "androidx.constraintlayout:constraintlayout:2.0.0-alpha1"
 
     // ViewModel and LiveData

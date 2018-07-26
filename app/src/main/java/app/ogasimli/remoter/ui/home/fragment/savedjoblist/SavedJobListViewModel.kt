@@ -5,7 +5,7 @@
  * Written by Orkhan Gasimli orkhan.gasimli@gmail.com in 2018.
  */
 
-package app.ogasimli.remoter.ui.home.fragment.joblist
+package app.ogasimli.remoter.ui.home.fragment.savedjoblist
 
 import androidx.lifecycle.MutableLiveData
 import app.ogasimli.remoter.model.data.DataManager
@@ -17,19 +17,19 @@ import timber.log.Timber
 import javax.inject.Inject
 
 /**
- * ViewModel class JobListFragment
+ * ViewModel class SavedJobListFragment
  *
- * @author Orkhan Gasimli on 17.07.2018.
+ * @author Orkhan Gasimli on 26.07.2018.
  */
-class JobListViewModel @Inject constructor(private val dataManager: DataManager) : BaseViewModel() {
+class SavedJobListViewModel @Inject constructor(private val dataManager: DataManager) : BaseViewModel() {
 
     var jobList: MutableLiveData<List<Job>> = MutableLiveData()
 
     /**
-     * Fetches jobs, updates local DB and serves them
+     * Fetches saved jobs from DB
      */
     fun fetchJobs() {
-        disposable.add(dataManager.getAllJobs()
+        disposable.add(dataManager.getAllSavedJobs()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

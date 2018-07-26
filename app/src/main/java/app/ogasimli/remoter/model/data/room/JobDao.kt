@@ -37,6 +37,14 @@ interface JobDao {
     fun getAllJobsInChronologicalOrder(): Flowable<List<Job>>
 
     /**
+     * Get all bookmarked job items
+     *
+     * @return          the list of bookmarked jobs retrieved from the table
+     */
+    @Query("SELECT * FROM jobs WHERE isBookmarked = 1 ORDER BY postingTime DESC")
+    fun getAllSavedJobs(): Flowable<List<Job>>
+
+    /**
      * Get data of a specific job from the table.
      *
      * @param jobId     id of the job to be deleted

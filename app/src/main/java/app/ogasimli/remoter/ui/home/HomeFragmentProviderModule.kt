@@ -10,6 +10,8 @@ package app.ogasimli.remoter.ui.home
 import app.ogasimli.remoter.di.scope.FragmentScope
 import app.ogasimli.remoter.ui.home.fragment.joblist.JobListFragment
 import app.ogasimli.remoter.ui.home.fragment.joblist.JobListFragmentModule
+import app.ogasimli.remoter.ui.home.fragment.savedjoblist.SavedJobListFragment
+import app.ogasimli.remoter.ui.home.fragment.savedjoblist.SavedJobListFragmentModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -24,4 +26,8 @@ abstract class HomeFragmentProviderModule {
     @FragmentScope
     @ContributesAndroidInjector(modules = [JobListFragmentModule::class])
     abstract fun provideJobListFragment(): JobListFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = [SavedJobListFragmentModule::class])
+    abstract fun provideSavedJobListFragment(): SavedJobListFragment
 }

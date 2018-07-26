@@ -29,6 +29,13 @@ class DataManager @Inject constructor(private val jobRepository: JobRepository) 
     fun getAllJobs() = jobRepository.getAllJobs()
 
     /**
+     * Request list of bookmarked jobs from DB
+     *
+     * @return          Observable holding list of bookmarked jobs retrieved from DB
+     */
+    fun getAllSavedJobs() = jobRepository.getAllSavedJobs()
+
+    /**
      * Update job
      *
      * @return          Observable holding list of indexes of updated items
