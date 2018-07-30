@@ -112,9 +112,9 @@ class JobsAdapter(private val callback: JobsAdapterCallback) :
          */
         internal fun loadSaveButtonsImage(job: Job, button: ImageButton?) {
             val saveBtnImg = if (job.isBookmarked) {
-                R.drawable.ic_menu_saved
+                R.drawable.ic_tab_bookmarks
             } else {
-                R.drawable.ic_unsaved
+                R.drawable.ic_unbookmark
             }
             button?.setImageResource(saveBtnImg)
         }

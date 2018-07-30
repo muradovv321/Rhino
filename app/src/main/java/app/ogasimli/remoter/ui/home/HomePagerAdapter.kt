@@ -7,24 +7,30 @@
 
 package app.ogasimli.remoter.ui.home
 
+import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import app.ogasimli.remoter.R
 import app.ogasimli.remoter.helper.utils.instanceOf
 import app.ogasimli.remoter.ui.custom.SmartFragmentStatePagerAdapter
 import app.ogasimli.remoter.ui.home.fragment.joblist.JobListFragment
 import app.ogasimli.remoter.ui.home.fragment.savedjoblist.SavedJobListFragment
+
 
 /**
  * Custom ViewPagerAdapter class for HomeActivity
  *
  * @author Orkhan Gasimli on 26.07.2018.
  */
-class HomePagerAdapter(fragmentManager: FragmentManager) :
+class HomePagerAdapter(val context: Context, fragmentManager: FragmentManager) :
         SmartFragmentStatePagerAdapter(fragmentManager) {
 
     companion object {
         private const val NUM_ITEMS = 2
     }
+
+    // Tab Titles
+    private val tabTitles = intArrayOf(R.string.tab_jobs_title, R.string.tab_bookmarks_title)
 
     // Returns total number of pages
     override fun getCount(): Int {
@@ -40,4 +46,7 @@ class HomePagerAdapter(fragmentManager: FragmentManager) :
                 1 -> instanceOf<SavedJobListFragment>()
                 else -> null
             }
+
+    // Returns the title of the page
+    override fun getPageTitle(position: Int): CharSequence? = context.getString(tabTitles[position])
 }

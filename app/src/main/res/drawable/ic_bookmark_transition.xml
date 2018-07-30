@@ -7,6 +7,6 @@
   -->
 
 <transition xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/ic_unsaved" />
-    <item android:drawable="@drawable/ic_menu_saved" />
+    <item android:drawable="@drawable/ic_unbookmark" />
+    <item android:drawable="@drawable/ic_tab_bookmarks" />
 </transition>

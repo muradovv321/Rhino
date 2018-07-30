@@ -9,9 +9,9 @@
     <string name="app_name">Remoter</string>
     <string name="company_logo_content_description">Company Logo</string>
 
-    <!-- Bottom Navigation menu string resources -->
-    <string name="bottom_nav_jobs">Jobs</string>
-    <string name="bottom_nav_saved">Saved</string>
+    <!-- TabLayout string resources -->
+    <string name="tab_jobs_title">Jobs</string>
+    <string name="tab_bookmarks_title">Bookmarks</string>
 
     <!-- String resources for showing elapsed time since posting date -->
     <string name="posting_sec">"> %d s"</string>

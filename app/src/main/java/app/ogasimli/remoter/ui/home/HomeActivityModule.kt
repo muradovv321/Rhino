@@ -22,9 +22,10 @@ class HomeActivityModule {
 
     @ActivityScope
     @Provides
-    fun provideFragmentManager(homeActivity: HomeActivity) = homeActivity.supportFragmentManager
+    fun provideFragmentManager(homeActivity: HomeActivity) = homeActivity.supportFragmentManager!!
 
     @ActivityScope
     @Provides
-    fun providePagerAdapter(fragmentManager: FragmentManager) = HomePagerAdapter(fragmentManager)
+    fun providePagerAdapter(homeActivity: HomeActivity, fragmentManager: FragmentManager) =
+            HomePagerAdapter(homeActivity, fragmentManager)
 }
