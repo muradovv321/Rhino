@@ -21,9 +21,10 @@
     <string name="posting_week">"%dw+"</string>
     <string name="posting_month">"%dm+"</string>
     <string name="posting_year">"%dy+"</string>
+    <string name="company_name_and_period">%s • %s</string>
 
     <!-- Image content descriptions -->
-    <string name="job_save_btn_content_description">Button to save job</string>
+    <string name="job_bookmark_btn_content_description">Bookmark button</string>
     <string name="sort_btn_content_description">Sort Button</string>
 
     <!-- HomeActivity's string resources -->

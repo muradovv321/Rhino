@@ -17,6 +17,7 @@ import app.ogasimli.remoter.R
 import app.ogasimli.remoter.di.module.GlideApp
 import app.ogasimli.remoter.helper.utils.getFirstLetters
 import app.ogasimli.remoter.helper.utils.inflate
+import app.ogasimli.remoter.helper.utils.periodTillNow
 import app.ogasimli.remoter.model.models.Job
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
@@ -58,23 +59,23 @@ class JobsAdapter(private val callback: JobsAdapterCallback) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val job = jobs[position]
         with(holder) {
-            // Load image resource of the save button
-            loadSaveButtonsImage(job, saveBtn)
-            // Attach ClickListener to save button
-            saveBtn?.setOnClickListener {
-                callback.onJobSaveClick(job)
-            }
+            // Get context
+            val context = itemView.context
             // Load company logo
             loadCompanyLogo(job)
-            // Bind position
+            // Load image resource of the bookmark button
+            loadBookmarkButtonsImage(job, bookmarkBtn)
+            // Attach ClickListener to bookmark button
+            bookmarkBtn?.setOnClickListener {
+                callback.onJobSaveClick(job)
+            }
+            // Set position
             positionName?.text = job.position
-            // Bind company name
-            companyName?.text = job.company
-            // Bind job description
-//            jobDescription?.text = job.description
-            // Calculate and bind passed time since job posting
-//            postingDate?.text = periodTillNow(itemView.context, job.postingDate)
+            // Set company name and period
+            companyName?.text = context.getString(R.string.company_name_and_period,
+                    job.company, periodTillNow(context, job.postingDate))
 
+            // Attach ClickListener to CardView
             itemView.setOnClickListener {
 
             }
@@ -88,7 +89,7 @@ class JobsAdapter(private val callback: JobsAdapterCallback) :
         val positionName: TextView? = itemView.position
         val companyName: TextView? = itemView.company_name
         val logo: ImageView? = itemView.company_logo
-        val saveBtn: ImageButton? = itemView.bookmark_btn
+        val bookmarkBtn: ImageButton? = itemView.bookmark_btn
 
         /**
          * Determine and set the image resource of the save button
@@ -96,7 +97,7 @@ class JobsAdapter(private val callback: JobsAdapterCallback) :
          * @param job               {@link Job} item served to the adapter
          * @param button            button whose image resource will be set
          */
-        internal fun loadSaveButtonsImage(job: Job, button: ImageButton?) {
+        internal fun loadBookmarkButtonsImage(job: Job, button: ImageButton?) {
             val saveBtnImg = if (job.isBookmarked) {
                 R.drawable.ic_tab_bookmarks
             } else {

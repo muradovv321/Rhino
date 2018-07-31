@@ -65,8 +65,8 @@
                 android:id="@+id/company_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:ellipsize="end"
+                android:singleLine="true"
+                android:ellipsize="middle"
                 android:textAppearance="?attr/textAppearanceCaption"
                 android:fontFamily="@font/montserrat_alternates"
                 tools:text="O'Reilly Media • 16d+"/>
@@ -83,7 +83,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="@dimen/job_item_card_horizontal_margin_from_borders"
-            android:contentDescription="@string/job_save_btn_content_description"
+            android:contentDescription="@string/job_bookmark_btn_content_description"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
