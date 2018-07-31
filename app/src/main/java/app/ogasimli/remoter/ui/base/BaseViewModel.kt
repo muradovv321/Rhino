@@ -8,6 +8,7 @@
 package app.ogasimli.remoter.ui.base
 
 import androidx.lifecycle.ViewModel
+import app.ogasimli.remoter.helper.rx.RxBus
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
@@ -23,6 +24,16 @@ open class BaseViewModel : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
+        // Un-subscribe from bus events
+        RxBus.unregister(this)
+        // Clear disposable
         this.disposable.clear()
+    }
+
+    /**
+     * Base method to subscribe to RxEvents
+     */
+    open fun subscribeToEvents() {
+
     }
 }
