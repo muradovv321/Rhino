@@ -7,7 +7,9 @@
 
 package app.ogasimli.remoter.ui.base
 
+import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
+import app.ogasimli.remoter.helper.rx.RxBus
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -24,4 +26,23 @@ abstract class BaseActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Subscribe to events
+        subscribeToEvents()
+    }
+
+    /**
+     * Base method to subscribe to RxEvents
+     */
+    protected open fun subscribeToEvents() {
+
+    }
+
+    override fun onDestroy() {
+        // Un-subscribe from bus events
+        RxBus.unregister(this)
+        super.onDestroy()
+    }
 }

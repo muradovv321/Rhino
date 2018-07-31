@@ -12,4 +12,6 @@ package app.ogasimli.remoter.helper.rx
  *
  * @author Orkhan Gasimli on 31.07.2018.
  */
-class RxEvent(val type: EventType, val message: String = "")
+open class RxEvent(val type: EventType, val message: String = "")
+
+class JobsCountEvent(type: EventType, val count: Int, var isSearching: Boolean = false) : RxEvent(type)

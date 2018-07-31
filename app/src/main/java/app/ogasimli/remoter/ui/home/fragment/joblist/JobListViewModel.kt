@@ -8,6 +8,9 @@
 package app.ogasimli.remoter.ui.home.fragment.joblist
 
 import androidx.lifecycle.MutableLiveData
+import app.ogasimli.remoter.helper.rx.EventType
+import app.ogasimli.remoter.helper.rx.JobsCountEvent
+import app.ogasimli.remoter.helper.rx.RxBus
 import app.ogasimli.remoter.model.data.DataManager
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.ui.base.BaseViewModel
@@ -23,7 +26,7 @@ import javax.inject.Inject
  */
 class JobListViewModel @Inject constructor(private val dataManager: DataManager) : BaseViewModel() {
 
-    var jobList: MutableLiveData<List<Job>> = MutableLiveData()
+    var jobList = MutableLiveData<List<Job>>()
 
     /**
      * Fetches jobs, updates local DB and serves them
@@ -35,6 +38,7 @@ class JobListViewModel @Inject constructor(private val dataManager: DataManager)
                 .subscribe(
                         {
                             jobList.postValue(it.jobs)
+                            RxBus.publish(JobsCountEvent(EventType.OPEN_JOBS_COUNT, it.jobs.size))
                         },
                         {
                             Timber.e(it)
