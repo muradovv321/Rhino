@@ -130,7 +130,7 @@ class JobsAdapter(private val callback: JobsAdapterCallback) :
          * @param companyName       name of the company
          */
         private fun generatePlaceholderImage(companyName: String): TextDrawable? {
-            val text = companyName.getFirstLetters()
+            val text = companyName.getFirstLetters(2)
             return textBuilder.build(text, colorGenerator.getColor(companyName))
         }
     }
