@@ -70,7 +70,7 @@ class JobListFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, Jo
      * Helper function to setup RecyclerView
      */
     private fun setupRecyclerView() {
-        with(recycler_view) {
+        with(jobs_recycler_view) {
             setHasFixedSize(true)
             itemAnimator = DefaultItemAnimator()
             adapter = jobsAdapter

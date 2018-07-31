@@ -11,7 +11,6 @@ import android.os.Bundle
 import app.ogasimli.remoter.R
 import app.ogasimli.remoter.helper.utils.viewModelProvider
 import app.ogasimli.remoter.ui.base.BaseActivity
-import app.ogasimli.remoter.ui.custom.ZoomOutPageTransformer
 import kotlinx.android.synthetic.main.activity_home.*
 import javax.inject.Inject
 
@@ -34,6 +33,9 @@ class HomeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        // Set up the tool bar
+        setSupportActionBar(toolbar)
+
         // Bind ViewModel
         viewModel = viewModelProvider(this, viewModelFactory)
 
@@ -48,7 +50,7 @@ class HomeActivity : BaseActivity() {
     private fun setupViewPager() {
         with(view_pager) {
             adapter = pagerAdapter
-            setPageTransformer(true, ZoomOutPageTransformer())
+//            setPageTransformer(true, ZoomOutPageTransformer())
             tab_layout.setupWithViewPager(this)
             tabIcons.forEachIndexed { index, icon -> tab_layout.getTabAt(index)?.setIcon(icon) }
         }

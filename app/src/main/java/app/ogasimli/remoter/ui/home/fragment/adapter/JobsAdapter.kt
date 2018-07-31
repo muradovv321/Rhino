@@ -9,22 +9,23 @@ package app.ogasimli.remoter.ui.home.fragment.adapter
 
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.widget.Group
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.TransitionManager
 import app.ogasimli.remoter.R
 import app.ogasimli.remoter.di.module.GlideApp
 import app.ogasimli.remoter.helper.utils.getFirstLetters
 import app.ogasimli.remoter.helper.utils.inflate
-import app.ogasimli.remoter.helper.utils.periodTillNow
 import app.ogasimli.remoter.model.models.Job
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
+import com.bumptech.glide.load.resource.bitmap.CenterInside
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.job_item_card.view.*
+
+
 
 /**
  * Adapter class for RecyclerView displaying job list
@@ -35,18 +36,12 @@ class JobsAdapter(private val callback: JobsAdapterCallback) :
         RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
 
     private lateinit var viewGroup: ViewGroup
-    private var expandedPosition = -1
-    private var isExpanded = false
 
     // {@link ColorGenerator} color generator for image background
     private val colorGenerator: ColorGenerator = ColorGenerator.MATERIAL
 
     // {@link TextDrawable.IBuilder} text drawable textBuilder
-    private val textBuilder: TextDrawable.IBuilder = TextDrawable.builder()
-            .beginConfig()
-            .withBorder(4)
-            .endConfig()
-            .rect()
+    private val textBuilder: TextDrawable.IBuilder = TextDrawable.builder().roundRect(16)
 
     var jobs: List<Job> = emptyList()
         set(value) {
@@ -76,16 +71,12 @@ class JobsAdapter(private val callback: JobsAdapterCallback) :
             // Bind company name
             companyName?.text = job.company
             // Bind job description
-            jobDescription?.text = job.description
+//            jobDescription?.text = job.description
             // Calculate and bind passed time since job posting
-            postingDate?.text = periodTillNow(itemView.context, job.postingDate)
+//            postingDate?.text = periodTillNow(itemView.context, job.postingDate)
 
-            isExpanded = position == expandedPosition
-            group?.visibility = if (isExpanded) View.VISIBLE else View.GONE
             itemView.setOnClickListener {
-                expandedPosition = if (isExpanded) -1 else position
-                TransitionManager.beginDelayedTransition(viewGroup)
-                notifyItemChanged(position)
+
             }
         }
     }
@@ -96,13 +87,8 @@ class JobsAdapter(private val callback: JobsAdapterCallback) :
 
         val positionName: TextView? = itemView.position
         val companyName: TextView? = itemView.company_name
-        val postingDate: TextView? = itemView.posting_date
-        val jobDescription: TextView? = itemView.job_description
         val logo: ImageView? = itemView.company_logo
-        val saveBtn: ImageButton? = itemView.save_btn
-        val detailsBtn: Button? = itemView.details_button
-        val applyBtn: Button? = itemView.apply_button
-        val group: Group? = itemView.group
+        val saveBtn: ImageButton? = itemView.bookmark_btn
 
         /**
          * Determine and set the image resource of the save button
@@ -127,10 +113,14 @@ class JobsAdapter(private val callback: JobsAdapterCallback) :
         internal fun loadCompanyLogo(job: Job) {
             // Generate placeholder image using TextDrawable
             val placeholder = generatePlaceholderImage(job.company)
+            // Generate new RequestOptions to round image backgrounds
+            val glideOptions = RequestOptions()
+                    .transforms(CenterInside(), RoundedCorners(16))
             // Load company logo via Glide
             GlideApp.with(itemView)
                     .load(job.logo)
                     .placeholder(placeholder)
+                    .apply(glideOptions)
                     .into(itemView.company_logo)
         }
 

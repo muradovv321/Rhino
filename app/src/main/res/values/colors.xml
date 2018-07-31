@@ -7,7 +7,14 @@
   -->
 
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#933C60</color>
+    <color name="colorPrimaryDark">#620936</color>
+    <color name="colorAccent">#F3A358</color>
+    <color name="textColorPrimary">#000000</color>
+    <color name="textColorSecondary">#717579</color>
+    <color name="backDropColor">@color/colorPrimary</color>
+    <color name="backDropFrontColor">#F7F3F7</color>
+    <color name="backDropFrontHeaderColor">#FFFFFF</color>
+    <color name="backDropFrontHeaderBottomBorderColor">@color/backDropFrontColor</color>
+    <color name="controlElementsTextColor">#FFFFFF</color>
 </resources>

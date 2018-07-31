@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018 Orkhan Gasimli - All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited.
+  ~ This file is proprietary and confidential.
+  ~ Written by Orkhan Gasimli orkhan.gasimli@gmail.com in 2018.
+  -->
+
+<resources>
+    <style name="TextAppearance.Remoter.Toolbar" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textColor">@color/controlElementsTextColor</item>
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:letterSpacing">0.09</item>
+    </style>
+</resources>

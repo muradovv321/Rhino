@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018 Orkhan Gasimli - All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited.
+  ~ This file is proprietary and confidential.
+  ~ Written by Orkhan Gasimli orkhan.gasimli@gmail.com in 2018.
+  -->
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+    <View
+        android:id="@+id/header_background"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/backdrop_front_header_height"
+        android:background="@drawable/backdrop_front_header_background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/sort_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:srcCompat="@drawable/ic_sort"
+        android:tint="?attr/colorPrimary"
+        android:layout_marginEnd="@dimen/backdrop_front_header_horizontal_margin"
+        app:layout_constraintEnd_toEndOf="@+id/header_background"
+        android:layout_marginTop="@dimen/backdrop_front_header_vertical_margin"
+        app:layout_constraintTop_toTopOf="@+id/header_background"
+        android:layout_marginBottom="@dimen/backdrop_front_header_vertical_margin"
+        app:layout_constraintBottom_toBottomOf="@+id/header_background"
+        android:contentDescription="@string/sort_btn_content_description"/>
+
+    <TextView
+        android:id="@+id/header_info_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:fontFamily="@font/lato"
+        tools:text="395 Open Jobs"
+        android:layout_marginTop="@dimen/backdrop_front_header_vertical_margin"
+        app:layout_constraintTop_toTopOf="@+id/header_background"
+        android:layout_marginBottom="@dimen/backdrop_front_header_vertical_margin"
+        app:layout_constraintBottom_toBottomOf="@+id/header_background"
+        app:layout_constraintStart_toStartOf="@+id/header_background"
+        android:layout_marginStart="@dimen/backdrop_front_header_horizontal_margin"/>
+
+    <View
+        android:id="@+id/background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/backDropFrontColor"
+        app:layout_constraintTop_toBottomOf="@+id/header_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

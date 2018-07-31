@@ -9,4 +9,27 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- Dimens of HomeActivity -->
+    <dimen name="activity_home_appbar_elevation">0dp</dimen>
+    <dimen name="main_content_margin_top">16dp</dimen>
+    <dimen name="view_pager_margin_top">@dimen/backdrop_front_header_height</dimen>
+    <dimen name="jobs_recycler_views_padding">4dp</dimen>
+
+    <!-- Dimens of BackDrop -->
+    <dimen name="backdrop_front_header_height">40dp</dimen>
+    <dimen name="backdrop_front_elevation">8dp</dimen>
+    <dimen name="backdrop_front_header_horizontal_margin">@dimen/activity_horizontal_margin</dimen>
+    <dimen name="backdrop_front_header_vertical_margin">8dp</dimen>
+
+    <!-- Dimens of CardView and its child elements holding job items -->
+    <dimen name="job_item_card_height">80dp</dimen>
+    <dimen name="job_item_card_elevation">0dp</dimen>
+    <dimen name="job_item_card_corner_radius">6dp</dimen>
+    <dimen name="company_logo_width">40dp</dimen>
+    <dimen name="company_logo_height">40dp</dimen>
+    <dimen name="job_item_card_horizontal_margin_from_borders">12dp</dimen>
+    <dimen name="position_and_company_name_container_horizontal_margin">16dp</dimen>
+    <dimen name="bookmark_btn_width">28dp</dimen>
+    <dimen name="bookmark_btn_height">28dp</dimen>
 </resources>
