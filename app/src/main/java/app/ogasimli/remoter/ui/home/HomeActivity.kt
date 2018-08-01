@@ -67,14 +67,13 @@ class HomeActivity : BaseActivity() {
     private fun setupViewPager() {
         with(view_pager) {
             adapter = pagerAdapter
-//            setPageTransformer(true, ZoomOutPageTransformer())
             tab_layout.setupWithViewPager(this)
             tabIcons.forEachIndexed { index, icon -> tab_layout.getTabAt(index)?.setIcon(icon) }
             addOnPageChangeListener(pageChangeListener)
         }
     }
 
-    private val pageChangeListener = object: CustomPageChangeListener() {
+    private val pageChangeListener = object : CustomPageChangeListener() {
         override fun onPageSelected(position: Int) {
             setBackdropHeaderText()
         }

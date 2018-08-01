@@ -109,11 +109,11 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
 //    implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
 
-    // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-
     // Multidex support
     implementation 'androidx.multidex:multidex:2.0.0'
+
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
     // Kotlin Anko
     implementation "org.jetbrains.anko:anko-commons:$ankoVersion"
@@ -167,9 +167,6 @@ dependencies {
     }
     kapt "com.github.bumptech.glide:compiler:$glideVersion"
 
-    // TextDrawable
-    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-
     // OkHttp
     implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
@@ -179,6 +176,9 @@ dependencies {
 
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.0'
+
+    // TextDrawable
+    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 
     //Joda-Time
     implementation 'joda-time:joda-time:2.10'
