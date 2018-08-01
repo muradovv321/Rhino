@@ -19,6 +19,7 @@ import app.ogasimli.remoter.helper.utils.inflate
 import app.ogasimli.remoter.helper.utils.viewModelProvider
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.ui.base.BaseFragment
+import app.ogasimli.remoter.ui.home.HomeViewModel
 import app.ogasimli.remoter.ui.home.fragment.adapter.JobsAdapter
 import app.ogasimli.remoter.ui.home.fragment.adapter.JobsAdapterCallback
 import kotlinx.android.synthetic.main.fragment_job_list.*
@@ -32,7 +33,7 @@ import javax.inject.Inject
  */
 class JobListFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, JobsAdapterCallback {
 
-    private lateinit var viewModel: JobListViewModel
+    private lateinit var viewModel: HomeViewModel
 
     @Inject
     lateinit var jobsAdapter: JobsAdapter
@@ -49,7 +50,7 @@ class JobListFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, Jo
         setupRecyclerView()
 
         // Bind ViewModel
-        viewModel = viewModelProvider(this, viewModelFactory)
+        viewModel = viewModelProvider(activity!!, viewModelFactory)
 
         // Set refresh listener
         swipe_refresh_layout.setOnRefreshListener(this)
@@ -84,14 +85,14 @@ class JobListFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, Jo
         // Show loading
         showLoadingView()
         // Fetch jobs
-        viewModel.fetchJobs()
+        viewModel.fetchAllJobs()
     }
 
     /**
      * Helper function to observe jobs LiveData
      */
     private fun observeJobs() {
-        viewModel.jobList.observe(this, Observer {
+        viewModel.allJobList.observe(this, Observer {
             it?.let {
                 Timber.d("${it.size} jobs received")
                 jobsAdapter.jobs = it

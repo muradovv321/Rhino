@@ -8,44 +8,114 @@
 package app.ogasimli.remoter.ui.home
 
 import androidx.lifecycle.MutableLiveData
-import app.ogasimli.remoter.helper.rx.*
+import app.ogasimli.remoter.helper.rx.EventType
+import app.ogasimli.remoter.helper.rx.JobsCount
+import app.ogasimli.remoter.helper.rx.JobsCountEvent
+import app.ogasimli.remoter.model.data.DataManager
+import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.ui.base.BaseViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import org.jetbrains.anko.doAsync
+import timber.log.Timber
 import javax.inject.Inject
-
-class JobsCount {
-    var openJobs = 0
-    var bookmarkedJobs = 0
-    var isSearching = false
-}
 
 /**
  * ViewModel class HomeActivity
  *
  * @author Orkhan Gasimli on 17.07.2018.
  */
-class HomeViewModel @Inject constructor() : BaseViewModel() {
+class HomeViewModel @Inject constructor(private val dataManager: DataManager) : BaseViewModel() {
 
-    var jobsCount = MutableLiveData<JobsCount>()
+    val allJobList = MutableLiveData<List<Job>>()
+
+    val bookmarkedJobList = MutableLiveData<List<Job>>()
+
+    val jobsCount = MutableLiveData<JobsCount>()
 
     /**
-     * Helper function to listen for RxEvent and register subscriber within the pool
+     * Fetches jobs, updates local DB and serves them
      */
-    override fun subscribeToEvents() {
-        RxBus.listen<RxEvent>()
-                .subscribe { event ->
-                    when(event) {
-                        is JobsCountEvent -> {
-                            val tempJobsCount = jobsCount.value ?: JobsCount()
-                            when (event.type) {
-                                EventType.OPEN_JOBS_COUNT -> tempJobsCount.openJobs = event.count
-                                EventType.BOOKMARKED_JOBS_COUNT -> tempJobsCount.bookmarkedJobs = event.count
-                            }
-                            tempJobsCount.isSearching = event.isSearching
-                            jobsCount.postValue(tempJobsCount)
+    fun fetchAllJobs() {
+        disposable.add(dataManager.getAllJobs()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            setAllJobs(it.jobs)
+                            setBookmarkedJobs(it.jobs)
+                        },
+                        {
+                            Timber.e(it)
                         }
-                        else -> return@subscribe
-                    }
-                }
-                .registerInBus(this)
+                )
+        )
+    }
+
+    /**
+     * Marks job as bookmarked or un-bookmarked
+     *
+     * @param job       the job item that should be marked as bookmarked or not bookmarked
+     */
+    fun bookmarkJob(job: Job) {
+        job.isBookmarked = !job.isBookmarked
+        disposable.add(dataManager.updateJob(job)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            Timber.d("${it.size} jobs updated in the DB...")
+                        },
+                        {
+                            Timber.e(it)
+                        }
+                )
+        )
+    }
+
+    /**
+     * Set value of allJobList LiveData
+     *
+     * @param jobs      list of jobs
+     */
+    private fun setAllJobs(jobs: List<Job>) {
+        // Set value of the LiveData
+        allJobList.value = jobs
+        // Set value of jobsCount LiveData
+        setJobsCount(JobsCountEvent(EventType.OPEN_JOBS_COUNT, jobs.size))
+    }
+
+    /**
+     * Set value of bookmarkedJobList LiveData
+     *
+     * @param jobs      list of jobs
+     */
+    private fun setBookmarkedJobs(jobs: List<Job>) {
+        doAsync {
+            // Filter out not bookmarked jobs from the list
+            val bookmarkedJobs = jobs.filter { it.isBookmarked }
+            // Set value of the LiveData
+            bookmarkedJobList.postValue(bookmarkedJobs)
+            // Set value of jobsCount LiveData
+            setJobsCount(JobsCountEvent(EventType.BOOKMARKED_JOBS_COUNT, bookmarkedJobs.size))
+        }
+    }
+
+    /**
+     * Set value of jobsCount LiveData
+     *
+     * @param event     wrapper object containing all information about jobs count
+     */
+    private fun setJobsCount(event: JobsCountEvent) {
+        // Create new temporary JobsCount object
+        val tempJobsCount = jobsCount.value ?: JobsCount()
+        // Assign values to relevant fields
+        when (event.type) {
+            EventType.OPEN_JOBS_COUNT -> tempJobsCount.openJobs = event.count
+            EventType.BOOKMARKED_JOBS_COUNT -> tempJobsCount.bookmarkedJobs = event.count
+        }
+        tempJobsCount.isSearching = event.isSearching
+        // Set value of the LiveData
+        jobsCount.value = tempJobsCount
     }
 }

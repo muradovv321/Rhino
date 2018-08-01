@@ -10,6 +10,7 @@ package app.ogasimli.remoter.ui.home
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import app.ogasimli.remoter.R
+import app.ogasimli.remoter.helper.rx.JobsCount
 import app.ogasimli.remoter.helper.utils.viewModelProvider
 import app.ogasimli.remoter.ui.base.BaseActivity
 import app.ogasimli.remoter.ui.custom.CustomPageChangeListener
@@ -44,8 +45,6 @@ class HomeActivity : BaseActivity() {
 
         // Bind ViewModel
         viewModel = viewModelProvider(this, viewModelFactory)
-        // Force ViewModel to subscribe to RxEvents
-        viewModel.subscribeToEvents()
 
         // Setup ViewPager
         setupViewPager()
@@ -81,7 +80,7 @@ class HomeActivity : BaseActivity() {
     }
 
     /**
-     * Helper function to observe jobs LiveData
+     * Helper method to observe count of jobs
      */
     private fun observeJobsCount() {
         viewModel.jobsCount.observe(this, Observer {
