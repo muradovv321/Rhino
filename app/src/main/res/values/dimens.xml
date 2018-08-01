@@ -17,6 +17,8 @@
     <dimen name="jobs_recycler_views_padding">4dp</dimen>
 
     <!-- Dimens of BackDrop -->
+    <dimen name="sort_btn_width">38dp</dimen>
+    <dimen name="sort_btn_height">38dp</dimen>
     <dimen name="backdrop_front_header_height">40dp</dimen>
     <dimen name="backdrop_front_elevation">8dp</dimen>
     <dimen name="backdrop_front_header_horizontal_margin">@dimen/activity_horizontal_margin</dimen>
@@ -30,6 +32,6 @@
     <dimen name="company_logo_height">40dp</dimen>
     <dimen name="job_item_card_horizontal_margin_from_borders">12dp</dimen>
     <dimen name="position_and_company_name_container_horizontal_margin">16dp</dimen>
-    <dimen name="bookmark_btn_width">28dp</dimen>
-    <dimen name="bookmark_btn_height">28dp</dimen>
+    <dimen name="bookmark_btn_width">48dp</dimen>
+    <dimen name="bookmark_btn_height">48dp</dimen>
 </resources>

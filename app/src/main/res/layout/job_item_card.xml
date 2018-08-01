@@ -80,6 +80,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:tint="?attr/colorAccent"
             app:srcCompat="@drawable/ic_unbookmark"
+            android:scaleType="center"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="@dimen/job_item_card_horizontal_margin_from_borders"

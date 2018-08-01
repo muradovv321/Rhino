@@ -25,10 +25,11 @@
 
     <ImageButton
         android:id="@+id/sort_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/sort_btn_width"
+        android:layout_height="@dimen/sort_btn_height"
         android:background="?attr/selectableItemBackgroundBorderless"
         app:srcCompat="@drawable/ic_sort"
+        android:scaleType="center"
         android:tint="?attr/colorPrimary"
         android:layout_marginEnd="@dimen/backdrop_front_header_horizontal_margin"
         app:layout_constraintEnd_toEndOf="@+id/header_background"
