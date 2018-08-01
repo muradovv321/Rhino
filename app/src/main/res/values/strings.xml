@@ -28,19 +28,19 @@
     <string name="sort_btn_content_description">Sort Button</string>
 
     <!-- HomeActivity's string resources -->
+    <string name="backdrop_front_header_all_jobs_zero">No Open Jobs</string>
     <plurals name="backdrop_front_header_all_jobs">
-        <item quantity="zero">No Open Job</item>
-        <item quantity="one">%d Open Job</item>
+        <item quantity="one">One Open Job</item>
         <item quantity="other">%d Open Jobs</item>
     </plurals>
+    <string name="backdrop_front_header_bookmarked_jobs_zero">No Bookmarked Jobs</string>
     <plurals name="backdrop_front_header_bookmarked_jobs">
-        <item quantity="zero">No Bookmarked Job</item>
-        <item quantity="one">%d Bookmarked Job</item>
+        <item quantity="one">One Bookmarked Job</item>
         <item quantity="other">%d Bookmarked Jobs</item>
     </plurals>
+    <string name="backdrop_front_header_search_result_jobs_zero">No Job Found</string>
     <plurals name="backdrop_front_header_search_result_jobs">
-        <item quantity="zero">No Job Found</item>
-        <item quantity="one">%d Job Found</item>
+        <item quantity="one">One Job Found</item>
         <item quantity="other">%d Jobs Found</item>
     </plurals>
 </resources>

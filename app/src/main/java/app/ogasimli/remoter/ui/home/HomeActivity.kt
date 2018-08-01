@@ -11,6 +11,7 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import app.ogasimli.remoter.R
 import app.ogasimli.remoter.helper.rx.JobsCount
+import app.ogasimli.remoter.helper.utils.getJobsCountText
 import app.ogasimli.remoter.helper.utils.viewModelProvider
 import app.ogasimli.remoter.ui.base.BaseActivity
 import app.ogasimli.remoter.ui.custom.CustomPageChangeListener
@@ -92,21 +93,25 @@ class HomeActivity : BaseActivity() {
         })
     }
 
+    /**
+     * Helper method to set the text of the header text
+     * of Backdrop's front layer
+     */
     private fun setBackdropHeaderText() {
         header_info_text_view.text = when (view_pager.currentItem) {
             0 -> if (jobsCount.isSearching) {
-                resources.getQuantityString(R.plurals.backdrop_front_header_search_result_jobs,
-                        jobsCount.openJobs, jobsCount.openJobs)
+                getJobsCountText(this, R.plurals.backdrop_front_header_search_result_jobs,
+                        R.string.backdrop_front_header_search_result_jobs_zero, jobsCount.openJobs)
             } else {
-                resources.getQuantityString(R.plurals.backdrop_front_header_all_jobs,
-                        jobsCount.openJobs, jobsCount.openJobs)
+                getJobsCountText(this, R.plurals.backdrop_front_header_all_jobs,
+                        R.string.backdrop_front_header_all_jobs_zero, jobsCount.openJobs)
             }
             1 -> if (jobsCount.isSearching) {
-                resources.getQuantityString(R.plurals.backdrop_front_header_search_result_jobs,
-                        jobsCount.openJobs, jobsCount.openJobs)
+                getJobsCountText(this, R.plurals.backdrop_front_header_search_result_jobs,
+                        R.string.backdrop_front_header_search_result_jobs_zero, jobsCount.bookmarkedJobs)
             } else {
-                resources.getQuantityString(R.plurals.backdrop_front_header_bookmarked_jobs,
-                        jobsCount.bookmarkedJobs, jobsCount.bookmarkedJobs)
+                getJobsCountText(this, R.plurals.backdrop_front_header_bookmarked_jobs,
+                        R.string.backdrop_front_header_bookmarked_jobs_zero, jobsCount.bookmarkedJobs)
             }
             else -> ""
         }

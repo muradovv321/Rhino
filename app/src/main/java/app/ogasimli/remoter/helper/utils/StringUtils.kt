@@ -7,6 +7,10 @@
 
 package app.ogasimli.remoter.helper.utils
 
+import android.content.Context
+import androidx.annotation.PluralsRes
+import androidx.annotation.StringRes
+
 /**
  * Helper & extension functions for String manipulation
  *
@@ -31,3 +35,22 @@ fun String.getFirstLetters(limit: Int): String {
             .joinToString("")
             .take(limit)
 }
+
+/**
+ * Helper function to get quantity string
+ *
+ * @param context   context object
+ * @param resId     id of the plurals resource
+ * @param zeroResId id of the string resource
+ * @param count     count of the item
+ * @return          formatted text
+ */
+fun getJobsCountText(context: Context,
+                     @PluralsRes resId: Int,
+                     @StringRes zeroResId: Int,
+                     count: Int) =
+        if (count == 0) {
+            context.getString(zeroResId)
+        } else {
+            context.resources.getQuantityString(resId, count, count)
+        }
