@@ -32,6 +32,6 @@
     <dimen name="company_logo_height">40dp</dimen>
     <dimen name="job_item_card_horizontal_margin_from_borders">12dp</dimen>
     <dimen name="position_and_company_name_container_horizontal_margin">16dp</dimen>
-    <dimen name="bookmark_btn_width">48dp</dimen>
-    <dimen name="bookmark_btn_height">48dp</dimen>
+    <dimen name="bookmark_btn_width">38dp</dimen>
+    <dimen name="bookmark_btn_height">38dp</dimen>
 </resources>
