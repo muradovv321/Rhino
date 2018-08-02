@@ -11,8 +11,8 @@ import android.content.Context
 import androidx.room.Room
 import app.ogasimli.remoter.di.qualifier.ApplicationContext
 import app.ogasimli.remoter.di.scope.ApplicationScope
-import app.ogasimli.remoter.model.data.room.AppDatabase
-import app.ogasimli.remoter.model.data.room.JobDao
+import app.ogasimli.remoter.model.data.local.room.AppDatabase
+import app.ogasimli.remoter.model.data.local.room.JobDao
 import dagger.Module
 import dagger.Provides
 

@@ -5,7 +5,7 @@
  * Written by Orkhan Gasimli orkhan.gasimli@gmail.com in 2018.
  */
 
-package app.ogasimli.remoter.model.data.room
+package app.ogasimli.remoter.model.data.local.room
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

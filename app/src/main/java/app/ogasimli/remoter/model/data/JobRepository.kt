@@ -8,8 +8,8 @@
 package app.ogasimli.remoter.model.data
 
 import app.ogasimli.remoter.di.scope.ApplicationScope
-import app.ogasimli.remoter.model.data.api.JobsApiService
-import app.ogasimli.remoter.model.data.room.JobDao
+import app.ogasimli.remoter.model.data.local.room.JobDao
+import app.ogasimli.remoter.model.data.remote.api.JobsApiService
 import app.ogasimli.remoter.model.models.DataSource
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.model.models.JobList

@@ -5,7 +5,7 @@
  * Written by Orkhan Gasimli orkhan.gasimli@gmail.com in 2018.
  */
 
-package app.ogasimli.remoter.model.data.api
+package app.ogasimli.remoter.model.data.remote.api
 
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.model.models.JobInfo

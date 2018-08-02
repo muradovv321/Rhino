@@ -8,7 +8,7 @@
 package app.ogasimli.remoter.di.module
 
 import app.ogasimli.remoter.di.scope.ApplicationScope
-import app.ogasimli.remoter.model.data.api.JobsApiService
+import app.ogasimli.remoter.model.data.remote.api.JobsApiService
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
