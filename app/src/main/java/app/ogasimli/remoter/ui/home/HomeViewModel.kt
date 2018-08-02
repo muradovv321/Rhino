@@ -13,10 +13,10 @@ import app.ogasimli.remoter.helper.rx.JobsCount
 import app.ogasimli.remoter.helper.rx.JobsCountEvent
 import app.ogasimli.remoter.model.data.DataManager
 import app.ogasimli.remoter.model.models.Job
+import app.ogasimli.remoter.model.models.SortOption
 import app.ogasimli.remoter.ui.base.BaseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import org.jetbrains.anko.doAsync
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -33,16 +33,59 @@ class HomeViewModel @Inject constructor(private val dataManager: DataManager) : 
 
     val jobsCount = MutableLiveData<JobsCount>()
 
+    var sortOptionAllJobs = dataManager.getAllSortOption()
+
+    var sortOptionBookmarkedJobs = dataManager.getBookmarkedSortOption()
+
     /**
-     * Fetches jobs, updates local DB and serves them
+     * Fetches jobs and updates local DB
      */
     fun fetchAllJobs() {
+        disposable.add(dataManager.fetchAllJobs()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally {
+                    getAllJobs()
+                    getBookmarkedJobs()
+                }
+                .subscribe(
+                        {
+                            // TODO: Handle network errors
+                        },
+                        {
+                            Timber.e(it)
+                        }
+                )
+        )
+    }
+
+    /**
+     * Gets all jobs from DB and serves them
+     */
+    private fun getAllJobs() {
         disposable.add(dataManager.getAllJobs()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         {
                             setAllJobs(it.jobs)
+                        },
+                        {
+                            Timber.e(it)
+                        }
+                )
+        )
+    }
+
+    /**
+     * Gets bookmarked jobs from DB and serves them
+     */
+    private fun getBookmarkedJobs() {
+        disposable.add(dataManager.getBookmarkedJobs()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
                             setBookmarkedJobs(it.jobs)
                         },
                         {
@@ -73,6 +116,24 @@ class HomeViewModel @Inject constructor(private val dataManager: DataManager) : 
         )
     }
 
+    fun sortAllJobs(sortOption: SortOption) {
+        // Update local variable
+        sortOptionAllJobs = sortOption
+        // Save option into SharedPreferences
+        dataManager.saveAllSortOption(sortOption)
+        // Reload data to apply the sorting option
+        getAllJobs()
+    }
+
+    fun sortBookmarkedJobs(sortOption: SortOption) {
+        // Update local variable
+        sortOptionBookmarkedJobs = sortOption
+        // Save option into SharedPreferences
+        dataManager.saveBookmarkedSortOption(sortOption)
+        // Reload data to apply the sorting option
+        getBookmarkedJobs()
+    }
+
     /**
      * Set value of allJobList LiveData
      *
@@ -91,14 +152,10 @@ class HomeViewModel @Inject constructor(private val dataManager: DataManager) : 
      * @param jobs      list of jobs
      */
     private fun setBookmarkedJobs(jobs: List<Job>) {
-        doAsync {
-            // Filter out not bookmarked jobs from the list
-            val bookmarkedJobs = jobs.filter { it.isBookmarked }
-            // Set value of the LiveData
-            bookmarkedJobList.postValue(bookmarkedJobs)
-            // Set value of jobsCount LiveData
-            setJobsCount(JobsCountEvent(EventType.BOOKMARKED_JOBS_COUNT, bookmarkedJobs.size))
-        }
+        // Set value of the LiveData
+        bookmarkedJobList.value = jobs
+        // Set value of jobsCount LiveData
+        setJobsCount(JobsCountEvent(EventType.BOOKMARKED_JOBS_COUNT, jobs.size))
     }
 
     /**

@@ -8,7 +8,11 @@
 package app.ogasimli.remoter.model.data
 
 import app.ogasimli.remoter.di.scope.ApplicationScope
+import app.ogasimli.remoter.helper.constant.Constants.SORT_OPTION_ALL_KEY
+import app.ogasimli.remoter.helper.constant.Constants.SORT_OPTION_BOOKMARKED_KEY
+import app.ogasimli.remoter.model.data.local.PreferencesHelper
 import app.ogasimli.remoter.model.models.Job
+import app.ogasimli.remoter.model.models.SortOption
 import javax.inject.Inject
 
 /**
@@ -17,28 +21,88 @@ import javax.inject.Inject
  * @author Orkhan Gasimli on 17.07.2018.
  */
 @ApplicationScope
-class DataManager @Inject constructor(private val jobRepository: JobRepository) {
+class DataManager @Inject constructor(
+        private val jobRepository: JobRepository,
+        private val prefsHelper: PreferencesHelper) {
 
-    /* ___________________ Job ___________________*/
+    /* ___________________ Jobs Table ___________________*/
 
     /**
-     * Request list of jobs from DB & API
+     * Request list of jobs from DB
      *
-     * @return          Observable holding list of jobs retrieved from API or DB
+     * @return              Observable holding list of jobs retrieved from DB
      */
-    fun getAllJobs() = jobRepository.getAllJobs()
+    fun getAllJobs() = jobRepository.getAllJobs(getAllSortOption())
 
     /**
      * Request list of bookmarked jobs from DB
      *
-     * @return          Observable holding list of bookmarked jobs retrieved from DB
+     * @return              Observable holding list of bookmarked jobs retrieved from DB
      */
-    fun getAllSavedJobs() = jobRepository.getAllSavedJobs()
+    fun getBookmarkedJobs() = jobRepository.getBookmarkedJobs(getBookmarkedSortOption())
 
     /**
      * Update job
      *
-     * @return          Observable holding list of indexes of updated items
+     * @return              Observable holding list of indexes of updated items
      */
     fun updateJob(vararg job: Job) = jobRepository.updateJob(*job)
+
+    /* ___________________ API ___________________*/
+
+    /**
+     * Request list of jobs from API
+     *
+     * @return              Observable holding list of jobs retrieved from API
+     */
+    fun fetchAllJobs() = jobRepository.fetchAllJobs()
+
+    /* ___________________ SharedPreferences ___________________*/
+
+    /**
+     * Save sorting option of all jobs to SharedPreferences
+     *
+     * @param sortOption    {@link SortOptions} for indicating the order of the items
+     */
+    fun saveAllSortOption(sortOption: SortOption) = saveSortOption(sortOption, SORT_OPTION_ALL_KEY)
+
+    /**
+     * Retrieve sorting option of all jobs from SharedPreferences
+     *
+     * @return              {@link SortOptions} selected by the user
+     */
+    fun getAllSortOption() = getSortOption(SORT_OPTION_ALL_KEY)
+
+    /**
+     * Save sorting option of bookmarked jobs to SharedPreferences
+     *
+     * @param sortOption    {@link SortOptions} for indicating the order of the items
+     */
+    fun saveBookmarkedSortOption(sortOption: SortOption) =
+            saveSortOption(sortOption, SORT_OPTION_BOOKMARKED_KEY)
+
+    /**
+     * Retrieve sorting option of bookmarked jobs from SharedPreferences
+     *
+     * @return              {@link SortOptions} selected by the user
+     */
+    fun getBookmarkedSortOption() = getSortOption(SORT_OPTION_BOOKMARKED_KEY)
+
+    /**
+     * Save sorting option to SharedPreferences
+     *
+     * @param prefsKey      key of the item in SharedPreferences
+     * @param sortOption    {@link SortOptions} for indicating the order of the items
+     */
+    private fun saveSortOption(sortOption: SortOption, prefsKey: String) =
+            prefsHelper.putInt(prefsKey, sortOption.type)
+
+    /**
+     * Retrieve sorting option from SharedPreferences
+     *
+     * @param prefsKey      key of the item in SharedPreferences
+     * @return              {@link SortOptions} selected by the user
+     */
+    private fun getSortOption(prefsKey: String) =
+            SortOption.getFromType(prefsHelper.getInt(prefsKey, 0))
 }

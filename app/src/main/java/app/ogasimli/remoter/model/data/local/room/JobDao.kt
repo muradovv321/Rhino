@@ -29,20 +29,60 @@ interface JobDao {
     fun getAllJobs(): Flowable<List<Job>>
 
     /**
-     * Get all job data from the table.
+     * Get all job data from the table by pasting date (in descending order)
      *
      * @return          the list of jobs retrieved from the table
      */
     @Query("SELECT * FROM jobs ORDER BY postingTime DESC")
-    fun getAllJobsInChronologicalOrder(): Flowable<List<Job>>
+    fun getAllJobsByPostingDate(): Flowable<List<Job>>
+
+    /**
+     * Get all job data from the table by position name
+     *
+     * @return          the list of jobs retrieved from the table
+     */
+    @Query("SELECT * FROM jobs ORDER BY position")
+    fun getAllJobsByPositionName(): Flowable<List<Job>>
+
+    /**
+     * Get all job data from the table by company name
+     *
+     * @return          the list of jobs retrieved from the table
+     */
+    @Query("SELECT * FROM jobs ORDER BY company")
+    fun getAllJobsByCompanyName(): Flowable<List<Job>>
 
     /**
      * Get all bookmarked job items
      *
      * @return          the list of bookmarked jobs retrieved from the table
      */
+    @Query("SELECT * FROM jobs WHERE isBookmarked = 1 ")
+    fun getBookmarkedJobs(): Flowable<List<Job>>
+
+    /**
+     * Get all bookmarked job items by pasting date (in descending order)
+     *
+     * @return          the list of bookmarked jobs retrieved from the table
+     */
     @Query("SELECT * FROM jobs WHERE isBookmarked = 1 ORDER BY postingTime DESC")
-    fun getAllSavedJobs(): Flowable<List<Job>>
+    fun getBookmarkedJobsByPostingDate(): Flowable<List<Job>>
+
+    /**
+     * Get all bookmarked job items by position name
+     *
+     * @return          the list of bookmarked jobs retrieved from the table
+     */
+    @Query("SELECT * FROM jobs WHERE isBookmarked = 1 ORDER BY position")
+    fun getBookmarkedJobsByPositionName(): Flowable<List<Job>>
+
+    /**
+     * Get all bookmarked job items by company name
+     *
+     * @return          the list of bookmarked jobs retrieved from the table
+     */
+    @Query("SELECT * FROM jobs WHERE isBookmarked = 1 ORDER BY company")
+    fun getBookmarkedJobsByCompanyName(): Flowable<List<Job>>
 
     /**
      * Get data of a specific job from the table.

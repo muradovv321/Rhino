@@ -7,12 +7,38 @@
 
 package app.ogasimli.remoter.helper.constant
 
+import app.ogasimli.remoter.BuildConfig
+
 /**
  * Helper class to hold constants
  *
  * @author Orkhan Gasimli on 17.07.2018.
  */
 object Constants {
+
+    /**
+     * Package firstName of the app
+     */
+    @JvmStatic
+    private val PACKAGE_NAME = BuildConfig.APPLICATION_ID
+
+    /**
+     * Default key of SharedPreferences
+     */
+    @JvmStatic
+    val DEFAULT_SHARED_PREF_KEY = "$PACKAGE_NAME.SHARED_PREF_KEY"
+
+    /**
+     * SharedPreferences key for {@link SortOption} of all jobs
+     */
+    @JvmStatic
+    val SORT_OPTION_ALL_KEY = "$PACKAGE_NAME.SORT_OPTION_ALL_KEY"
+
+    /**
+     * SharedPreferences key for {@link SortOption} of bookmarked jobs
+     */
+    @JvmStatic
+    val SORT_OPTION_BOOKMARKED_KEY = "$PACKAGE_NAME.SORT_OPTION_BOOKMARKED_KEY"
 
     /**
      * Timeout limit of http requests in seconds

@@ -8,15 +8,23 @@
 package app.ogasimli.remoter.ui.home
 
 import android.os.Bundle
+import android.view.Gravity
+import android.view.View
+import android.widget.RadioButton
 import androidx.lifecycle.Observer
 import app.ogasimli.remoter.R
 import app.ogasimli.remoter.helper.rx.JobsCount
 import app.ogasimli.remoter.helper.utils.getJobsCountText
 import app.ogasimli.remoter.helper.utils.viewModelProvider
+import app.ogasimli.remoter.model.models.SortOption
 import app.ogasimli.remoter.ui.base.BaseActivity
 import app.ogasimli.remoter.ui.custom.CustomPageChangeListener
+import com.github.zawadz88.materialpopupmenu.popupMenu
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.backdrop_front.*
+import kotlinx.android.synthetic.main.sort_by_company_name_layout.view.*
+import kotlinx.android.synthetic.main.sort_by_position_name_layout.view.*
+import kotlinx.android.synthetic.main.sort_by_posting_date_layout.view.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -44,6 +52,10 @@ class HomeActivity : BaseActivity() {
         // Set up the tool bar
         initToolbar()
 
+        sort_btn.setOnClickListener {
+            showSortPopup(it)
+        }
+
         // Bind ViewModel
         viewModel = viewModelProvider(this, viewModelFactory)
 
@@ -52,6 +64,87 @@ class HomeActivity : BaseActivity() {
 
         // Observe count of jobs
         observeJobsCount()
+    }
+
+    private fun showSortPopup(v: View) {
+/*        val popup = PopupMenu(this, v)
+        with(popup) {
+            setOnMenuItemClickListener {
+                toast("Clicked: ${it.title}")
+                true
+            }
+            inflate(R.menu.sort_popup_menu)
+            show()
+        }*/
+
+
+        popupMenu.show(this@HomeActivity, v)
+    }
+
+    private val popupMenu = popupMenu {
+        style = R.style.Widget_Remoter_MPM_Menu
+        dropdownGravity = Gravity.START
+        val radioButtons = arrayListOf<RadioButton>()
+        section {
+            title = "Sort by"
+            customItem {
+                lateinit var radioBtn: RadioButton
+                layoutResId = R.layout.sort_by_posting_date_layout
+                viewBoundCallback = { view ->
+                    radioBtn = view.by_posting_date_radio_btn
+                    radioButtons.add(radioBtn)
+                    checkRadioButton(radioBtn, 0)
+                }
+                callback = {
+                    setChecked(radioBtn, radioButtons)
+                    sortJobs(SortOption.BY_POSTING_DATE)
+                }
+            }
+            customItem {
+                lateinit var radioBtn: RadioButton
+                layoutResId = R.layout.sort_by_position_name_layout
+                viewBoundCallback = { view ->
+                    radioBtn = view.by_position_name_radio_btn
+                    radioButtons.add(radioBtn)
+                    checkRadioButton(radioBtn, 1)
+                }
+                callback = {
+                    setChecked(radioBtn, radioButtons)
+                    sortJobs(SortOption.BY_POSITION_NAME)
+                }
+            }
+            customItem {
+                lateinit var radioBtn: RadioButton
+                layoutResId = R.layout.sort_by_company_name_layout
+                viewBoundCallback = { view ->
+                    radioBtn = view.by_company_name_radio_btn
+                    radioButtons.add(radioBtn)
+                    checkRadioButton(radioBtn, 2)
+                }
+                callback = {
+                    setChecked(radioBtn, radioButtons)
+                    sortJobs(SortOption.BY_COMPANY_NAME)
+                }
+            }
+        }
+    }
+
+    private fun sortJobs(sortOption: SortOption) {
+        when (view_pager.currentItem) {
+            0 -> viewModel.sortAllJobs(sortOption)
+            1 -> viewModel.sortBookmarkedJobs(sortOption)
+        }
+    }
+
+    private fun setChecked(radioButton: RadioButton, radioButtons: ArrayList<RadioButton>) {
+        radioButtons.forEach { it.isChecked = it.id == radioButton.id }
+    }
+
+    private fun checkRadioButton(radioButton: RadioButton, position: Int) {
+        when (view_pager.currentItem) {
+            0 -> radioButton.isChecked = position == viewModel.sortOptionAllJobs.type
+            1 -> radioButton.isChecked = position == viewModel.sortOptionBookmarkedJobs.type
+        }
     }
 
     /**
@@ -83,8 +176,8 @@ class HomeActivity : BaseActivity() {
      * Helper method to observe count of jobs
      */
     private fun observeJobsCount() {
-        viewModel.jobsCount.observe(this, Observer {
-            it?.let {
+        viewModel.jobsCount.observe(this, Observer { count ->
+            count?.let {
                 Timber.d("$it jobs received")
                 jobsCount = it
                 setBackdropHeaderText()
