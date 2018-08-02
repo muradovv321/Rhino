@@ -66,21 +66,14 @@ class HomeActivity : BaseActivity() {
         observeJobsCount()
     }
 
+    /**
+     * Helper function to display Popup Menu
+     */
     private fun showSortPopup(v: View) {
-/*        val popup = PopupMenu(this, v)
-        with(popup) {
-            setOnMenuItemClickListener {
-                toast("Clicked: ${it.title}")
-                true
-            }
-            inflate(R.menu.sort_popup_menu)
-            show()
-        }*/
-
-
         popupMenu.show(this@HomeActivity, v)
     }
 
+    // Popup menu
     private val popupMenu = popupMenu {
         style = R.style.Widget_Remoter_MPM_Menu
         dropdownGravity = Gravity.START
@@ -129,6 +122,11 @@ class HomeActivity : BaseActivity() {
         }
     }
 
+    /**
+     * Helper method to sort jobs
+     *
+     * @param sortOption    {@link SortOptions} for indicating the order of the items
+     */
     private fun sortJobs(sortOption: SortOption) {
         when (view_pager.currentItem) {
             0 -> viewModel.sortAllJobs(sortOption)
@@ -136,10 +134,21 @@ class HomeActivity : BaseActivity() {
         }
     }
 
+    /**
+     * Helper method to set the selected RadioButton checked and unset others
+     *
+     * @param radioButton   RadioButton that should be checked
+     * @param radioButtons  array of all available RadioButtons
+     */
     private fun setChecked(radioButton: RadioButton, radioButtons: ArrayList<RadioButton>) {
         radioButtons.forEach { it.isChecked = it.id == radioButton.id }
     }
 
+    /**
+     * Helper method to determine the check state of RadioButton
+     *
+     * @param radioButton   RadioButton element
+     */
     private fun checkRadioButton(radioButton: RadioButton, position: Int) {
         when (view_pager.currentItem) {
             0 -> radioButton.isChecked = position == viewModel.sortOptionAllJobs.type

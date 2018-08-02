@@ -116,6 +116,11 @@ class HomeViewModel @Inject constructor(private val dataManager: DataManager) : 
         )
     }
 
+    /**
+     * Helper function to sort all jobs list
+     *
+     * @param sortOption    {@link SortOptions} for indicating the order of the items
+     */
     fun sortAllJobs(sortOption: SortOption) {
         // Update local variable
         sortOptionAllJobs = sortOption
@@ -125,6 +130,11 @@ class HomeViewModel @Inject constructor(private val dataManager: DataManager) : 
         getAllJobs()
     }
 
+    /**
+     * Helper function to sort bookmarked jobs list
+     *
+     * @param sortOption    {@link SortOptions} for indicating the order of the items
+     */
     fun sortBookmarkedJobs(sortOption: SortOption) {
         // Update local variable
         sortOptionBookmarkedJobs = sortOption
