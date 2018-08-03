@@ -5,40 +5,34 @@
  * Written by Orkhan Gasimli orkhan.gasimli@gmail.com in 2018.
  */
 
-package app.ogasimli.remoter.ui.home.fragment.savedjoblist
+package app.ogasimli.remoter.ui.details
 
 import androidx.core.content.res.ResourcesCompat
 import app.ogasimli.remoter.R
-import app.ogasimli.remoter.di.scope.FragmentScope
-import app.ogasimli.remoter.ui.home.fragment.adapter.JobsAdapter
+import app.ogasimli.remoter.di.scope.ActivityScope
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import dagger.Module
 import dagger.Provides
 
 /**
- * DI Module providing dependencies for SavedJobListFragment
+ * DI Module providing dependencies for DetailsActivity
  *
- * @author Orkhan Gasimli on 26.07.2018.
+ * @author Orkhan Gasimli on 02.08.2018.
  */
 @Module
-class SavedJobListFragmentModule {
+class DetailsActivityModule {
 
-    @FragmentScope
+    @ActivityScope
     @Provides
     fun provideColorGenerator(): ColorGenerator = ColorGenerator.MATERIAL
 
-    @FragmentScope
+    @ActivityScope
     @Provides
-    fun provideTextBuilder(fragment: SavedJobListFragment): TextDrawable.IBuilder =
+    fun provideTextBuilder(activity: DetailsActivity): TextDrawable.IBuilder =
             TextDrawable.builder()
                     .beginConfig()
-                    .useFont(ResourcesCompat.getFont(fragment.context!!, R.font.montserrat_alternates))
+                    .useFont(ResourcesCompat.getFont(activity, R.font.montserrat_alternates))
                     .endConfig()
                     .roundRect(16)
-
-    @FragmentScope
-    @Provides
-    fun provideJobsAdapter(colorGenerator: ColorGenerator, textBuilder: TextDrawable.IBuilder) =
-            JobsAdapter(colorGenerator, textBuilder)
 }

@@ -8,6 +8,8 @@
 package app.ogasimli.remoter.di.module
 
 import app.ogasimli.remoter.di.scope.ActivityScope
+import app.ogasimli.remoter.ui.details.DetailsActivity
+import app.ogasimli.remoter.ui.details.DetailsActivityModule
 import app.ogasimli.remoter.ui.home.HomeActivity
 import app.ogasimli.remoter.ui.home.HomeActivityModule
 import app.ogasimli.remoter.ui.home.HomeFragmentProviderModule
@@ -27,4 +29,8 @@ abstract class ActivityBuilderModule {
         HomeActivityModule::class,
         HomeFragmentProviderModule::class])
     abstract fun provideHomeActivity(): HomeActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [DetailsActivityModule::class])
+    abstract fun provideDetailsActivity(): DetailsActivity
 }

@@ -14,23 +14,40 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.Remoter.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.Remoter.Subtitle1</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.Remoter.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.Remoter.Body2</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.Remoter.Caption</item>
         <item name="android:textAppearanceLargePopupMenu">@style/TextAppearance.Remoter.Popup.Large</item>
         <item name="android:textAppearanceSmallPopupMenu">@style/TextAppearance.Remoter.Popup.Small</item>
     </style>
 
-    <!-- Toolbar theme -->
-    <style name="Widget.Remoter.Toolbar" parent="Widget.AppCompat.Toolbar">
-        <item name="android:theme">@style/Theme.Remoter</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-        <item name="titleTextAppearance">@style/TextAppearance.Remoter.Toolbar</item>
+    <!-- Activity Themes -->
+    <style name="Theme.Remoter.Activity.Home" parent="Theme.Remoter"/>
+
+    <style name="Theme.Remoter.Activity.Details" parent="Theme.Remoter">
+        <item name="colorPrimaryDark">#EBE5E7</item>
     </style>
 
-    <style name="TextAppearance.Remoter.Toolbar" parent="TextAppearance.MaterialComponents.Button">
+    <!-- Toolbar theme -->
+    <style name="Widget.Remoter.Toolbar.Main" parent="Widget.AppCompat.Toolbar">
+        <item name="android:theme">@style/Theme.Remoter.Activity.Home</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="titleTextAppearance">@style/TextAppearance.Remoter.Toolbar.Main</item>
+    </style>
+
+    <style name="TextAppearance.Remoter.Toolbar.Main" parent="TextAppearance.MaterialComponents.Button">
         <item name="android:textColor">@color/controlElementsTextColor</item>
         <item name="fontFamily">@font/lato_bold</item>
         <item name="android:textStyle">bold</item>
         <item name="textAllCaps">false</item>
         <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Widget.Remoter.Toolbar.Secondary" parent="Widget.AppCompat.Toolbar">
+        <item name="android:theme">@style/Theme.Remoter.Activity.Details</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
     <!-- Popup menu style -->
@@ -60,5 +77,39 @@
         <item name="fontFamily">@font/lato_bold</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- Button styles -->
+    <style name="Widget.Remoter.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/controlElementsTextColor</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="cornerRadius">16dp</item>
+    </style>
+
+    <style name="Widget.Remoter.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:fontFamily">@font/lato</item>
+    </style>
+
+    <!-- TextAppearance themes -->
+    <style name="TextAppearance.Remoter.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">@font/lato_bold</item>
+    </style>
+
+    <style name="TextAppearance.Remoter.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">@font/lato_bold</item>
+    </style>
+
+    <style name="TextAppearance.Remoter.Body1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/lato_bold</item>
+    </style>
+
+    <style name="TextAppearance.Remoter.Body2" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="fontFamily">@font/lato</item>
+    </style>
+
+    <style name="TextAppearance.Remoter.Caption" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="fontFamily">@font/lato</item>
     </style>
 </resources>

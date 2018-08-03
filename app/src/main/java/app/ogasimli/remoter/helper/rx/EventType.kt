@@ -14,5 +14,7 @@ package app.ogasimli.remoter.helper.rx
  */
 enum class EventType {
     OPEN_JOBS_COUNT,
-    BOOKMARKED_JOBS_COUNT
+    BOOKMARKED_JOBS_COUNT,
+    BOOKMARK_BUTTON_CLICK,
+    JOB_ITEM_CLICK
 }

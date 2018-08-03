@@ -21,8 +21,11 @@
         android:theme="@style/Theme.Remoter"
         android:allowBackup="false"
         tools:ignore="GoogleAppIndexingWarning">
+
+        <!-- HomeActivity -->
         <activity
             android:name=".ui.home.HomeActivity"
+            android:theme="@style/Theme.Remoter.Activity.Home"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -30,6 +33,12 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <!-- DetailsActivity -->
+        <activity
+            android:name=".ui.details.DetailsActivity"
+            android:parentActivityName=".ui.home.HomeActivity"
+            android:theme="@style/Theme.Remoter.Activity.Details"/>
 
         <!-- Metadata to download preloaded fonts -->
         <meta-data android:name="preloaded_fonts" android:resource="@array/preloaded_fonts"/>

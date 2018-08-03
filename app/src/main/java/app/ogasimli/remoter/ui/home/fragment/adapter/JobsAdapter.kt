@@ -15,6 +15,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import app.ogasimli.remoter.R
 import app.ogasimli.remoter.di.module.GlideApp
+import app.ogasimli.remoter.helper.rx.EventType
+import app.ogasimli.remoter.helper.rx.RxBus
+import app.ogasimli.remoter.helper.rx.RxEvent
 import app.ogasimli.remoter.helper.utils.getFirstLetters
 import app.ogasimli.remoter.helper.utils.inflate
 import app.ogasimli.remoter.helper.utils.periodTillNow
@@ -25,7 +28,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.job_item_card.view.*
-
+import javax.inject.Inject
 
 
 /**
@@ -33,16 +36,9 @@ import kotlinx.android.synthetic.main.job_item_card.view.*
  *
  * @author Orkhan Gasimli on 17.07.2018.
  */
-class JobsAdapter(private val callback: JobsAdapterCallback) :
+class JobsAdapter @Inject constructor(private val colorGenerator: ColorGenerator,
+                                      private val textBuilder: TextDrawable.IBuilder) :
         RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
-
-    private lateinit var viewGroup: ViewGroup
-
-    // {@link ColorGenerator} color generator for image background
-    private val colorGenerator: ColorGenerator = ColorGenerator.MATERIAL
-
-    // {@link TextDrawable.IBuilder} text drawable textBuilder
-    private val textBuilder: TextDrawable.IBuilder = TextDrawable.builder().roundRect(16)
 
     var jobs: List<Job> = emptyList()
         set(value) {
@@ -52,7 +48,6 @@ class JobsAdapter(private val callback: JobsAdapterCallback) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflatedView = parent.inflate(R.layout.job_item_card)
-        viewGroup = parent
         return ViewHolder(inflatedView)
     }
 
@@ -67,7 +62,7 @@ class JobsAdapter(private val callback: JobsAdapterCallback) :
             loadBookmarkButtonsImage(job, bookmarkBtn)
             // Attach ClickListener to bookmark button
             bookmarkBtn?.setOnClickListener {
-                callback.onJobSaveClick(job)
+                RxBus.publish(RxEvent(EventType.BOOKMARK_BUTTON_CLICK, data = job))
             }
             // Set position
             positionName?.text = job.position
@@ -77,7 +72,7 @@ class JobsAdapter(private val callback: JobsAdapterCallback) :
 
             // Attach ClickListener to CardView
             itemView.setOnClickListener {
-
+                RxBus.publish(RxEvent(EventType.JOB_ITEM_CLICK))
             }
         }
     }

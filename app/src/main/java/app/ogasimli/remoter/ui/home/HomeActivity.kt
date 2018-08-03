@@ -7,24 +7,29 @@
 
 package app.ogasimli.remoter.ui.home
 
+import android.app.ActivityOptions
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.widget.RadioButton
 import androidx.lifecycle.Observer
 import app.ogasimli.remoter.R
-import app.ogasimli.remoter.helper.rx.JobsCount
+import app.ogasimli.remoter.helper.rx.*
 import app.ogasimli.remoter.helper.utils.getJobsCountText
 import app.ogasimli.remoter.helper.utils.viewModelProvider
 import app.ogasimli.remoter.model.models.SortOption
 import app.ogasimli.remoter.ui.base.BaseActivity
 import app.ogasimli.remoter.ui.custom.CustomPageChangeListener
+import app.ogasimli.remoter.ui.details.DetailsActivity
 import com.github.zawadz88.materialpopupmenu.popupMenu
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.backdrop_front.*
 import kotlinx.android.synthetic.main.sort_by_company_name_layout.view.*
 import kotlinx.android.synthetic.main.sort_by_position_name_layout.view.*
 import kotlinx.android.synthetic.main.sort_by_posting_date_layout.view.*
+import org.jetbrains.anko.startActivity
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -216,5 +221,27 @@ class HomeActivity : BaseActivity() {
             }
             else -> ""
         }
+    }
+
+    /**
+     * Helper function to listen for RxEvent and register subscriber within the pool
+     */
+    override fun subscribeToEvents() {
+        RxBus.listen<RxEvent>()
+                .subscribe { event ->
+                    when (event.type) {
+                        EventType.JOB_ITEM_CLICK -> {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                val intent = Intent(this, DetailsActivity::class.java)
+                                val options = ActivityOptions.makeSceneTransitionAnimation(this)
+                                startActivity(intent, options.toBundle())
+                            } else {
+                                startActivity<DetailsActivity>()
+                            }
+                        }
+                        else -> return@subscribe
+                    }
+                }
+                .registerInBus(this)
     }
 }

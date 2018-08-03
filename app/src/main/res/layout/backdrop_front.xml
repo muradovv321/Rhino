@@ -46,7 +46,6 @@
         android:maxLines="1"
         android:ellipsize="end"
         android:textAppearance="?attr/textAppearanceCaption"
-        android:fontFamily="@font/lato"
         tools:text="395 Open Jobs"
         android:layout_marginTop="@dimen/backdrop_front_header_vertical_margin"
         app:layout_constraintTop_toTopOf="@+id/header_background"

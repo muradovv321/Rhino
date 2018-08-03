@@ -57,7 +57,6 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textAppearance="?attr/textAppearanceSubtitle1"
-                android:fontFamily="@font/lato_bold"
                 tools:text="Experienced C# Engineer"
                 android:textColor="@android:color/black"/>
 

@@ -7,7 +7,22 @@
   -->
 
 <resources>
-    <style name="TextAppearance.Remoter.Toolbar" parent="TextAppearance.MaterialComponents.Button">
+    <!-- Activity Themes -->
+    <style name="Theme.Remoter.Activity.Home" parent="Theme.Remoter">
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowReturnTransition">@android:transition/slide_bottom</item>
+        <item name="android:windowExitTransition">@android:transition/slide_top</item>
+    </style>
+
+    <style name="Theme.Remoter.Activity.Details" parent="Theme.Remoter">
+        <item name="colorPrimaryDark">#EBE5E7</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowEnterTransition">@android:transition/slide_top</item>
+        <item name="android:windowReturnTransition">@android:transition/slide_bottom</item>
+    </style>
+
+    <!-- TextAppearance of Toolbar Title -->
+    <style name="TextAppearance.Remoter.Toolbar.Main" parent="TextAppearance.MaterialComponents.Button">
         <item name="android:textColor">@color/controlElementsTextColor</item>
         <item name="fontFamily">@font/lato_bold</item>
         <item name="android:textStyle">bold</item>

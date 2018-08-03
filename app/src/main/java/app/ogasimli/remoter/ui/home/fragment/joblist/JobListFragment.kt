@@ -15,13 +15,16 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.ogasimli.remoter.R
+import app.ogasimli.remoter.helper.rx.EventType
+import app.ogasimli.remoter.helper.rx.RxBus
+import app.ogasimli.remoter.helper.rx.RxEvent
+import app.ogasimli.remoter.helper.rx.registerInBus
 import app.ogasimli.remoter.helper.utils.inflate
 import app.ogasimli.remoter.helper.utils.viewModelProvider
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.ui.base.BaseFragment
 import app.ogasimli.remoter.ui.home.HomeViewModel
 import app.ogasimli.remoter.ui.home.fragment.adapter.JobsAdapter
-import app.ogasimli.remoter.ui.home.fragment.adapter.JobsAdapterCallback
 import kotlinx.android.synthetic.main.fragment_job_list.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -31,7 +34,7 @@ import javax.inject.Inject
  *
  * @author Orkhan Gasimli on 17.07.2018.
  */
-class JobListFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, JobsAdapterCallback {
+class JobListFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var viewModel: HomeViewModel
 
@@ -92,8 +95,8 @@ class JobListFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, Jo
      * Helper function to observe jobs LiveData
      */
     private fun observeJobs() {
-        viewModel.allJobList.observe(this, Observer {
-            it?.let {
+        viewModel.allJobList.observe(this, Observer { jobs ->
+            jobs?.let {
                 Timber.d("${it.size} jobs received")
                 jobsAdapter.jobs = it
             }
@@ -118,16 +121,20 @@ class JobListFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, Jo
             swipe_refresh_layout.isRefreshing = false
         }
     }
-    /* Callback functions invoked through JobsAdapter */
-    override fun onJobSaveClick(job: Job) {
-        viewModel.bookmarkJob(job)
-    }
 
-    override fun onDetailsClick(job: Job) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onApplyClick(job: Job) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    /**
+     * Helper function to listen for RxEvent and register subscriber within the pool
+     */
+    override fun subscribeToEvents() {
+        RxBus.listen<RxEvent>()
+                .subscribe { event ->
+                    if (userVisibleHint) {
+                        when (event.type) {
+                            EventType.BOOKMARK_BUTTON_CLICK -> viewModel.bookmarkJob(event.data as Job)
+                            else -> return@subscribe
+                        }
+                    }
+                }
+                .registerInBus(this)
     }
 }

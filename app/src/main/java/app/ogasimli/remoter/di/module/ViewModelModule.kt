@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import app.ogasimli.remoter.di.scope.ViewModelKey
 import app.ogasimli.remoter.ui.base.ViewModelFactory
+import app.ogasimli.remoter.ui.details.DetailsViewModel
 import app.ogasimli.remoter.ui.home.HomeViewModel
 import dagger.Binds
 import dagger.Module
@@ -32,4 +33,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(HomeViewModel::class)
     abstract fun provideHomeViewModel(homeViewModel: HomeViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DetailsViewModel::class)
+    abstract fun provideDetailsViewModel(detailsViewModel: DetailsViewModel): ViewModel
 }

@@ -11,7 +11,7 @@
     <color name="colorPrimaryDark">#620936</color>
     <color name="colorAccent">#F3A358</color>
     <color name="textColorPrimary">#000000</color>
-    <color name="textColorSecondary">#717579</color>
+    <color name="textColorSecondary">#B3060606</color>
     <color name="backDropColor">@color/colorPrimary</color>
     <color name="backDropFrontColor">#F7F3F7</color>
     <color name="backDropFrontHeaderColor">#FFFFFF</color>

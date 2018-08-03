@@ -39,8 +39,17 @@
         <item quantity="other">%d Bookmarked Jobs</item>
     </plurals>
     <string name="backdrop_front_header_search_result_jobs_zero">No Job Found</string>
+    <string name="how_to_apply_heading_text">How do you apply?</string>
+    <string name="apply_btn_text">Apply Now</string>
     <plurals name="backdrop_front_header_search_result_jobs">
         <item quantity="one">One Job Found</item>
         <item quantity="other">%d Jobs Found</item>
     </plurals>
+
+    <string name="sample_job_description">
+        <![CDATA[<div>We are looking to bring on an HR Coordinator to join our team in Saigon, Vietnam on September 12, 2018, where you&#x2019;ll start your training during our quarterly meetup.<br>Our company has grown significantly in the last year. You only need to look at our public quarterly reports to see the massive growth our company has achieved. We&#x2019;ve been on the Inc. 5000 list of fastest growing American companies twice now! In 2016, we came in at 161, and last year, we came in at 172.<br>And we&#x2019;re just getting started!<br>You will play a pivotal role in helping us grow, organize and vet future hires for the company. As the HR Coordinator you will be performing background checks on our potential employees, review and revise our hiring emails, update and maintain our career boards and other tasks associated with hiring new talent for the company.<br>You will spend the first 4-6 months with us in SE Asia training with our management team. This position has the potential to become location-independent once your training is done and you can expect some travel. (SE Asia, Europe, US, etc.) You will be in a probationary period for the first six months, and afterwards we&#x2019;ll have you up and running as an HR Coordinator.<br>You should either be a digital nomad or interested in the digital nomad lifestyle. This is very important for this role, since our entire company is remote and our people are regularly on the move. We would need you to be knowledgeable about the unique challenges that comes with managing such a remote team so you can best serve them.<br>Ideally, we would want you to be based primarily out of SE Asia since so much of our team tends to live in this part of the world. This would allow you to meet face to face with the team fairly regularly and also travel to several events we do around the region every year.<p style="text-align:center">See more jobs at <a target="_new" href="/remote-companies/empire-flippers">Empire Flippers</a></p><p style="text-align:center">Visit <a href="https://empireflippers.com/">Empire Flippers</a>&apos;s website</p></div>]]>
+    </string>
+    <string name="sample_how_to_apply">
+        <![CDATA[For more info and to apply visit: https://empireflippers.com/career/hr-coordinator/]]>
+    </string>
 </resources>
