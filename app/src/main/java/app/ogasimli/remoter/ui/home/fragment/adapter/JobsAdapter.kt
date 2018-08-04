@@ -14,31 +14,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import app.ogasimli.remoter.R
-import app.ogasimli.remoter.di.module.GlideApp
 import app.ogasimli.remoter.helper.rx.EventType
 import app.ogasimli.remoter.helper.rx.RxBus
 import app.ogasimli.remoter.helper.rx.RxEvent
-import app.ogasimli.remoter.helper.utils.getFirstLetters
 import app.ogasimli.remoter.helper.utils.inflate
+import app.ogasimli.remoter.helper.utils.loadCompanyLogo
 import app.ogasimli.remoter.helper.utils.periodTillNow
 import app.ogasimli.remoter.model.models.Job
-import com.amulyakhare.textdrawable.TextDrawable
-import com.amulyakhare.textdrawable.util.ColorGenerator
-import com.bumptech.glide.load.resource.bitmap.CenterInside
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.job_item_card.view.*
-import javax.inject.Inject
-
 
 /**
  * Adapter class for RecyclerView displaying job list
  *
  * @author Orkhan Gasimli on 17.07.2018.
  */
-class JobsAdapter @Inject constructor(private val colorGenerator: ColorGenerator,
-                                      private val textBuilder: TextDrawable.IBuilder) :
-        RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
+class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
 
     var jobs: List<Job> = emptyList()
         set(value) {
@@ -57,7 +47,7 @@ class JobsAdapter @Inject constructor(private val colorGenerator: ColorGenerator
             // Get context
             val context = itemView.context
             // Load company logo
-            loadCompanyLogo(job)
+            loadCompanyLogo(job, context, itemView.company_logo)
             // Load image resource of the bookmark button
             loadBookmarkButtonsImage(job, bookmarkBtn)
             // Attach ClickListener to bookmark button
@@ -72,7 +62,7 @@ class JobsAdapter @Inject constructor(private val colorGenerator: ColorGenerator
 
             // Attach ClickListener to CardView
             itemView.setOnClickListener {
-                RxBus.publish(RxEvent(EventType.JOB_ITEM_CLICK))
+                RxBus.publish(RxEvent(EventType.JOB_ITEM_CLICK, data = job))
             }
         }
     }
@@ -99,35 +89,6 @@ class JobsAdapter @Inject constructor(private val colorGenerator: ColorGenerator
                 R.drawable.ic_unbookmark
             }
             button?.setImageResource(saveBtnImg)
-        }
-
-        /**
-         * Loads company logo to the View
-         *
-         * @param job               {@link Job} item served to the adapter
-         */
-        internal fun loadCompanyLogo(job: Job) {
-            // Generate placeholder image using TextDrawable
-            val placeholder = generatePlaceholderImage(job.company)
-            // Generate new RequestOptions to round image backgrounds
-            val glideOptions = RequestOptions()
-                    .transforms(CenterInside(), RoundedCorners(16))
-            // Load company logo via Glide
-            GlideApp.with(itemView)
-                    .load(job.logo)
-                    .placeholder(placeholder)
-                    .apply(glideOptions)
-                    .into(itemView.company_logo)
-        }
-
-        /**
-         * Generates placeholder image for company logo
-         *
-         * @param companyName       name of the company
-         */
-        private fun generatePlaceholderImage(companyName: String): TextDrawable? {
-            val text = companyName.getFirstLetters(2)
-            return textBuilder.build(text, colorGenerator.getColor(companyName))
         }
     }
 }

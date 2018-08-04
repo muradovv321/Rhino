@@ -52,4 +52,5 @@
     <string name="sample_how_to_apply">
         <![CDATA[For more info and to apply visit: https://empireflippers.com/career/hr-coordinator/]]>
     </string>
+    <string name="no_job_description">No job description available.</string>
 </resources>

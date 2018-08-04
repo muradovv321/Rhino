@@ -7,6 +7,10 @@
 
 package app.ogasimli.remoter.helper.utils
 
+import android.app.Activity
+import android.app.ActivityOptions
+import android.content.Intent
+import android.os.Build
 import android.os.Handler
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
@@ -104,4 +108,18 @@ inline fun <reified T : DialogFragment>
 inline fun <reified T : DialogFragment> instanceOfDialogFragment(vararg params: Pair<String, Any>):
         T = T::class.java.newInstance().apply {
     arguments = bundleOf(*params)
+}
+
+/**
+ * Helper & extension functions for loading images
+ *
+ * @param intent            {@link Intent} object required for starting an Activity
+ */
+fun Activity.launchActivity(intent: Intent) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        val options = ActivityOptions.makeSceneTransitionAnimation(this)
+        startActivity(intent, options.toBundle())
+    } else {
+        startActivity(intent)
+    }
 }

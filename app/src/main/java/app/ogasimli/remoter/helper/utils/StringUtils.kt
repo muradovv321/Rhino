@@ -8,6 +8,8 @@
 package app.ogasimli.remoter.helper.utils
 
 import android.content.Context
+import android.os.Build
+import android.text.Html
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 
@@ -48,9 +50,22 @@ fun String.getFirstLetters(limit: Int): String {
 fun getJobsCountText(context: Context,
                      @PluralsRes resId: Int,
                      @StringRes zeroResId: Int,
-                     count: Int) =
+                     count: Int): String =
         if (count == 0) {
             context.getString(zeroResId)
         } else {
             context.resources.getQuantityString(resId, count, count)
+        }
+
+/**
+ * Extension function to decode HTML formatted text into Spanned
+ *
+ * @return          decoded text
+ */
+@Suppress("DEPRECATION")
+fun String.decodeFromHtml(): String =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(this, Html.FROM_HTML_SEPARATOR_LINE_BREAK_DIV).toString()
+        } else {
+            Html.fromHtml(this).toString()
         }

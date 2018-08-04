@@ -7,8 +7,6 @@
 
 package app.ogasimli.remoter.ui.home.fragment.savedjoblist
 
-import androidx.core.content.res.ResourcesCompat
-import app.ogasimli.remoter.R
 import app.ogasimli.remoter.di.scope.FragmentScope
 import app.ogasimli.remoter.ui.home.fragment.adapter.JobsAdapter
 import com.amulyakhare.textdrawable.TextDrawable
@@ -26,19 +24,5 @@ class SavedJobListFragmentModule {
 
     @FragmentScope
     @Provides
-    fun provideColorGenerator(): ColorGenerator = ColorGenerator.MATERIAL
-
-    @FragmentScope
-    @Provides
-    fun provideTextBuilder(fragment: SavedJobListFragment): TextDrawable.IBuilder =
-            TextDrawable.builder()
-                    .beginConfig()
-                    .useFont(ResourcesCompat.getFont(fragment.context!!, R.font.montserrat_alternates))
-                    .endConfig()
-                    .roundRect(16)
-
-    @FragmentScope
-    @Provides
-    fun provideJobsAdapter(colorGenerator: ColorGenerator, textBuilder: TextDrawable.IBuilder) =
-            JobsAdapter(colorGenerator, textBuilder)
+    fun provideJobsAdapter() = JobsAdapter()
 }

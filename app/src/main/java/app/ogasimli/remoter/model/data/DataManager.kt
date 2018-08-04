@@ -42,6 +42,14 @@ class DataManager @Inject constructor(
     fun getBookmarkedJobs() = jobRepository.getBookmarkedJobs(getBookmarkedSortOption())
 
     /**
+     * Request job by id from DB
+     *
+     * @param jobId         id of the job to be deleted
+     * @return              Observable holding job item retrieved from DB
+     */
+    fun getJobById(jobId: String) = jobRepository.getJobById(jobId)
+
+    /**
      * Update job
      *
      * @return              Observable holding list of indexes of updated items
@@ -56,6 +64,14 @@ class DataManager @Inject constructor(
      * @return              Observable holding list of jobs retrieved from API
      */
     fun fetchAllJobs() = jobRepository.fetchAllJobs()
+
+    /**
+     * Fetch additional job info from API
+     *
+     * @param job           job item
+     * @return              Observable holding additional job info from API
+     */
+    fun fetchJobInfo(job: Job) = jobRepository.fetchJobInfo(job)
 
     /* ___________________ SharedPreferences ___________________*/
 

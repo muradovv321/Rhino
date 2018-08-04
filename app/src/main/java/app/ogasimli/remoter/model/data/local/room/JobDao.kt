@@ -10,7 +10,6 @@ package app.ogasimli.remoter.model.data.local.room
 import androidx.room.*
 import app.ogasimli.remoter.model.models.Job
 import io.reactivex.Flowable
-import io.reactivex.Single
 
 /**
  * Interface defining necessary methods for manipulating jobs table
@@ -91,7 +90,7 @@ interface JobDao {
      * @return          the job data from the table
      */
     @Query("SELECT * FROM jobs WHERE id=:jobId LIMIT 1")
-    fun getJobById(jobId: String): Single<Job>
+    fun getJobById(jobId: String): Flowable<Job>
 
     /**
      * Insert a job to the database.

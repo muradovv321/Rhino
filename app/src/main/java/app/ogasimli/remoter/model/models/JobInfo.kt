@@ -17,6 +17,6 @@ import kotlinx.android.parcel.Parcelize
  */
 @Parcelize
 data class JobInfo(
-        val jobDesc: String,
-        val applyInstruction: String,
-        val applyUrl: String) : Parcelable
+        var jobDesc: String? = null,
+        var applyInstruction: String? = null,
+        var applyUrl: String) : Parcelable

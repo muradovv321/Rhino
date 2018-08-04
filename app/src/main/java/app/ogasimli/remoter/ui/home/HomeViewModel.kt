@@ -44,9 +44,10 @@ class HomeViewModel @Inject constructor(private val dataManager: DataManager) : 
         disposable.add(dataManager.fetchAllJobs()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally {
+                .map {
                     getAllJobs()
                     getBookmarkedJobs()
+                    it
                 }
                 .subscribe(
                         {
@@ -102,18 +103,7 @@ class HomeViewModel @Inject constructor(private val dataManager: DataManager) : 
      */
     fun bookmarkJob(job: Job) {
         job.isBookmarked = !job.isBookmarked
-        disposable.add(dataManager.updateJob(job)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {
-                            Timber.d("${it.size} jobs updated in the DB...")
-                        },
-                        {
-                            Timber.e(it)
-                        }
-                )
-        )
+        dataManager.updateJob(job)
     }
 
     /**

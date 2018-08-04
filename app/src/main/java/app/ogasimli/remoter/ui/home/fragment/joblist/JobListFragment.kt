@@ -116,7 +116,8 @@ class JobListFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     /**
      * Method to cancel SwipeRefreshLayout
-     */    private fun hideLoadingView() {
+     */
+    private fun hideLoadingView() {
         if (swipe_refresh_layout.isRefreshing) {
             swipe_refresh_layout.isRefreshing = false
         }

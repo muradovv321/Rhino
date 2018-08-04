@@ -41,6 +41,12 @@ object Constants {
     val SORT_OPTION_BOOKMARKED_KEY = "$PACKAGE_NAME.SORT_OPTION_BOOKMARKED_KEY"
 
     /**
+     * Key of the job item to pass between activities via the Bundle
+     */
+    @JvmStatic
+    val JOB_ITEM_BUNDLE_KEY = "$PACKAGE_NAME.JOB_ITEM_BUNDLE_KEY"
+
+    /**
      * Timeout limit of http requests in seconds
      */
     @JvmStatic
@@ -69,4 +75,10 @@ object Constants {
      */
     @JvmStatic
     val API_BASE_URL = "https://remote-job.herokuapp.com"
+
+    /**
+     * Base URL for appending apply URL
+     */
+    @JvmStatic
+    val BASE_APPLY_URL = "https://remoteok.io"
 }

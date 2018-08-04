@@ -8,11 +8,12 @@
 package app.ogasimli.remoter.model.models
 
 /**
- * Wrapper class holding the list of jobs, source of the data and etc.
+ * Wrapper class holding the data, source of the data and etc.
  *
  * @author Orkhan Gasimli on 20.07.2018.
  */
-data class JobList(
+data class JobResponse(
+        val job: Job? = null,
         val jobs: List<Job> = emptyList(),
         val source: DataSource,
         val message: String = "",
