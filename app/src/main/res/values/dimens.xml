@@ -34,8 +34,16 @@
     <dimen name="position_and_company_name_container_horizontal_margin">16dp</dimen>
     <dimen name="bookmark_btn_width">38dp</dimen>
     <dimen name="bookmark_btn_height">38dp</dimen>
+
+    <!-- Dimens of DetailsActivity -->
     <dimen name="activity_details_appbar_elevation">0dp</dimen>
     <dimen name="details_activity_small_vertical_margin">8dp</dimen>
     <dimen name="apply_btn_height">54dp</dimen>
     <dimen name="apply_btn_vertical_margin">14dp</dimen>
+
+    <!-- Dimens of ShimmerLayout items -->
+    <dimen name="shimmer_text_height">16dp</dimen>
+    <dimen name="shimmer_text_margin_bottom_short">4dp</dimen>
+    <dimen name="shimmer_text_margin_bottom_long">8dp</dimen>
+
 </resources>

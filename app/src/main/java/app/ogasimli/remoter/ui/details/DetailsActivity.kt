@@ -35,6 +35,8 @@ class DetailsActivity : BaseActivity() {
 
     private lateinit var viewModel: DetailsViewModel
 
+    private lateinit var job: Job
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
@@ -42,14 +44,29 @@ class DetailsActivity : BaseActivity() {
         // Set up the tool bar
         initToolbar()
 
+        // Get data from Intent or Bundle
+        job = if (savedInstanceState != null) {
+            savedInstanceState.getParcelable(JOB_ITEM_BUNDLE_KEY)
+        } else {
+            intent.getParcelableExtra(JOB_ITEM_BUNDLE_KEY)
+        }
+
+        // Initial setup of content
+        setupInitialContent(job)
+
         // Bind ViewModel
         viewModel = viewModelProvider(this, viewModelFactory)
 
+        // Fetch jobs
+        fetchJobInfo()
+
         // Observe jobs LiveData
         observeJob()
+    }
 
-        // Fetch jobs
-        fetchJobs()
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putParcelable(JOB_ITEM_BUNDLE_KEY, job)
     }
 
     /**
@@ -65,13 +82,9 @@ class DetailsActivity : BaseActivity() {
     /**
      * Helper function to fetch jobs
      */
-    private fun fetchJobs() {
+    private fun fetchJobInfo() {
         // Show loading
         showLoadingView()
-        // Get data from Intent
-        val job: Job = intent.getParcelableExtra(JOB_ITEM_BUNDLE_KEY)
-        // Pass Intent extra to ViewModel and set LiveData
-        viewModel.setJob(job)
         // Fetch jobs
         viewModel.fetchJobInfo(job)
     }
@@ -92,33 +105,46 @@ class DetailsActivity : BaseActivity() {
     }
 
     /**
-     * Method to start SwipeRefreshLayout
+     * Method to start loading animation
      */
     private fun showLoadingView() {
-//        if (!swipe_refresh_layout.isRefreshing) {
-//            swipe_refresh_layout.isRefreshing = true
-//        }
+        job_description.visibility = View.GONE
+        apply_group.visibility = View.GONE
+        shimmer_layout.visibility = View.VISIBLE
+        shimmer_layout.startShimmerAnimation()
+        // Disallow touch events pass through the container to its children
+        container.requestDisallowInterceptTouchEvent(true)
     }
 
     /**
-     * Method to cancel SwipeRefreshLayout
+     * Method to cancel loading animation
      */
     private fun hideLoadingView() {
-//        if (swipe_refresh_layout.isRefreshing) {
-//            swipe_refresh_layout.isRefreshing = false
-//        }
+        shimmer_layout.visibility = View.GONE
+        shimmer_layout.stopShimmerAnimation()
+        // Allow touch events pass through the container to its children
+        container.requestDisallowInterceptTouchEvent(false)
     }
 
     /**
-     * Helper function to setup of the page
+     * Helper function for initial page setup
      *
      * @param job       job item
      */
-    private fun setupContent(job: Job) {
+    private fun setupInitialContent(job: Job) {
         loadCompanyLogo(job, this, company_logo)
         toolbar_position_title.text = job.position
         toolbar_posting_date_title.text = periodTillNow(this, job.postingDate)
         company_name.text = job.company
+    }
+
+    /**
+     * Helper function to setup content
+     * with initial job info
+     *
+     * @param job       job item
+     */
+    private fun setupContent(job: Job) {
         setJobDescription(job)
         setApplyInstructions(job)
         apply_btn.setOnClickListener {
@@ -130,6 +156,31 @@ class DetailsActivity : BaseActivity() {
         }
     }
 
+    /**
+     * Helper function to set job description
+     *
+     * @param job       job item
+     */
+    private fun setJobDescription(job: Job) {
+        // If detailed job description available use it, otherwise use compact description
+        var jobDescription = job.additionalInfo?.jobDesc ?: job.description
+        // Decode job description (convert HTML tags to styling)
+        jobDescription = jobDescription.decodeFromHtml()
+        // If none of the descriptions available, then use predefined no description message
+        if (jobDescription.isBlank()) jobDescription = getString(R.string.no_job_description)
+        // Set description to the TextView
+        job_description.text = jobDescription
+        // Make the text visible
+        job_description.visibility = View.VISIBLE
+        // Add movement method
+        job_description.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    /**
+     * Helper function to setup how to apply section
+     *
+     * @param job       job item
+     */
     private fun setApplyInstructions(job: Job) {
         // Assign instructions to new variable
         val instruction = job.additionalInfo?.applyInstruction
@@ -145,19 +196,6 @@ class DetailsActivity : BaseActivity() {
         }
         // Add movement method
         apply_instruction.movementMethod = LinkMovementMethod.getInstance()
-    }
-
-    private fun setJobDescription(job: Job) {
-        // If detailed job description available use it, otherwise use compact description
-        var jobDescription = job.additionalInfo?.jobDesc ?: job.description
-        // Decode job description (convert HTML tags to styling)
-        jobDescription = jobDescription.decodeFromHtml()
-        // If none of the descriptions available, then use predefined no description message
-        if (jobDescription.isBlank()) jobDescription = getString(R.string.no_job_description)
-        // Set description to the TextView
-        job_description.text = jobDescription
-        // Add movement method
-        job_description.movementMethod = LinkMovementMethod.getInstance()
     }
 
     /**

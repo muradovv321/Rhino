@@ -7,14 +7,23 @@
   -->
 
 <resources>
+    <!-- Main color set -->
     <color name="colorPrimary">#933C60</color>
     <color name="colorPrimaryDark">#620936</color>
     <color name="colorAccent">#F3A358</color>
     <color name="textColorPrimary">#000000</color>
     <color name="textColorSecondary">#B3060606</color>
+
+    <!-- BackDrop colors -->
     <color name="backDropColor">@color/colorPrimary</color>
     <color name="backDropFrontColor">#F7F3F7</color>
     <color name="backDropFrontHeaderColor">#FFFFFF</color>
     <color name="backDropFrontHeaderBottomBorderColor">@color/backDropFrontColor</color>
+
+    <!-- Color of control elements (i.e. buttons)located above colorPrimary -->
     <color name="controlElementsTextColor">#FFFFFF</color>
+
+    <!-- ShimmerLayout colors -->
+    <color name="shimmer_text_background_color">#edb1b1b1</color>
+    <color name="shimmer_header_background_color">#94333032</color>
 </resources>
