@@ -189,13 +189,20 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
                             JobResponse(job = newJob, source = DataSource.CACHE)
                         }
                     }
-                    .flatMap {
-                        Timber.d("Saving new job from API to DB: $it")
+                    .flatMap { response ->
+                        Timber.d("Saving new job from API to DB: $response")
                         // If response returned from network, then insert results to DB
-                        if (it.source == DataSource.API) {
-                            updateJob(it.job!!)
+                        if (response.source == DataSource.API) {
+                            updateJob(response.job!!).subscribe(
+                                    {
+                                        "Updated ${it.size} jobs in DB..."
+                                    },
+                                    {
+                                        Timber.e(it)
+                                    }
+                            )
                         }
-                        Maybe.just(it)
+                        Maybe.just(response)
                     }
                     .toSingle()
                     .onErrorReturn {
