@@ -11,56 +11,50 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/transparent">
+    android:layout_height="match_parent">
 
-    <View
-        android:id="@+id/header_background"
+    <RelativeLayout
+        android:id="@+id/header_container"
         android:layout_width="0dp"
         android:layout_height="@dimen/backdrop_front_header_height"
-        android:background="@drawable/backdrop_front_header_background"
+        android:padding="@dimen/backdrop_front_header_padding"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:background="@drawable/backdrop_front_header_background">
 
-    <ImageButton
-        android:id="@+id/sort_btn"
-        android:layout_width="@dimen/sort_btn_width"
-        android:layout_height="@dimen/sort_btn_height"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        app:srcCompat="@drawable/ic_sort"
-        android:scaleType="center"
-        android:tint="@color/btn_back_color_state_list"
-        android:layout_marginEnd="@dimen/backdrop_front_header_horizontal_margin"
-        app:layout_constraintEnd_toEndOf="@+id/header_background"
-        android:layout_marginTop="@dimen/backdrop_front_header_vertical_margin"
-        app:layout_constraintTop_toTopOf="@+id/header_background"
-        android:layout_marginBottom="@dimen/backdrop_front_header_vertical_margin"
-        app:layout_constraintBottom_toBottomOf="@+id/header_background"
-        android:enabled="false"
-        android:contentDescription="@string/sort_btn_content_description"/>
+        <TextView
+            android:id="@+id/header_info_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/backdrop_front_header_height"
+            android:layout_centerVertical="true"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textAppearance="?attr/textAppearanceCaption"
+            tools:text="395 Open Jobs"/>
 
-    <TextView
-        android:id="@+id/header_info_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:textAppearance="?attr/textAppearanceCaption"
-        tools:text="395 Open Jobs"
-        android:layout_marginTop="@dimen/backdrop_front_header_vertical_margin"
-        app:layout_constraintTop_toTopOf="@+id/header_background"
-        android:layout_marginBottom="@dimen/backdrop_front_header_vertical_margin"
-        app:layout_constraintBottom_toBottomOf="@+id/header_background"
-        app:layout_constraintStart_toStartOf="@+id/header_background"
-        android:layout_marginStart="@dimen/backdrop_front_header_horizontal_margin"/>
+        <ImageButton
+            android:id="@+id/sort_btn"
+            android:layout_width="@dimen/sort_btn_width"
+            android:layout_height="@dimen/sort_btn_width"
+            android:background="?selectableItemBackgroundBorderless"
+            app:srcCompat="@drawable/ic_sort"
+            android:tint="@color/btn_back_color_state_list"
+            android:scaleType="center"
+            android:enabled="false"
+            android:contentDescription="@string/sort_btn_content_description"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignEnd="@+id/header_info_text_view"/>
+
+    </RelativeLayout>
 
     <View
         android:id="@+id/background"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/backDropFrontColor"
-        app:layout_constraintTop_toBottomOf="@+id/header_background"
+        app:layout_constraintTop_toBottomOf="@+id/header_container"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

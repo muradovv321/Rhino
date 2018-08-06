@@ -19,10 +19,10 @@
     <!-- Dimens of BackDrop -->
     <dimen name="sort_btn_width">38dp</dimen>
     <dimen name="sort_btn_height">38dp</dimen>
-    <dimen name="backdrop_front_header_height">40dp</dimen>
+    <dimen name="backdrop_front_header_height">45dp</dimen>
     <dimen name="backdrop_front_elevation">8dp</dimen>
-    <dimen name="backdrop_front_header_horizontal_margin">@dimen/activity_horizontal_margin</dimen>
-    <dimen name="backdrop_front_header_vertical_margin">8dp</dimen>
+    <dimen name="backdrop_front_header_padding">@dimen/activity_horizontal_margin</dimen>
+    <dimen name="backdrop_front_header_corner_radius">20dp</dimen>
 
     <!-- Dimens of CardView and its child elements holding job items -->
     <dimen name="job_item_card_height">80dp</dimen>

@@ -81,7 +81,7 @@ class HomeActivity : BaseActivity() {
     // Popup menu
     private val popupMenu = popupMenu {
         style = R.style.Widget_Remoter_MPM_Menu
-        dropdownGravity = Gravity.START
+        dropdownGravity = Gravity.BOTTOM
         val radioButtons = arrayListOf<RadioButton>()
         section {
             title = "Sort by"
