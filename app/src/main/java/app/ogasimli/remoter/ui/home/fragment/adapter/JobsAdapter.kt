@@ -7,9 +7,11 @@
 
 package app.ogasimli.remoter.ui.home.fragment.adapter
 
+import android.animation.AnimatorInflater
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -48,12 +50,24 @@ class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
             val context = itemView.context
             // Load company logo
             loadCompanyLogo(job, context, itemView.company_logo)
-            // Load image resource of the bookmark button
-            loadBookmarkButtonsImage(job, bookmarkBtn)
-            // Attach ClickListener to bookmark button
-            bookmarkBtn?.setOnClickListener {
-                RxBus.publish(RxEvent(EventType.BOOKMARK_BUTTON_CLICK, data = job))
+            // Setup bookmark button
+            bookmarkBtn?.apply {
+                // Set checked state of the view
+                isChecked = job.isBookmarked
+
+                // Attach ClickListener to bookmark button
+                setOnClickListener {
+                    // Set scale animation when button clicked
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        // Load animation
+                        val scaleAnim = AnimatorInflater.loadStateListAnimator(context, R.animator.scale)
+                        // Set it to view
+                        stateListAnimator = scaleAnim
+                    }
+                    RxBus.publish(RxEvent(EventType.BOOKMARK_BUTTON_CLICK, data = job))
+                }
             }
+
             // Set position
             positionName?.text = job.position
             // Set company name and period
@@ -70,25 +84,9 @@ class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
     override fun getItemCount() = jobs.size
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         val positionName: TextView? = itemView.position
         val companyName: TextView? = itemView.company_name
         val logo: ImageView? = itemView.company_logo
-        val bookmarkBtn: ImageButton? = itemView.bookmark_btn
-
-        /**
-         * Determine and set the image resource of the save button
-         *
-         * @param job               {@link Job} item served to the adapter
-         * @param button            button whose image resource will be set
-         */
-        internal fun loadBookmarkButtonsImage(job: Job, button: ImageButton?) {
-            val saveBtnImg = if (job.isBookmarked) {
-                R.drawable.ic_tab_bookmarks
-            } else {
-                R.drawable.ic_unbookmark
-            }
-            button?.setImageResource(saveBtnImg)
-        }
+        val bookmarkBtn: CheckBox? = itemView.bookmark_btn
     }
 }

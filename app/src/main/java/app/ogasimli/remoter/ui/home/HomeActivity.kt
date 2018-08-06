@@ -48,7 +48,7 @@ class HomeActivity : BaseActivity() {
     private lateinit var jobsCount: JobsCount
 
     // Tab Icons
-    private val tabIcons = intArrayOf(R.drawable.ic_tab_jobs, R.drawable.ic_tab_bookmarks)
+    private val tabIcons = intArrayOf(R.drawable.ic_tie, R.drawable.ic_bookmark)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

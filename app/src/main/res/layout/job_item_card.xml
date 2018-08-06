@@ -72,19 +72,20 @@
 
         </LinearLayout>
 
-        <ImageButton
+        <CheckBox
             android:id="@+id/bookmark_btn"
             android:layout_width="@dimen/bookmark_btn_width"
             android:layout_height="@dimen/bookmark_btn_height"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:tint="?attr/colorAccent"
-            app:srcCompat="@drawable/ic_unbookmark"
-            android:scaleType="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:checked="false"
+            android:text="@null"
+            android:button="@drawable/bookmark_icon"
+            android:layout_marginEnd="4dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="@dimen/job_item_card_horizontal_margin_from_borders"
-            android:contentDescription="@string/job_bookmark_btn_content_description"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="@string/job_bookmark_btn_content_description"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
