@@ -30,13 +30,14 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         app:srcCompat="@drawable/ic_sort"
         android:scaleType="center"
-        android:tint="?attr/colorPrimary"
+        android:tint="@color/btn_back_color_state_list"
         android:layout_marginEnd="@dimen/backdrop_front_header_horizontal_margin"
         app:layout_constraintEnd_toEndOf="@+id/header_background"
         android:layout_marginTop="@dimen/backdrop_front_header_vertical_margin"
         app:layout_constraintTop_toTopOf="@+id/header_background"
         android:layout_marginBottom="@dimen/backdrop_front_header_vertical_margin"
         app:layout_constraintBottom_toBottomOf="@+id/header_background"
+        android:enabled="false"
         android:contentDescription="@string/sort_btn_content_description"/>
 
     <TextView

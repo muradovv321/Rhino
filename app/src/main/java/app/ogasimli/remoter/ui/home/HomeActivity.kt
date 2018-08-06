@@ -183,6 +183,7 @@ class HomeActivity : BaseActivity() {
     private val pageChangeListener = object : CustomPageChangeListener() {
         override fun onPageSelected(position: Int) {
             setBackdropHeaderText()
+            setSortButtonsStatus()
         }
     }
 
@@ -220,6 +221,17 @@ class HomeActivity : BaseActivity() {
                         R.string.backdrop_front_header_bookmarked_jobs_zero, jobsCount.bookmarkedJobs)
             }
             else -> ""
+        }
+    }
+
+    /**
+     * Helper method to enable/disable sort button
+     * based on the jobsCount
+     */
+    private fun setSortButtonsStatus() {
+        when (view_pager.currentItem) {
+            0 -> sort_btn.isEnabled = jobsCount.openJobs > 0
+            1 -> sort_btn.isEnabled = jobsCount.bookmarkedJobs > 0
         }
     }
 
