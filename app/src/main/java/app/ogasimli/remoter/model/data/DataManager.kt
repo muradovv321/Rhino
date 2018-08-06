@@ -28,9 +28,9 @@ class DataManager @Inject constructor(
     /* ___________________ Jobs Table ___________________*/
 
     /**
-     * Request list of jobs from DB
+     * Request list of jobs from DB & API
      *
-     * @return              Observable holding list of jobs retrieved from DB
+     * @return          Observable holding list of jobs retrieved from API or DB
      */
     fun getAllJobs() = jobRepository.getAllJobs(getAllSortOption())
 
@@ -57,13 +57,6 @@ class DataManager @Inject constructor(
     fun updateJob(vararg job: Job) = jobRepository.updateJob(*job)
 
     /* ___________________ API ___________________*/
-
-    /**
-     * Request list of jobs from API
-     *
-     * @return              Observable holding list of jobs retrieved from API
-     */
-    fun fetchAllJobs() = jobRepository.fetchAllJobs()
 
     /**
      * Fetch additional job info from API

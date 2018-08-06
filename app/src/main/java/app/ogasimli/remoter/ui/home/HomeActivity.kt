@@ -193,9 +193,10 @@ class HomeActivity : BaseActivity() {
     private fun observeJobsCount() {
         viewModel.jobsCount.observe(this, Observer { count ->
             count?.let {
-                Timber.d("$it jobs received")
+                Timber.d("${it.openJobs} open and ${it.bookmarkedJobs} bookmarked jobs received")
                 jobsCount = it
                 setBackdropHeaderText()
+                setSortButtonsStatus()
             }
         })
     }

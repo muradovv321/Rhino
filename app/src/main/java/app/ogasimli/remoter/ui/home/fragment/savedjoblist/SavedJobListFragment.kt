@@ -54,6 +54,9 @@ class SavedJobListFragment : BaseFragment() {
         // Bind ViewModel
         viewModel = viewModelProvider(activity!!, viewModelFactory)
 
+        // Fetch bookmarked jobs
+        viewModel.getBookmarkedJobs()
+
         // Observe jobs LiveData
         observeJobs()
     }

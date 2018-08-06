@@ -16,6 +16,7 @@ import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.model.models.SortOption
 import app.ogasimli.remoter.ui.base.BaseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
@@ -25,7 +26,10 @@ import javax.inject.Inject
  *
  * @author Orkhan Gasimli on 17.07.2018.
  */
-class HomeViewModel @Inject constructor(private val dataManager: DataManager) : BaseViewModel() {
+class HomeViewModel @Inject constructor(
+        private val dataManager: DataManager,
+        private val allJobsDisposable: CompositeDisposable,
+        private val bookmarkJobsDisposable: CompositeDisposable) : BaseViewModel() {
 
     val allJobList = MutableLiveData<List<Job>>()
 
@@ -38,33 +42,11 @@ class HomeViewModel @Inject constructor(private val dataManager: DataManager) : 
     var sortOptionBookmarkedJobs = dataManager.getBookmarkedSortOption()
 
     /**
-     * Fetches jobs and updates local DB
-     */
-    fun fetchAllJobs() {
-        disposable.add(dataManager.fetchAllJobs()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map {
-                    getAllJobs()
-                    getBookmarkedJobs()
-                    it
-                }
-                .subscribe(
-                        {
-                            // TODO: Handle network errors
-                        },
-                        {
-                            Timber.e(it)
-                        }
-                )
-        )
-    }
-
-    /**
      * Gets all jobs from DB and serves them
      */
-    private fun getAllJobs() {
-        disposable.add(dataManager.getAllJobs()
+    fun getAllJobs() {
+        allJobsDisposable.clear()
+        allJobsDisposable.add(dataManager.getAllJobs()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -81,8 +63,9 @@ class HomeViewModel @Inject constructor(private val dataManager: DataManager) : 
     /**
      * Gets bookmarked jobs from DB and serves them
      */
-    private fun getBookmarkedJobs() {
-        disposable.add(dataManager.getBookmarkedJobs()
+    fun getBookmarkedJobs() {
+        bookmarkJobsDisposable.clear()
+        bookmarkJobsDisposable.add(dataManager.getBookmarkedJobs()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -103,7 +86,7 @@ class HomeViewModel @Inject constructor(private val dataManager: DataManager) : 
      */
     fun bookmarkJob(job: Job) {
         job.isBookmarked = !job.isBookmarked
-        dataManager.updateJob(job)
+        disposable.add(dataManager.updateJob(job).subscribe({}, { Timber.e(it) }))
     }
 
     /**
@@ -170,9 +153,16 @@ class HomeViewModel @Inject constructor(private val dataManager: DataManager) : 
         when (event.type) {
             EventType.OPEN_JOBS_COUNT -> tempJobsCount.openJobs = event.count
             EventType.BOOKMARKED_JOBS_COUNT -> tempJobsCount.bookmarkedJobs = event.count
+            else -> return
         }
         tempJobsCount.isSearching = event.isSearching
         // Set value of the LiveData
         jobsCount.value = tempJobsCount
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        allJobsDisposable.clear()
+        bookmarkJobsDisposable.clear()
     }
 }

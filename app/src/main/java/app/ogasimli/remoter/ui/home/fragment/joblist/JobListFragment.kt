@@ -88,7 +88,7 @@ class JobListFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         // Show loading
         showLoadingView()
         // Fetch jobs
-        viewModel.fetchAllJobs()
+        viewModel.getAllJobs()
     }
 
     /**

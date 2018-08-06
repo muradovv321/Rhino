@@ -11,7 +11,6 @@ import androidx.lifecycle.MutableLiveData
 import app.ogasimli.remoter.model.data.DataManager
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.ui.base.BaseViewModel
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -48,9 +47,9 @@ class DetailsViewModel @Inject constructor(private val dataManager: DataManager)
             disposable.add(dataManager.fetchJobInfo(job)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .flatMap {
+                    .map {
                         getJobById(job.id)
-                        Observable.just(it)
+                        it
                     }
                     .subscribe(
                             {
@@ -71,6 +70,7 @@ class DetailsViewModel @Inject constructor(private val dataManager: DataManager)
      * @return          Observable holding job item retrieved from DB
      */
     private fun getJobById(jobId: String) {
+        disposable.clear()
         disposable.add(dataManager.getJobById(jobId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
