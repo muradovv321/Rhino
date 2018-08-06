@@ -164,12 +164,10 @@ class DetailsActivity : BaseActivity() {
     private fun setJobDescription(job: Job) {
         // If detailed job description available use it, otherwise use compact description
         var jobDescription = job.additionalInfo?.jobDesc ?: job.description
-        // Decode job description (convert HTML tags to styling)
-        jobDescription = jobDescription.decodeFromHtml()
         // If none of the descriptions available, then use predefined no description message
         if (jobDescription.isBlank()) jobDescription = getString(R.string.no_job_description)
-        // Set description to the TextView
-        job_description.text = jobDescription
+        // Decode job description and set description to the TextView
+        job_description.text = jobDescription.decodeFromHtml()
         // Make the text visible
         job_description.visibility = View.VISIBLE
         // Add movement method
@@ -190,12 +188,12 @@ class DetailsActivity : BaseActivity() {
             apply_instruction.text = instruction.decodeFromHtml()
             // Make the group visible
             apply_group.visibility = View.VISIBLE
+            // Add movement method
+            apply_instruction.movementMethod = LinkMovementMethod.getInstance()
         } else {
             // Make the group invisible
             apply_group.visibility = View.GONE
         }
-        // Add movement method
-        apply_instruction.movementMethod = LinkMovementMethod.getInstance()
     }
 
     /**

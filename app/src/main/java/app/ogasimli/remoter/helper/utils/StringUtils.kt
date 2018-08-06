@@ -10,6 +10,7 @@ package app.ogasimli.remoter.helper.utils
 import android.content.Context
 import android.os.Build
 import android.text.Html
+import android.text.Spanned
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 
@@ -63,9 +64,9 @@ fun getJobsCountText(context: Context,
  * @return          decoded text
  */
 @Suppress("DEPRECATION")
-fun String.decodeFromHtml(): String =
+fun String.decodeFromHtml(): Spanned =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Html.fromHtml(this, Html.FROM_HTML_SEPARATOR_LINE_BREAK_DIV).toString()
+            Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
         } else {
-            Html.fromHtml(this).toString()
+            Html.fromHtml(this)
         }
