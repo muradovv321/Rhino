@@ -13,17 +13,27 @@
     android:id="@+id/swipe_refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:showIn="@layout/activity_home"
     tools:context=".ui.home.HomeActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/jobs_recycler_view"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="@dimen/jobs_recycler_views_padding"
-        android:paddingStart="@dimen/jobs_recycler_views_padding"
-        android:paddingEnd="@dimen/jobs_recycler_views_padding"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/job_item_card"/>
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/jobs_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/jobs_recycler_views_padding"
+            android:paddingStart="@dimen/jobs_recycler_views_padding"
+            android:paddingEnd="@dimen/jobs_recycler_views_padding"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/job_item_card"/>
+
+        <include
+            android:id="@+id/empty_view"
+            layout="@layout/empty_jobs_layout"
+            android:visibility="gone"/>
+
+    </FrameLayout>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

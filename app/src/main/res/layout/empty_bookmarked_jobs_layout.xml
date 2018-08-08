@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018 Orkhan Gasimli - All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited.
+  ~ This file is proprietary and confidential.
+  ~ Written by Orkhan Gasimli orkhan.gasimli@gmail.com in 2018.
+  -->
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.HomeActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/empty_layout_padding_top"
+        android:paddingBottom="@dimen/empty_layout_padding_bottom"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="@dimen/empty_bookmarked_jobs_image_width"
+            android:layout_height="@dimen/empty_bookmarked_jobs_image_height"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:alpha="0.8"
+            android:contentDescription="@string/no_jobs_image_description"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/ic_rhino_front"/>
+
+        <TextView
+            android:id="@+id/trip_stats_empty_view_message_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:text="@string/no_bookmarked_jobs_main_message"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:fontFamily="@font/lato"
+            android:textColor="@color/textColorSecondary"/>
+
+    </LinearLayout>
+
+</ScrollView>

@@ -29,5 +29,5 @@
 
     <!-- Button background color -->
     <color name="btn_back_color_enabled">@color/colorPrimary</color>
-    <color name="btn_back_color_disabled">#AA933C60</color>
+    <color name="btn_back_color_disabled">#b1acae</color>
 </resources>

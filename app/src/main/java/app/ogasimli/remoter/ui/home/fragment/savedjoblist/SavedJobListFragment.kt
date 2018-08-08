@@ -24,7 +24,7 @@ import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.ui.base.BaseFragment
 import app.ogasimli.remoter.ui.home.HomeViewModel
 import app.ogasimli.remoter.ui.home.fragment.adapter.JobsAdapter
-import kotlinx.android.synthetic.main.fragment_saved_job_list.*
+import kotlinx.android.synthetic.main.fragment_bookmarked_job_list.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -42,7 +42,7 @@ class SavedJobListFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return container?.inflate(R.layout.fragment_saved_job_list)
+        return container?.inflate(R.layout.fragment_bookmarked_job_list)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,11 +77,40 @@ class SavedJobListFragment : BaseFragment() {
      */
     private fun observeJobs() {
         viewModel.bookmarkedJobList.observe(this, Observer { jobs ->
-            jobs?.let {
-                Timber.d("${it.size} jobs received")
-                jobsAdapter.jobs = it
+            if (jobs != null && jobs.isNotEmpty()) {
+                Timber.d("${jobs.size} jobs received")
+                showResultView(jobs)
+            } else {
+                Timber.d("No jobs received")
+                showEmptyView()
             }
         })
+    }
+
+    /**
+     * Helper function to setup UI when jobs received
+     *
+     * @param jobs      list of received job items
+     */
+    private fun showResultView(jobs: List<Job>) {
+        // Forward jobs to JobsAdapter
+        jobsAdapter.jobs = jobs
+        // Show RecyclerView
+        jobs_recycler_view.visibility = View.VISIBLE
+        // Hide empty view
+        empty_view.visibility = View.GONE
+    }
+
+    /**
+     * Helper function to setup UI when no jobs received
+     */
+    private fun showEmptyView() {
+        // Forward empty list to JobsAdapter
+        jobsAdapter.jobs = emptyList()
+        // Hide RecyclerView
+        jobs_recycler_view.visibility = View.GONE
+        // Show empty view
+        empty_view.visibility = View.VISIBLE
     }
 
     /**

@@ -54,4 +54,13 @@
 
     <!-- DetailsActivity's string resources -->
     <string name="no_job_description">No job description available.</string>
+
+    <!-- Empty UI's string resources -->
+    <string name="no_jobs_image_description">No result image</string>
+    <string name="no_jobs_main_message">Looks like our rhino is ashamed and not able to retrieve
+        the data. Try to poke him again&#8230;
+    </string>
+    <string name="no_bookmarked_jobs_main_message">No bookmarked job available. Try to
+        bookmark at least on job before heading up here.</string>
+    <string name="poke_btn_text">Poke</string>
 </resources>

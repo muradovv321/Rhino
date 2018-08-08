@@ -6,10 +6,14 @@
   ~ Written by Orkhan Gasimli orkhan.gasimli@gmail.com in 2018.
   -->
 
-<androidx.recyclerview.widget.RecyclerView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<androidx.recyclerview.widget.RecyclerView
     android:id="@+id/jobs_recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,5 +22,11 @@
     android:paddingEnd="@dimen/jobs_recycler_views_padding"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
     tools:listitem="@layout/job_item_card"
-    tools:showIn="@layout/activity_home"
     tools:context=".ui.home.HomeActivity"/>
+
+    <include
+        android:id="@+id/empty_view"
+        layout="@layout/empty_bookmarked_jobs_layout"
+        android:visibility="gone"/>
+
+</FrameLayout>

@@ -90,7 +90,7 @@
 
     <style name="Widget.Remoter.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">?attr/colorPrimary</item>
-        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
     </style>
 
     <!-- TextAppearance themes -->

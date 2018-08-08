@@ -54,4 +54,13 @@
     <dimen name="shimmer_text_margin_bottom_short">4dp</dimen>
     <dimen name="shimmer_text_margin_bottom_long">8dp</dimen>
 
+    <!-- Empty UI's items -->
+    <dimen name="empty_jobs_image_width">150dp</dimen>
+    <dimen name="empty_jobs_image_height">150dp</dimen>
+    <dimen name="empty_bookmarked_jobs_image_width">160dp</dimen>
+    <dimen name="empty_bookmarked_jobs_image_height">150dp</dimen>
+    <dimen name="empty_layout_padding_top">80dp</dimen>
+    <dimen name="empty_layout_padding_bottom">16dp</dimen>
+    <dimen name="poke_btn_margin_top">8dp</dimen>
+
 </resources>
