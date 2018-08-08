@@ -35,7 +35,7 @@ class DetailsActivity : BaseActivity() {
 
     private lateinit var viewModel: DetailsViewModel
 
-    private lateinit var job: Job
+    private var job: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,8 +51,11 @@ class DetailsActivity : BaseActivity() {
             intent.getParcelableExtra(JOB_ITEM_BUNDLE_KEY)
         }
 
+        // Finish activity if job is null
+        if (job == null) supportFinishAfterTransition()
+
         // Initial setup of content
-        setupInitialContent(job)
+        setupInitialContent(job!!)
 
         // Bind ViewModel
         viewModel = viewModelProvider(this, viewModelFactory)
@@ -86,7 +89,7 @@ class DetailsActivity : BaseActivity() {
         // Show loading
         showLoadingView()
         // Fetch jobs
-        viewModel.fetchJobInfo(job)
+        viewModel.fetchJobInfo(job!!)
     }
 
     /**
