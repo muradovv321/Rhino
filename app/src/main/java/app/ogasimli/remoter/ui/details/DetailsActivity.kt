@@ -182,10 +182,12 @@ class DetailsActivity : BaseActivity() {
     private fun setApplyInstructions(job: Job) {
         // Assign instructions to new variable
         val instruction = job.additionalInfo?.applyInstruction
-        // If instructions are available
-        if (instruction != null && instruction.isNotBlank()) {
-            // Decode it and set to the TextView
-            apply_instruction.text = instruction.decodeFromHtml()
+        // Decode instructions from HTML
+        val decodedText = instruction?.decodeFromHtml()
+        // If decoded instructions are available
+        if (decodedText != null && decodedText.isNotBlank()) {
+            // Set to the TextView
+            apply_instruction.text = decodedText
             // Make the group visible
             apply_group.visibility = View.VISIBLE
             // Add movement method
