@@ -8,6 +8,7 @@
 package app.ogasimli.remoter.ui.custom
 
 import android.content.Context
+import android.content.res.Configuration.*
 import android.os.Build
 import android.util.AttributeSet
 import android.view.Gravity
@@ -41,7 +42,12 @@ class SortPopupWindow @JvmOverloads constructor(
     }
 
     override fun showAsDropDown(anchor: View?) {
-        val yOff = 10F.toPx(context).toInt()
-        super.showAsDropDown(anchor, 0, yOff, Gravity.START)
+        when (context.resources.configuration.orientation) {
+            ORIENTATION_LANDSCAPE, ORIENTATION_UNDEFINED -> super.showAsDropDown(anchor)
+            ORIENTATION_PORTRAIT -> {
+                val yOff = 10F.toPx(context).toInt()
+                super.showAsDropDown(anchor, 0, yOff, Gravity.START)
+            }
+        }
     }
 }
