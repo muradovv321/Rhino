@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018 Orkhan Gasimli - All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited.
+  ~ This file is proprietary and confidential.
+  ~ Written by Orkhan Gasimli orkhan.gasimli@gmail.com in 2018.
+  -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minWidth="@dimen/sort_popup_min_width"
+    android:paddingTop="@dimen/sort_popup_padding_top"
+    android:paddingBottom="@dimen/sort_popup_padding_bottom">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/sort_popup_title_margin_bottom"
+        android:paddingStart="@dimen/sort_popup_padding_horizontal"
+        android:paddingEnd="@dimen/sort_popup_padding_horizontal"
+        android:textColor="?android:textColorSecondary"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:text="@string/sort_popup_group_title"/>
+
+    <LinearLayout
+        android:id="@+id/by_date_container"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/sort_popup_radio_container_min_height"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/sort_popup_padding_horizontal"
+        android:paddingEnd="@dimen/sort_popup_padding_horizontal"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:fontFamily="@font/lato"
+            android:text="@string/sort_popup_by_date_title"/>
+
+        <RadioButton
+            android:id="@+id/by_date_radio_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:clickable="false"
+            android:focusable="false"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/by_position_container"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/sort_popup_radio_container_min_height"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/sort_popup_padding_horizontal"
+        android:paddingEnd="@dimen/sort_popup_padding_horizontal"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:fontFamily="@font/lato"
+            android:text="@string/sort_popup_by_position_title"/>
+
+        <RadioButton
+            android:id="@+id/by_position_radio_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:clickable="false"
+            android:focusable="false"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/by_company_container"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/sort_popup_radio_container_min_height"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/sort_popup_padding_horizontal"
+        android:paddingEnd="@dimen/sort_popup_padding_horizontal"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:fontFamily="@font/lato"
+            android:text="@string/sort_popup_by_company_title"/>
+
+        <RadioButton
+            android:id="@+id/by_company_radio_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:clickable="false"
+            android:focusable="false"/>
+
+    </LinearLayout>
+
+</LinearLayout>

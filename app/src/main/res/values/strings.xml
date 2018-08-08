@@ -46,6 +46,12 @@
         <item quantity="other">%d Jobs Found</item>
     </plurals>
 
+    <!-- Sort Popup Window -->
+    <string name="sort_popup_group_title">Sort by</string>
+    <string name="sort_popup_by_date_title">Posting Date</string>
+    <string name="sort_popup_by_position_title">Position Name</string>
+    <string name="sort_popup_by_company_title">Company Name</string>
+
     <!-- DetailsActivity's string resources -->
     <string name="no_job_description">No job description available.</string>
 </resources>

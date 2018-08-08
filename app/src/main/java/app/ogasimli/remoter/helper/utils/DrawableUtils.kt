@@ -5,7 +5,7 @@
  * Written by Orkhan Gasimli orkhan.gasimli@gmail.com in 2018.
  */
 
-package com.dashroad.milebyterms.helper.utils
+package app.ogasimli.remoter.helper.utils
 
 import android.content.Context
 import android.graphics.PorterDuff

@@ -179,9 +179,6 @@ dependencies {
     // TextDrawable
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 
-    // Material Popup Menu
-    implementation 'com.github.zawadz88.materialpopupmenu:material-popup-menu:2.1.0'
-
     // ShimmerLayout
     implementation 'io.supercharge:shimmerlayout:2.1.0'
 

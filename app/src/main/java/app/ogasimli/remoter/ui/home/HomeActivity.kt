@@ -7,10 +7,11 @@
 
 package app.ogasimli.remoter.ui.home
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
+import android.view.animation.DecelerateInterpolator
 import android.widget.RadioButton
 import androidx.lifecycle.Observer
 import app.ogasimli.remoter.R
@@ -23,13 +24,11 @@ import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.model.models.SortOption
 import app.ogasimli.remoter.ui.base.BaseActivity
 import app.ogasimli.remoter.ui.custom.CustomPageChangeListener
+import app.ogasimli.remoter.ui.custom.SortPopupWindow
 import app.ogasimli.remoter.ui.details.DetailsActivity
-import com.github.zawadz88.materialpopupmenu.popupMenu
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.backdrop_front.*
-import kotlinx.android.synthetic.main.sort_by_company_name_layout.view.*
-import kotlinx.android.synthetic.main.sort_by_position_name_layout.view.*
-import kotlinx.android.synthetic.main.sort_by_posting_date_layout.view.*
+import kotlinx.android.synthetic.main.sort_popup_window.view.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -58,6 +57,9 @@ class HomeActivity : BaseActivity() {
         initToolbar()
 
         sort_btn.setOnClickListener {
+            // Rotate button 180 degree
+            rotateBy(180F, it)
+            // Show Popup Menu
             showSortPopup(it)
         }
 
@@ -71,59 +73,64 @@ class HomeActivity : BaseActivity() {
         observeJobsCount()
     }
 
-    /**
-     * Helper function to display Popup Menu
-     */
-    private fun showSortPopup(v: View) {
-        popupMenu.show(this@HomeActivity, v)
+    private fun rotateBy(degree: Float, view: View?) {
+        view?.apply {
+            animate()
+                    .rotationBy(degree)
+                    .setInterpolator(DecelerateInterpolator())
+                    .start()
+        }
     }
 
-    // Popup menu
-    private val popupMenu = popupMenu {
-        style = R.style.Widget_Remoter_MPM_Menu
-        dropdownGravity = Gravity.BOTTOM
-        val radioButtons = arrayListOf<RadioButton>()
-        section {
-            title = "Sort by"
-            customItem {
-                lateinit var radioBtn: RadioButton
-                layoutResId = R.layout.sort_by_posting_date_layout
-                viewBoundCallback = { view ->
-                    radioBtn = view.by_posting_date_radio_btn
-                    radioButtons.add(radioBtn)
-                    checkRadioButton(radioBtn, 0)
-                }
-                callback = {
-                    setChecked(radioBtn, radioButtons)
-                    sortJobs(SortOption.BY_POSTING_DATE)
-                }
+    /**
+     * Helper function to display {@link SortPopupWindow}
+     */
+    @SuppressLint("InflateParams")
+    private fun showSortPopup(v: View) {
+        // Get root layout of the popup
+        val rootView = layoutInflater.inflate(R.layout.sort_popup_window, null)
+        // Create instance of SortPopupWindow
+        val popupWindow = SortPopupWindow(this, rootView)
+        // Rotate sort button, when popup is dismissed
+        popupWindow.setOnDismissListener {
+            rotateBy(180F, v)
+        }
+
+        // Create array of RadioButtons
+        val radioButtons = arrayListOf<RadioButton>(
+                rootView.by_date_radio_btn,
+                rootView.by_position_radio_btn,
+                rootView.by_company_radio_btn)
+
+        // Create array of ViewGroups holding RadioButtons
+        val radioButtonContainers = arrayListOf(
+                rootView.by_date_container,
+                rootView.by_position_container,
+                rootView.by_company_container)
+
+        // Set isChecked status of each RadioButton
+        radioButtons.forEachIndexed { index, radioButton -> checkRadioButton(radioButton, index) }
+
+        // Iterate over ViewGroups holding RadioButtons
+        radioButtonContainers.forEachIndexed { index, container ->
+            // Set OnClickListener to each ViewGroups holding RadioButtons
+            container.setOnClickListener { _ ->
+                // Toggle isChecked state of each RadioButton
+                setChecked(radioButtons[index], radioButtons)
+                // Close popup
+                popupWindow.dismiss()
+                // Sort jobs
+                sortJobs(SortOption.getFromType(index))
             }
-            customItem {
-                lateinit var radioBtn: RadioButton
-                layoutResId = R.layout.sort_by_position_name_layout
-                viewBoundCallback = { view ->
-                    radioBtn = view.by_position_name_radio_btn
-                    radioButtons.add(radioBtn)
-                    checkRadioButton(radioBtn, 1)
-                }
-                callback = {
-                    setChecked(radioBtn, radioButtons)
-                    sortJobs(SortOption.BY_POSITION_NAME)
-                }
-            }
-            customItem {
-                lateinit var radioBtn: RadioButton
-                layoutResId = R.layout.sort_by_company_name_layout
-                viewBoundCallback = { view ->
-                    radioBtn = view.by_company_name_radio_btn
-                    radioButtons.add(radioBtn)
-                    checkRadioButton(radioBtn, 2)
-                }
-                callback = {
-                    setChecked(radioBtn, radioButtons)
-                    sortJobs(SortOption.BY_COMPANY_NAME)
-                }
-            }
+        }
+
+        // If popup is not visible
+        if (!popupWindow.isShowing) {
+            // then show it
+            popupWindow.showAsDropDown(v)
+        } else {
+            // Else close it
+            popupWindow.dismiss()
         }
     }
 
