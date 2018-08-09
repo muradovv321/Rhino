@@ -17,7 +17,7 @@ import app.ogasimli.remoter.R
 import app.ogasimli.remoter.helper.constant.Constants
 import app.ogasimli.remoter.helper.constant.Constants.JOB_ITEM_BUNDLE_KEY
 import app.ogasimli.remoter.helper.utils.decodeFromHtml
-import app.ogasimli.remoter.helper.utils.loadCompanyLogo
+import app.ogasimli.remoter.helper.utils.load
 import app.ogasimli.remoter.helper.utils.periodTillNow
 import app.ogasimli.remoter.helper.utils.viewModelProvider
 import app.ogasimli.remoter.model.models.Job
@@ -135,7 +135,7 @@ class DetailsActivity : BaseActivity() {
      * @param job       job item
      */
     private fun setupInitialContent(job: Job) {
-        loadCompanyLogo(job, this, company_logo)
+        company_logo.load(job, true)
         toolbar_position_title.text = job.position
         toolbar_posting_date_title.text = periodTillNow(this, job.postingDate)
         company_name.text = job.company

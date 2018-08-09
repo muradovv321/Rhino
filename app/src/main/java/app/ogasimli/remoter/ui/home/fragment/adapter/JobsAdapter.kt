@@ -20,7 +20,7 @@ import app.ogasimli.remoter.helper.rx.EventType
 import app.ogasimli.remoter.helper.rx.RxBus
 import app.ogasimli.remoter.helper.rx.RxEvent
 import app.ogasimli.remoter.helper.utils.inflate
-import app.ogasimli.remoter.helper.utils.loadCompanyLogo
+import app.ogasimli.remoter.helper.utils.load
 import app.ogasimli.remoter.helper.utils.periodTillNow
 import app.ogasimli.remoter.model.models.Job
 import kotlinx.android.synthetic.main.job_item_card.view.*
@@ -49,7 +49,7 @@ class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
             // Get context
             val context = itemView.context
             // Load company logo
-            loadCompanyLogo(job, context, itemView.company_logo)
+            itemView.company_logo.load(job)
             // Setup bookmark button
             bookmarkBtn?.apply {
                 // Set checked state of the view
@@ -76,7 +76,7 @@ class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
 
             // Attach ClickListener to CardView
             itemView.setOnClickListener {
-                RxBus.publish(RxEvent(EventType.JOB_ITEM_CLICK, data = job))
+                RxBus.publish(RxEvent(EventType.JOB_ITEM_CLICK, data = job to logo))
             }
         }
     }

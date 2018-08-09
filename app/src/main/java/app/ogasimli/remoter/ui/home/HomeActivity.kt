@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.RadioButton
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import app.ogasimli.remoter.R
 import app.ogasimli.remoter.helper.constant.Constants.JOB_ITEM_BUNDLE_KEY
@@ -281,9 +282,11 @@ class HomeActivity : BaseActivity() {
                 .subscribe { event ->
                     when (event.type) {
                         EventType.JOB_ITEM_CLICK -> {
+                            val job= (event.data as Pair<*, *>).first as Job
+                            val logo= event.data.second as View
                             val intent = Intent(this, DetailsActivity::class.java)
-                            intent.putExtra(JOB_ITEM_BUNDLE_KEY, event.data as Job)
-                            launchActivity(intent)
+                            intent.putExtra(JOB_ITEM_BUNDLE_KEY, job)
+                            launchActivity(intent, logo, ViewCompat.getTransitionName(logo))
                         }
                         else -> return@subscribe
                     }

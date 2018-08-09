@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018 Orkhan Gasimli - All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited.
+  ~ This file is proprietary and confidential.
+  ~ Written by Orkhan Gasimli orkhan.gasimli@gmail.com in 2018.
+  -->
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#FFFFFF"
+    tools:context=".ui.details.DetailsActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:elevation="@dimen/activity_details_appbar_elevation"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                style="@style/Widget.Remoter.Toolbar.Secondary"
+                app:navigationIcon="@drawable/ic_clear"
+                android:background="#FFFFFF"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                app:contentInsetStartWithNavigation="0dp"
+                tools:ignore="RtlSymmetry">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/toolbar_position_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@+id/toolbar_posting_date_title"
+                        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="?android:textColorSecondary"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        tools:text="Experienced C# Engineer"/>
+
+                    <TextView
+                        android:id="@+id/toolbar_posting_date_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="?attr/colorAccent"
+                        tools:text="1m+"/>
+
+                </RelativeLayout>
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <ImageView
+            android:id="@+id/company_logo"
+            android:transitionName="company_logo"
+            android:layout_width="@dimen/company_logo_width"
+            android:layout_height="@dimen/company_logo_height"
+            android:scaleType="centerInside"
+            android:contentDescription="@string/company_logo_content_description"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            tools:src="@tools:sample/avatars"/>
+
+        <TextView
+            android:id="@+id/company_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textColor="?attr/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@+id/company_logo"
+            android:layout_marginTop="@dimen/details_activity_small_vertical_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            tools:text="Citrusbyte"/>
+
+        <TextView
+            android:id="@+id/job_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceBody2"
+            app:layout_constraintTop_toBottomOf="@+id/company_name"
+            android:layout_marginTop="@dimen/details_activity_small_vertical_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:visibility="gone"
+            tools:text="@tools:sample/lorem[100]"/>
+
+        <TextView
+            android:id="@+id/apply_heading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textAppearance="?attr/textAppearanceBody1"
+            app:layout_constraintTop_toBottomOf="@+id/job_description"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/how_to_apply_heading_text"/>
+
+        <TextView
+            android:id="@+id/apply_instruction"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textAppearance="?attr/textAppearanceBody2"
+            app:layout_constraintTop_toBottomOf="@+id/apply_heading"
+            android:layout_marginTop="@dimen/details_activity_small_vertical_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            tools:text="@tools:sample/lorem[30]"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/apply_btn"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/apply_btn_height"
+            app:layout_constraintHeight_default="spread"
+            style="@style/Widget.Remoter.Button"
+            android:text="@string/apply_btn_text"
+            app:layout_constraintTop_toBottomOf="@+id/apply_instruction"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/apply_btn_vertical_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="@dimen/apply_btn_vertical_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/details_activity_small_vertical_margin"
+            app:layout_constraintVertical_bias="1.0"/>
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/apply_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="apply_heading,apply_instruction"
+            android:visibility="gone"/>
+
+        <io.supercharge.shimmerlayout.ShimmerLayout
+            android:id="@+id/shimmer_layout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/company_name"
+            android:layout_marginTop="@dimen/details_activity_small_vertical_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            app:layout_constraintBottom_toTopOf="@+id/apply_btn"
+            android:layout_marginBottom="@dimen/details_activity_small_vertical_margin">
+
+            <include layout="@layout/job_desc_shimmer_layout"/>
+
+        </io.supercharge.shimmerlayout.ShimmerLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

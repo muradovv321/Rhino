@@ -8,12 +8,12 @@
 package app.ogasimli.remoter.helper.utils
 
 import android.app.Activity
-import android.app.ActivityOptions
 import android.content.Intent
-import android.os.Build
 import android.os.Handler
+import android.view.View
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import org.jetbrains.anko.bundleOf
@@ -114,12 +114,15 @@ inline fun <reified T : DialogFragment> instanceOfDialogFragment(vararg params: 
  * Helper & extension functions for loading images
  *
  * @param intent            {@link Intent} object required for starting an Activity
+ * @param sharedElement     shared View element
+ * @param sharedElementName name of the shared element
  */
-fun Activity.launchActivity(intent: Intent) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        val options = ActivityOptions.makeSceneTransitionAnimation(this)
-        startActivity(intent, options.toBundle())
+fun Activity.launchActivity(intent: Intent, sharedElement: View? = null,
+                            sharedElementName: String? = null) {
+    val options = if (sharedElement == null || sharedElementName == null) {
+        ActivityOptionsCompat.makeSceneTransitionAnimation(this)
     } else {
-        startActivity(intent)
+        ActivityOptionsCompat.makeSceneTransitionAnimation(this, sharedElement, sharedElementName)
     }
+    startActivity(intent, options.toBundle())
 }
