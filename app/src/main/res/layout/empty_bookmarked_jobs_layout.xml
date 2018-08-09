@@ -28,7 +28,7 @@
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:alpha="0.8"
             android:contentDescription="@string/no_jobs_image_description"
-            android:scaleType="fitXY"
+            android:scaleType="fitCenter"
             app:srcCompat="@drawable/ic_rhino_front"/>
 
         <TextView
