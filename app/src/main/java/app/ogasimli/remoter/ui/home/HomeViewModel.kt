@@ -8,6 +8,9 @@
 package app.ogasimli.remoter.ui.home
 
 import androidx.lifecycle.MutableLiveData
+import app.ogasimli.remoter.helper.exceptions.AppException
+import app.ogasimli.remoter.helper.exceptions.ConnectionError
+import app.ogasimli.remoter.helper.exceptions.GenericApiError
 import app.ogasimli.remoter.helper.rx.EventType
 import app.ogasimli.remoter.helper.rx.JobsCount
 import app.ogasimli.remoter.helper.rx.JobsCountEvent
@@ -18,6 +21,7 @@ import app.ogasimli.remoter.ui.base.BaseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -37,6 +41,8 @@ class HomeViewModel @Inject constructor(
 
     val jobsCount = MutableLiveData<JobsCount>()
 
+    val appException = MutableLiveData<AppException>()
+
     var sortOptionAllJobs = dataManager.getAllSortOption()
 
     var sortOptionBookmarkedJobs = dataManager.getBookmarkedSortOption()
@@ -54,7 +60,13 @@ class HomeViewModel @Inject constructor(
                             setAllJobs(it.jobs)
                         },
                         {
-                            Timber.e(it)
+                            Timber.e(it, "Unable to fetch jobs")
+                            // Assign exception type to this variable
+                            appException.value = when(it) {
+                                // non 200 codes
+                                is HttpException -> GenericApiError()
+                                else -> ConnectionError()
+                            }
                         }
                 )
         )

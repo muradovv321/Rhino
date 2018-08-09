@@ -83,13 +83,6 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
                         }
                         Flowable.just(response)
                     }
-                    .onErrorReturn {
-                        Timber.e(it, "Error occurred while fetching from API.")
-                        JobResponse(
-                                source = DataSource.API,
-                                message = "Error occurred while fetching from API.",
-                                error = it)
-                    }
                     .doOnNext {
                         Timber.d("Saving ${it.jobs.size} jobs from API to DB...")
                     }
