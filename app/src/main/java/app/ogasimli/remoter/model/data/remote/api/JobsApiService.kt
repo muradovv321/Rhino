@@ -36,5 +36,5 @@ interface JobsApiService {
      * @return              Observable holding the additional job info retrieved from API
      */
     @GET("job")
-    fun getJobInfo(@Query("url") url: String): Single<Response<JobInfo>>
+    fun getJobInfo(@Query("id") id: String): Single<Response<JobInfo>>
 }
