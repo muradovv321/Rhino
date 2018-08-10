@@ -80,7 +80,7 @@ ext {
     runnerVersion = '1.1.0-alpha3'
     rulesVersion = '1.1.0-alpha'
     espressoVersion = '3.1.0-alpha3'
-    ankoVersion = '0.10.3'
+    ankoVersion = '0.10.5'
     androidXVersion = '1.0.0-beta01'
     lifecycleVersion = '2.0.0-beta01'
     daggerVersion = '2.16'
@@ -117,7 +117,6 @@ dependencies {
 
     // Kotlin Anko
     implementation "org.jetbrains.anko:anko-commons:$ankoVersion"
-    implementation "org.jetbrains.anko:anko-design:$ankoVersion"
     implementation "org.jetbrains.anko:anko-support-v4-commons:$ankoVersion"
 
     // AndroidX
