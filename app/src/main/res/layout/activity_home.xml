@@ -16,51 +16,47 @@
     android:background="@color/backDropColor"
     tools:context=".ui.home.HomeActivity">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:elevation="@dimen/activity_home_appbar_elevation">
 
-        <com.google.android.material.appbar.AppBarLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            style="@style/Widget.Remoter.Toolbar.Main"
+            app:title="@string/app_name"/>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:elevation="@dimen/activity_home_appbar_elevation">
+            style="@style/Widget.Remoter.TabLayout"/>
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                style="@style/Widget.Remoter.Toolbar.Main"
-                app:title="@string/app_name"/>
+    </com.google.android.material.appbar.AppBarLayout>
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/Widget.Remoter.TabLayout"/>
+    <FrameLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:elevation="@dimen/backdrop_front_elevation"
+        android:layout_marginTop="@dimen/main_content_margin_top"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        </com.google.android.material.appbar.AppBarLayout>
+        <include
+            layout="@layout/backdrop_front"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
-        <FrameLayout
-            android:id="@+id/main_content"
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:elevation="@dimen/backdrop_front_elevation"
-            android:layout_marginTop="@dimen/main_content_margin_top">
+            android:layout_marginTop="@dimen/view_pager_margin_top"/>
 
-            <include
-                layout="@layout/backdrop_front"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/view_pager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/view_pager_margin_top"/>
-
-        </FrameLayout>
-
-    </LinearLayout>
+    </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
