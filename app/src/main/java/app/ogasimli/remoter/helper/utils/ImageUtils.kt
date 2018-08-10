@@ -32,12 +32,17 @@ import com.bumptech.glide.request.RequestOptions
  * Loads company logo to the View
  *
  * @param job               {@link Job} item served to the adapter
+ * @param imageWidth        width of the ImageView in pixels
+ * @param imageHeight       height of the ImageView in pixels
+ * @param loadOnlyFromCache boolean flag to indicate if image should be loaded only from cache
  */
-fun ImageView.load(job: Job, loadOnlyFromCache: Boolean = false) {
+fun ImageView.load(job: Job, imageWidth: Int = 100, imageHeight: Int = 100,
+                   loadOnlyFromCache: Boolean = false) {
 
     // Generate placeholder image using TextDrawable
     val textDrawable = generatePlaceholderImage(job.company, context)
-    val placeholder = BitmapDrawable(context.resources, textDrawable?.toBitmap(context))
+
+    val placeholder = BitmapDrawable(context.resources, textDrawable?.toBitmap(imageWidth, imageHeight))
     // Generate new RequestOptions to round image backgrounds
     val glideOptions = RequestOptions
             .placeholderOf(placeholder)
@@ -73,17 +78,16 @@ private fun generatePlaceholderImage(companyName: String, context: Context): Tex
 /**
  * Converts {@link TextDrawable} into Bitmap
  *
- * @param context           Context object used to retrieve image dimens
+ * @param imageWidth        width of the ImageView in pixels
+ * @param imageHeight       height of the ImageView in pixels
  * @return                  Bitmap generated from TextDrawable
  */
-private fun TextDrawable.toBitmap(context: Context): Bitmap {
+private fun TextDrawable.toBitmap(imageWidth: Int = 100, imageHeight: Int = 100): Bitmap {
     // Set width of the bitmap
-    val imageWidth = context.resources.getDimension(R.dimen.company_logo_width).toInt()
     var width = intrinsicWidth
     width = if (width > 0) width else imageWidth
 
     // Set height of the bitmap
-    val imageHeight = context.resources.getDimension(R.dimen.company_logo_height).toInt()
     var height = this.intrinsicHeight
     height = if (height > 0) height else imageHeight
 

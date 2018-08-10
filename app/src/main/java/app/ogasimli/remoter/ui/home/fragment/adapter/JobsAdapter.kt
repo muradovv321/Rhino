@@ -23,6 +23,7 @@ import app.ogasimli.remoter.helper.utils.inflate
 import app.ogasimli.remoter.helper.utils.load
 import app.ogasimli.remoter.helper.utils.periodTillNow
 import app.ogasimli.remoter.model.models.Job
+import com.thefinestartist.utils.content.ResourcesUtil
 import kotlinx.android.synthetic.main.job_item_card.view.*
 
 /**
@@ -49,7 +50,9 @@ class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
             // Get context
             val context = itemView.context
             // Load company logo
-            itemView.company_logo.load(job)
+            itemView.company_logo.load(job,
+                    ResourcesUtil.getDimension(R.dimen.company_logo_width).toInt(),
+                    ResourcesUtil.getDimension(R.dimen.company_logo_height).toInt())
             // Setup bookmark button
             bookmarkBtn?.apply {
                 // Set checked state of the view
