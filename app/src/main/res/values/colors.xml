@@ -30,4 +30,10 @@
     <!-- Button background color -->
     <color name="btnBackEnabledColor">@color/colorPrimary</color>
     <color name="btnBackDisabledColor">#b1acae</color>
+
+    <!-- SwipeRefreshLayout color resource array -->
+    <array name="swipeRefreshColorArray">
+        <item>@color/colorPrimary</item>
+        <item>@color/colorAccent</item>
+    </array>
 </resources>

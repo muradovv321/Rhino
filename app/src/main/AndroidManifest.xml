@@ -40,6 +40,12 @@
             android:parentActivityName=".ui.home.HomeActivity"
             android:theme="@style/Theme.Remoter.Activity.Details"/>
 
+        <!-- FinestWebView -->
+        <activity
+            android:name="com.thefinestartist.finestwebview.FinestWebViewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.Remoter.Activity.WebView" />
+
         <!-- Metadata to download preloaded fonts -->
         <meta-data android:name="preloaded_fonts" android:resource="@array/preloaded_fonts"/>
     </application>

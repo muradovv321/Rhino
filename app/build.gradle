@@ -181,6 +181,9 @@ dependencies {
     // ShimmerLayout
     implementation 'io.supercharge:shimmerlayout:2.1.0'
 
+    // FinestWebView
+    implementation 'com.thefinestartist:finestwebview:1.2.7'
+
     //Joda-Time
     implementation 'joda-time:joda-time:2.10'
 

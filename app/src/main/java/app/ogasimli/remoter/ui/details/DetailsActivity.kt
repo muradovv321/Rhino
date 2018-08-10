@@ -7,14 +7,11 @@
 
 package app.ogasimli.remoter.ui.details
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.View
 import androidx.lifecycle.Observer
 import app.ogasimli.remoter.R
-import app.ogasimli.remoter.helper.constant.Constants
 import app.ogasimli.remoter.helper.constant.Constants.JOB_ITEM_BUNDLE_KEY
 import app.ogasimli.remoter.helper.utils.decodeFromHtml
 import app.ogasimli.remoter.helper.utils.load
@@ -22,6 +19,7 @@ import app.ogasimli.remoter.helper.utils.periodTillNow
 import app.ogasimli.remoter.helper.utils.viewModelProvider
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.ui.base.BaseActivity
+import com.thefinestartist.finestwebview.FinestWebView
 import com.thefinestartist.utils.content.ResourcesUtil.getDimension
 import kotlinx.android.synthetic.main.activity_details.*
 import timber.log.Timber
@@ -155,11 +153,7 @@ class DetailsActivity : BaseActivity() {
         setJobDescription(job)
         setApplyInstructions(job)
         apply_btn.setOnClickListener {
-            var url = job.additionalInfo?.applyUrl ?: "${Constants.BASE_APPLY_URL}/l/$job.id"
-            if (url.startsWith("/l/")) {
-                url = url.prependIndent(Constants.BASE_APPLY_URL)
-            }
-            openWebPage(url)
+            openWebPage(job.url)
         }
     }
 
@@ -211,10 +205,9 @@ class DetailsActivity : BaseActivity() {
      * @param url       URL of the web page
      */
     private fun openWebPage(url: String) {
-        val webPage = Uri.parse(url)
-        val intent = Intent(Intent.ACTION_VIEW, webPage)
-        if (intent.resolveActivity(packageManager) != null) {
-            startActivity(intent)
-        }
+        FinestWebView.Builder(this)
+                .progressBarColorRes(R.color.colorAccent)
+                .swipeRefreshColorsRes(R.array.swipeRefreshColorArray)
+                .show(url)
     }
 }

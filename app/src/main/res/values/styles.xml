@@ -31,6 +31,12 @@
         <item name="colorPrimaryDark">#EBE5E7</item>
     </style>
 
+    <style name="Theme.Remoter.Activity.WebView" parent="Theme.Remoter">
+        <item name="colorAccent">@color/controlElementsTextColor</item>
+        <item name="android:textColorPrimary">@color/controlElementsTextColor</item>
+        <item name="android:textColorSecondary">@color/controlElementsTextColor</item>
+    </style>
+
     <!-- Toolbar theme -->
     <style name="Widget.Remoter.Toolbar.Main" parent="Widget.AppCompat.Toolbar">
         <item name="android:theme">@style/Theme.Remoter.Activity.Home</item>

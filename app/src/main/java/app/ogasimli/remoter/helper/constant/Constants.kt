@@ -75,10 +75,4 @@ object Constants {
      */
     @JvmStatic
     val API_BASE_URL = "https://remote-job.herokuapp.com"
-
-    /**
-     * Base URL for appending apply URL
-     */
-    @JvmStatic
-    val BASE_APPLY_URL = "https://remoteok.io"
 }
