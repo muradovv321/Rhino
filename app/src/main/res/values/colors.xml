@@ -24,10 +24,10 @@
     <color name="controlElementsTextColor">#FFFFFF</color>
 
     <!-- ShimmerLayout colors -->
-    <color name="shimmer_text_background_color">#EDB1B1B1</color>
-    <color name="shimmer_header_background_color">#94333032</color>
+    <color name="shimmerTextBackgroundColor">#EDB1B1B1</color>
+    <color name="shimmerHeaderBackgroundColor">#94333032</color>
 
     <!-- Button background color -->
-    <color name="btn_back_color_enabled">@color/colorPrimary</color>
-    <color name="btn_back_color_disabled">#b1acae</color>
+    <color name="btnBackEnabledColor">@color/colorPrimary</color>
+    <color name="btnBackDisabledColor">#b1acae</color>
 </resources>

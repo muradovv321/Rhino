@@ -8,9 +8,9 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:color="@color/btn_back_color_enabled"
+        android:color="@color/btnBackEnabledColor"
         android:state_enabled="true"/>
     <item
-        android:color="@color/btn_back_color_disabled"
+        android:color="@color/btnBackDisabledColor"
         android:state_enabled="false"/>
 </selector>
