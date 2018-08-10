@@ -18,6 +18,7 @@ import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import retrofit2.HttpException
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -38,7 +39,9 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
      */
     fun getAllJobs(sortOption: SortOption): Flowable<JobResponse> =
             Flowable.concatArrayEager(
+/*
                     getAllJobsFromDb(sortOption),
+*/
                     getAllJobsFromApi(sortOption)
                     //Drop DB data if we can fetch item fast enough from the API
                     //to avoid UI flickers
@@ -52,8 +55,11 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
      */
     private fun getAllJobsFromApi(sortOption: SortOption): Flowable<JobResponse> =
             apiService.getJobList()
-                    .filter { it.body() != null } // Filter results which has null body
                     .map { response ->
+                        if (response.errorBody() != null) {
+                            throw HttpException(response)
+                        }
+
                         Timber.d("Mapping items to JobResponse...")
                         // Distinguish between cache response and network response
                         val source = if (response.raw().networkResponse() != null) {
@@ -75,9 +81,16 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
                         // Map items to JobResponse
                         JobResponse(jobs = jobs, source = source)
                     }
+                    .onErrorReturn {
+                        Timber.e(it, "Error occurred while fetching from API.")
+                        JobResponse(
+                                source = DataSource.API,
+                                message = "Error occurred while fetching from API.",
+                                error = it)
+                    }
                     .flatMap { response ->
                         // If response returned from network, then insert results to DB
-                        if (response.source == DataSource.API) {
+                        if (response.source == DataSource.API && response.jobs.isNotEmpty()) {
                             jobDao.insertJob(*(response.jobs.toTypedArray()))
                             jobDao.deleteOldJobs(response.jobs.map { it.id })
                         }
@@ -170,7 +183,7 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
      * @return              Observable holding additional job info from API
      */
     fun fetchJobInfo(job: Job): Single<JobResponse> =
-            apiService.getJobInfo(job.url)
+            apiService.getJobInfo(job.id)
                     .filter { it.body() != null } // Filter results which has null body
                     .map {
                         val newJob = job.copy(additionalInfo = it.body()!!)

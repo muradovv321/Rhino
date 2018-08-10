@@ -8,20 +8,17 @@
 package app.ogasimli.remoter.ui.home
 
 import androidx.lifecycle.MutableLiveData
-import app.ogasimli.remoter.helper.exceptions.AppException
-import app.ogasimli.remoter.helper.exceptions.ConnectionError
-import app.ogasimli.remoter.helper.exceptions.GenericApiError
 import app.ogasimli.remoter.helper.rx.EventType
 import app.ogasimli.remoter.helper.rx.JobsCount
 import app.ogasimli.remoter.helper.rx.JobsCountEvent
 import app.ogasimli.remoter.model.data.DataManager
 import app.ogasimli.remoter.model.models.Job
+import app.ogasimli.remoter.model.models.JobResponse
 import app.ogasimli.remoter.model.models.SortOption
 import app.ogasimli.remoter.ui.base.BaseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -35,13 +32,11 @@ class HomeViewModel @Inject constructor(
         private val allJobsDisposable: CompositeDisposable,
         private val bookmarkJobsDisposable: CompositeDisposable) : BaseViewModel() {
 
-    val allJobList = MutableLiveData<List<Job>>()
+    val allJobs = MutableLiveData<JobResponse>()
 
-    val bookmarkedJobList = MutableLiveData<List<Job>>()
+    val bookmarkedJobs = MutableLiveData<JobResponse>()
 
     val jobsCount = MutableLiveData<JobsCount>()
-
-    val appException = MutableLiveData<AppException>()
 
     var sortOptionAllJobs = dataManager.getAllSortOption()
 
@@ -56,18 +51,8 @@ class HomeViewModel @Inject constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        {
-                            setAllJobs(it.jobs)
-                        },
-                        {
-                            Timber.e(it, "Unable to fetch jobs")
-                            // Assign exception type to this variable
-                            appException.value = when(it) {
-                                // non 200 codes
-                                is HttpException -> GenericApiError()
-                                else -> ConnectionError()
-                            }
-                        }
+                        this::setAllJobs,
+                        Timber::e
                 )
         )
     }
@@ -81,12 +66,8 @@ class HomeViewModel @Inject constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        {
-                            setBookmarkedJobs(it.jobs)
-                        },
-                        {
-                            Timber.e(it)
-                        }
+                        this::setBookmarkedJobs,
+                        Timber::e
                 )
         )
     }
@@ -130,27 +111,45 @@ class HomeViewModel @Inject constructor(
     }
 
     /**
-     * Set value of allJobList LiveData
+     * Set value of allJobs LiveData
      *
-     * @param jobs      list of jobs
+     * @param response      Response object containing job list and additional data
      */
-    private fun setAllJobs(jobs: List<Job>) {
+    private fun setAllJobs(response: JobResponse) {
         // Set value of the LiveData
-        allJobList.value = jobs
+        val newData = if (response.error != null) {
+            JobResponse(
+                    jobs = allJobs.value?.jobs ?: emptyList(),
+                    source = response.source,
+                    message = response.message,
+                    error = response.error)
+        } else {
+            response
+        }
+        allJobs.value = newData
         // Set value of jobsCount LiveData
-        setJobsCount(JobsCountEvent(EventType.OPEN_JOBS_COUNT, jobs.size))
+        setJobsCount(JobsCountEvent(EventType.OPEN_JOBS_COUNT, newData.jobs.size))
     }
 
     /**
-     * Set value of bookmarkedJobList LiveData
+     * Set value of bookmarkedJobs LiveData
      *
-     * @param jobs      list of jobs
+     * @param response      Response object containing job list and additional data
      */
-    private fun setBookmarkedJobs(jobs: List<Job>) {
+    private fun setBookmarkedJobs(response: JobResponse) {
         // Set value of the LiveData
-        bookmarkedJobList.value = jobs
+        val newData = if (response.error != null) {
+            JobResponse(
+                    jobs = bookmarkedJobs.value?.jobs ?: emptyList(),
+                    source = response.source,
+                    message = response.message,
+                    error = response.error)
+        } else {
+            response
+        }
+        bookmarkedJobs.value = newData
         // Set value of jobsCount LiveData
-        setJobsCount(JobsCountEvent(EventType.BOOKMARKED_JOBS_COUNT, jobs.size))
+        setJobsCount(JobsCountEvent(EventType.BOOKMARKED_JOBS_COUNT, newData.jobs.size))
     }
 
     /**

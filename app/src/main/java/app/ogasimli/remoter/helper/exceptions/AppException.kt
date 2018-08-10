@@ -22,7 +22,11 @@ class DbException : AppException()
 
 class GenericApiError : AppException()
 
+class GenericError : AppException()
+
 class ConnectionError : AppException()
+
+class TimeOutError : AppException()
 
 /**
  * Extension function to convert error type into string
@@ -35,6 +39,8 @@ fun AppException.toMessage(context: Context?): String {
             is DbException -> it.getString(R.string.db_error_msg)
             is GenericApiError -> it.getString(R.string.generic_api_error_msg)
             is ConnectionError -> it.getString(R.string.connection_error_msg)
+            is GenericError -> it.getString(R.string.generic_error_msg)
+            is TimeOutError -> it.getString(R.string.timeout_error_msg)
         }
     }
     return ""

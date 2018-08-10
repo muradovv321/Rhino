@@ -75,9 +75,6 @@ class HomeActivity : BaseActivity() {
 
         // Observe count of jobs
         observeJobsCount()
-
-        // Observe count of jobs
-        observeAppException()
     }
 
     private fun rotateBy(degree: Float, view: View?) {
@@ -216,18 +213,6 @@ class HomeActivity : BaseActivity() {
     }
 
     /**
-     * Helper method to observe exceptions
-     */
-    private fun observeAppException() {
-        viewModel.appException.observe(this, Observer { exception ->
-            exception?.let {
-                Timber.d("${it.toMessage(this)} received")
-                showErrorSnack(it)
-            }
-        })
-    }
-
-    /**
      * Helper method to set the text of the header text
      * of Backdrop's front layer
      */
@@ -267,9 +252,9 @@ class HomeActivity : BaseActivity() {
      *
      * @param exception     {@link AppException} occurred in the app
      */
-    private fun showErrorSnack(exception: AppException) {
+    fun showErrorSnack(exception: AppException) {
         val msg = exception.toMessage(this)
-        val snackbar = Snackbar.make(findViewById(R.id.container), msg, Snackbar.LENGTH_LONG)
+        val snackbar = Snackbar.make(container, msg, Snackbar.LENGTH_LONG)
         snackbar.setAction(android.R.string.ok) { snackbar.dismiss() }
         snackbar.show()
     }

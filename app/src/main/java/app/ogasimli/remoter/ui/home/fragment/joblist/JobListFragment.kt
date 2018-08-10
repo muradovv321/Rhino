@@ -14,6 +14,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import app.ogasimli.remoter.R
+import app.ogasimli.remoter.helper.exceptions.ConnectionError
+import app.ogasimli.remoter.helper.exceptions.GenericApiError
+import app.ogasimli.remoter.helper.exceptions.GenericError
+import app.ogasimli.remoter.helper.exceptions.TimeOutError
 import app.ogasimli.remoter.helper.rx.EventType
 import app.ogasimli.remoter.helper.rx.RxBus
 import app.ogasimli.remoter.helper.rx.RxEvent
@@ -22,11 +26,15 @@ import app.ogasimli.remoter.helper.utils.inflate
 import app.ogasimli.remoter.helper.utils.viewModelProvider
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.ui.base.BaseFragment
+import app.ogasimli.remoter.ui.home.HomeActivity
 import app.ogasimli.remoter.ui.home.HomeViewModel
 import app.ogasimli.remoter.ui.home.fragment.adapter.JobsAdapter
 import kotlinx.android.synthetic.main.empty_jobs_layout.*
 import kotlinx.android.synthetic.main.fragment_job_list.*
+import retrofit2.HttpException
 import timber.log.Timber
+import java.io.IOException
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 /**
@@ -107,13 +115,16 @@ class JobListFragment : BaseFragment() {
      * Helper function to observe jobs LiveData
      */
     private fun observeJobs() {
-        viewModel.allJobList.observe(this, Observer { jobs ->
-            if (jobs != null && jobs.isNotEmpty()) {
-                Timber.d("${jobs.size} jobs received")
-                showResultView(jobs)
-            } else {
-                Timber.d("No jobs received")
-                showEmptyView()
+        viewModel.allJobs.observe(this, Observer { response ->
+            response?.let {
+                val jobs = response.jobs
+                if (jobs.isNotEmpty()) {
+                    showResultView(jobs)
+                } else {
+                    showEmptyView()
+                }
+
+                showErrorView(response.error)
             }
         })
     }
@@ -124,6 +135,7 @@ class JobListFragment : BaseFragment() {
      * @param jobs      list of received job items
      */
     private fun showResultView(jobs: List<Job>) {
+        Timber.d("${jobs.size} jobs received")
         // Forward jobs to JobsAdapter
         jobsAdapter.jobs = jobs
         // Hide loading
@@ -138,6 +150,7 @@ class JobListFragment : BaseFragment() {
      * Helper function to setup UI when no jobs received
      */
     private fun showEmptyView() {
+        Timber.d("No jobs received")
         // Forward empty list to JobsAdapter
         jobsAdapter.jobs = emptyList()
         // Hide loading
@@ -146,6 +159,26 @@ class JobListFragment : BaseFragment() {
         jobs_recycler_view.visibility = View.GONE
         // Show empty view
         empty_view.visibility = View.VISIBLE
+    }
+
+    /**
+     * Helper function to setup UI when no error occurs
+     *
+     * @param exception     error occurred during the work of the app
+     */
+    private fun showErrorView(exception: Throwable?) {
+        if (exception != null) {
+            Timber.d(exception, "Received exception")
+            // Determine the appropriate {@link AppException} from Throwable
+            val error = when(exception) {
+                is HttpException -> GenericApiError()
+                is IOException -> ConnectionError()
+                is SocketTimeoutException -> TimeOutError()
+                else -> GenericError()
+            }
+            // Show error snack
+            (activity as HomeActivity).showErrorSnack(error)
+        }
     }
 
     /**
