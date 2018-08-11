@@ -75,7 +75,7 @@ class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
             positionName?.text = job.position
             // Set company name and period
             companyName?.text = context.getString(R.string.company_name_and_period,
-                    job.company, periodTillNow(context, job.postingDate))
+                    job.company, periodTillNow(context, job.postingTime))
 
             // Attach ClickListener to CardView
             itemView.setOnClickListener {

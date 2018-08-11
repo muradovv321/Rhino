@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c4aecb8964fac65cdb1a00a909470c59",
+    "identityHash": "1a8995b2b34d9d404aa1d209e49e46b9",
     "entities": [
       {
         "tableName": "jobs",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `slug` TEXT NOT NULL, `postingTime` INTEGER NOT NULL, `postingDate` TEXT NOT NULL, `company` TEXT NOT NULL, `position` TEXT NOT NULL, `tags` TEXT NOT NULL, `logo` TEXT, `description` TEXT NOT NULL, `url` TEXT NOT NULL, `isBookmarked` INTEGER NOT NULL, `jobDesc` TEXT, `applyInstruction` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `postingTime` INTEGER NOT NULL, `company` TEXT NOT NULL, `position` TEXT NOT NULL, `tags` TEXT NOT NULL, `logo` TEXT, `description` TEXT NOT NULL, `url` TEXT NOT NULL, `isBookmarked` INTEGER NOT NULL, `jobDesc` TEXT, `applyInstruction` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -15,21 +15,9 @@
             "notNull": true
           },
           {
-            "fieldPath": "slug",
-            "columnName": "slug",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
             "fieldPath": "postingTime",
             "columnName": "postingTime",
             "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "postingDate",
-            "columnName": "postingDate",
-            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -108,7 +96,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"c4aecb8964fac65cdb1a00a909470c59\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"1a8995b2b34d9d404aa1d209e49e46b9\")"
     ]
   }
 }

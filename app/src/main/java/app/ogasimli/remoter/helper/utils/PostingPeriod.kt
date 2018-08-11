@@ -10,9 +10,8 @@ package app.ogasimli.remoter.helper.utils
 import android.content.Context
 import android.content.ContextWrapper
 import app.ogasimli.remoter.R
-import org.joda.time.*
-import org.joda.time.format.DateTimeFormatter
-import org.joda.time.format.ISODateTimeFormat
+import java.util.concurrent.TimeUnit
+
 
 /**
  * Helper class used for calculation of
@@ -20,18 +19,26 @@ import org.joda.time.format.ISODateTimeFormat
  *
  * @author Orkhan Gasimli on 19.07.2018.
  */
-class PostingPeriod(val context: Context, postingDate: String) : ContextWrapper(context) {
+class PostingPeriod(val context: Context, postingTime: Long) : ContextWrapper(context) {
 
-    private val df: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis()
-    private val from: DateTime = df.parseDateTime(postingDate)
-    private val till: DateTime = DateTime(from.zone)
-    private var years: Int = Years.yearsBetween(from, till).years
-    private var months: Int = Months.monthsBetween(from, till).months
-    private var weeks: Int = Weeks.weeksBetween(from, till).weeks
-    private var days: Int = Days.daysBetween(from, till).days
-    private var hours: Int = Hours.hoursBetween(from, till).hours
-    private var minutes: Int = Minutes.minutesBetween(from, till).minutes
-    private var seconds: Int = Seconds.secondsBetween(from, till).seconds
+    var postingTime: Long = 0
+        set(value) {
+            field = value
+            now = System.currentTimeMillis()
+        }
+
+    private var now: Long = System.currentTimeMillis()
+    private var years: Int = (postingTime.periodTillNow(TimeUnit.DAYS) / 360).toInt()
+    private var months: Int = (postingTime.periodTillNow(TimeUnit.DAYS) / 30).toInt()
+    private var weeks: Int = (postingTime.periodTillNow(TimeUnit.DAYS) / 7).toInt()
+    private var days: Int = postingTime.periodTillNow(TimeUnit.DAYS).toInt()
+    private var hours: Int = postingTime.periodTillNow(TimeUnit.HOURS).toInt()
+    private var minutes: Int = postingTime.periodTillNow(TimeUnit.MINUTES).toInt()
+    private var seconds: Int = postingTime.periodTillNow(TimeUnit.SECONDS).toInt()
+
+    private fun Long.periodTillNow(timeUnit: TimeUnit): Long {
+        return timeUnit.convert(now - this, TimeUnit.MILLISECONDS)
+    }
 
     /**
      * Returns String representation of passed period

@@ -139,7 +139,7 @@ class DetailsActivity : BaseActivity() {
                 getDimension(R.dimen.company_logo_height).toInt(),
                 true)
         toolbar_position_title.text = job.position
-        toolbar_posting_date_title.text = periodTillNow(this, job.postingDate)
+        toolbar_posting_date_title.text = periodTillNow(this, job.postingTime)
         company_name.text = job.company
     }
 

@@ -13,6 +13,7 @@ import android.text.Html
 import android.text.Spanned
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
+import timber.log.Timber
 
 /**
  * Helper & extension functions for String manipulation
@@ -27,6 +28,7 @@ import androidx.annotation.StringRes
  * @param limit     non-negative value specifying the maximum number of substrings to return
  */
 fun String.getFirstLetters(limit: Int): String {
+    Timber.d("Company name: $this")
     // Return X if company name is blank
     if (this.isBlank()) return "X"
     return this

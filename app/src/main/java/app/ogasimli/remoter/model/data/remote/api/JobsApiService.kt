@@ -25,16 +25,20 @@ interface JobsApiService {
     /**
      * Request the list of remote jobs
      *
+     * @param from          query parameter indicating the source of the data
      * @return              Observable holding the job list retrieved from API
      */
     @GET("jobs")
-    fun getJobList(): Flowable<Response<List<Job>>>
+    fun getJobList(@Query("from") from: String = "workaline"): Flowable<Response<List<Job>>>
 
     /**
      * Request the additional job info
      *
+     * @param id            query parameter indicating the id of the job announcement
+     * @param from          query parameter indicating the source of the data
      * @return              Observable holding the additional job info retrieved from API
      */
     @GET("job")
-    fun getJobInfo(@Query("id") id: String): Single<Response<JobInfo>>
+    fun getJobInfo(@Query("id") id: String, @Query("from") from: String = "workaline"):
+            Single<Response<JobInfo>>
 }

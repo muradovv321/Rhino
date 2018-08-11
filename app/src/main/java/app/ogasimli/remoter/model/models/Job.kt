@@ -12,7 +12,6 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -27,11 +26,7 @@ import kotlinx.android.parcel.Parcelize
 data class Job(
         @PrimaryKey
         val id: String,
-        val slug: String,
-        @SerializedName("epoch")
         val postingTime: Long,
-        @SerializedName("date")
-        val postingDate: String,
         val company: String,
         val position: String,
         val tags: List<String>,

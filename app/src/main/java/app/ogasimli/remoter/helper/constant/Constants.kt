@@ -74,5 +74,5 @@ object Constants {
      * Base URL for fetching coin data
      */
     @JvmStatic
-    val API_BASE_URL = "https://remote-job.herokuapp.com"
+    val API_BASE_URL = "https://remote-job.herokuapp.com/v1/"
 }

@@ -19,8 +19,8 @@ import android.content.Context
  * Helper function to calculate time passed between now and posting date
  *
  * @param context       context object
- * @param postingDate   posting date represented in {@link ISODateTimeFormat} format
+ * @param postingTime   posting date represented in milliseconds
  * @return              passed time in String format
  */
-fun periodTillNow(context: Context, postingDate: String): String =
-        PostingPeriod(context, postingDate).print()
+fun periodTillNow(context: Context, postingTime: Long): String =
+        PostingPeriod(context, postingTime).print()
