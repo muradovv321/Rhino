@@ -115,7 +115,7 @@ class DetailsActivity : BaseActivity() {
         shimmer_layout?.visibility = View.VISIBLE
         shimmer_layout?.startShimmerAnimation()
         // Disallow touch events pass through the container to its children
-        container.requestDisallowInterceptTouchEvent(true)
+        constraint_layout?.requestDisallowInterceptTouchEvent(true)
     }
 
     /**
@@ -125,7 +125,7 @@ class DetailsActivity : BaseActivity() {
         shimmer_layout?.visibility = View.GONE
         shimmer_layout?.stopShimmerAnimation()
         // Allow touch events pass through the container to its children
-        container.requestDisallowInterceptTouchEvent(false)
+        constraint_layout?.requestDisallowInterceptTouchEvent(false)
     }
 
     /**
