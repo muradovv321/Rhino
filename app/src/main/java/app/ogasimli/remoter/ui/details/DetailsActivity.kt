@@ -20,7 +20,6 @@ import app.ogasimli.remoter.helper.utils.viewModelProvider
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.ui.base.BaseActivity
 import com.thefinestartist.finestwebview.FinestWebView
-import com.thefinestartist.utils.content.ResourcesUtil.getDimension
 import kotlinx.android.synthetic.main.activity_details.*
 import timber.log.Timber
 
@@ -135,8 +134,8 @@ class DetailsActivity : BaseActivity() {
      */
     private fun setupInitialContent(job: Job) {
         company_logo.load(job,
-                getDimension(R.dimen.company_logo_width).toInt(),
-                getDimension(R.dimen.company_logo_height).toInt(),
+                resources.getDimension(R.dimen.company_logo_width).toInt(),
+                resources.getDimension(R.dimen.company_logo_height).toInt(),
                 true)
         toolbar_position_title.text = job.position
         toolbar_posting_date_title.text = periodTillNow(this, job.postingTime)
