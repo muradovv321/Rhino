@@ -110,10 +110,10 @@ class DetailsActivity : BaseActivity() {
      * Method to start loading animation
      */
     private fun showLoadingView() {
-        job_description.visibility = View.GONE
-        apply_group.visibility = View.GONE
-        shimmer_layout.visibility = View.VISIBLE
-        shimmer_layout.startShimmerAnimation()
+        job_description?.visibility = View.GONE
+        apply_group?.visibility = View.GONE
+        shimmer_layout?.visibility = View.VISIBLE
+        shimmer_layout?.startShimmerAnimation()
         // Disallow touch events pass through the container to its children
         container.requestDisallowInterceptTouchEvent(true)
     }
@@ -122,8 +122,8 @@ class DetailsActivity : BaseActivity() {
      * Method to cancel loading animation
      */
     private fun hideLoadingView() {
-        shimmer_layout.visibility = View.GONE
-        shimmer_layout.stopShimmerAnimation()
+        shimmer_layout?.visibility = View.GONE
+        shimmer_layout?.stopShimmerAnimation()
         // Allow touch events pass through the container to its children
         container.requestDisallowInterceptTouchEvent(false)
     }

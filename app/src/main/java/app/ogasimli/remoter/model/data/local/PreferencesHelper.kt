@@ -62,11 +62,11 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
         return prefs.getFloat(key, defValue)
     }
 
-    override fun getString(key: String?, defValue: String?): String {
+    override fun getString(key: String?, defValue: String?): String? {
         return prefs.getString(key, defValue)
     }
 
-    override fun getStringSet(key: String?, defValues: MutableSet<String>?): MutableSet<String> {
+    override fun getStringSet(key: String?, defValues: MutableSet<String>?): MutableSet<String>? {
         return prefs.getStringSet(key, defValues)
     }
 
