@@ -38,21 +38,21 @@
     </style>
 
     <!-- Toolbar theme -->
-    <style name="Widget.Remoter.Toolbar.Main" parent="Widget.AppCompat.Toolbar">
+    <style name="Widget.Remoter.Toolbar.Main" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:theme">@style/Theme.Remoter.Activity.Home</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="titleTextAppearance">@style/TextAppearance.Remoter.Toolbar.Main</item>
+        <item name="titleTextColor">@color/controlElementsTextColor</item>
     </style>
 
     <style name="TextAppearance.Remoter.Toolbar.Main" parent="TextAppearance.MaterialComponents.Button">
-        <item name="android:textColor">@color/controlElementsTextColor</item>
         <item name="fontFamily">@font/lato_bold</item>
         <item name="android:textStyle">bold</item>
         <item name="textAllCaps">false</item>
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="Widget.Remoter.Toolbar.Secondary" parent="Widget.AppCompat.Toolbar">
+    <style name="Widget.Remoter.Toolbar.Secondary" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:theme">@style/Theme.Remoter.Activity.Details</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
@@ -80,7 +80,7 @@
         <item name="tabTextAppearance">@style/TextAppearance.Remoter.Tab</item>
     </style>
 
-    <style name="TextAppearance.Remoter.Tab" parent="TextAppearance.MaterialComponents.Tab.Colored">
+    <style name="TextAppearance.Remoter.Tab" parent="TextAppearance.MaterialComponents.Tab">
         <item name="fontFamily">@font/lato_bold</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">14sp</item>

@@ -81,10 +81,10 @@ ext {
     rulesVersion = '1.1.0-alpha'
     espressoVersion = '3.1.0-alpha3'
     ankoVersion = '0.10.5'
-    androidXVersion = '1.0.0-beta01'
-    lifecycleVersion = '2.0.0-beta01'
+    androidXVersion = '1.0.0-rc01'
+    lifecycleVersion = '2.0.0-rc01'
     daggerVersion = '2.16'
-    roomVersion = '2.0.0-beta01'
+    roomVersion = '2.0.0-rc01'
     retrofitVersion = '2.3.0'
     glideVersion = '4.8.0-SNAPSHOT'
     okhttpVersion = '3.9.1'
@@ -124,7 +124,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidXVersion"
     implementation "androidx.cardview:cardview:$androidXVersion"
     implementation "com.google.android.material:material:$androidXVersion"
-    implementation "androidx.constraintlayout:constraintlayout:2.0.0-alpha1"
+    implementation "androidx.constraintlayout:constraintlayout:2.0.0-alpha2"
 
     // ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
