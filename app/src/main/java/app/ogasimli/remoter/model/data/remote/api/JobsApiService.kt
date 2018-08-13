@@ -10,7 +10,6 @@ package app.ogasimli.remoter.model.data.remote.api
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.model.models.JobInfo
 import io.reactivex.Flowable
-import io.reactivex.Single
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -40,5 +39,5 @@ interface JobsApiService {
      */
     @GET("job")
     fun getJobInfo(@Query("id") id: String, @Query("from") from: String = "workaline"):
-            Single<Response<JobInfo>>
+            Flowable<Response<JobInfo>>
 }

@@ -10,18 +10,25 @@ package app.ogasimli.remoter.ui.details
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.View
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import app.ogasimli.remoter.R
 import app.ogasimli.remoter.helper.constant.Constants.JOB_ITEM_BUNDLE_KEY
+import app.ogasimli.remoter.helper.exceptions.*
 import app.ogasimli.remoter.helper.utils.decodeFromHtml
 import app.ogasimli.remoter.helper.utils.load
 import app.ogasimli.remoter.helper.utils.periodTillNow
 import app.ogasimli.remoter.helper.utils.viewModelProvider
+import app.ogasimli.remoter.model.models.DataResponse
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.ui.base.BaseActivity
+import com.google.android.material.snackbar.Snackbar
 import com.thefinestartist.finestwebview.FinestWebView
 import kotlinx.android.synthetic.main.activity_details.*
+import retrofit2.HttpException
 import timber.log.Timber
+import java.io.IOException
+import java.net.SocketTimeoutException
 
 
 /**
@@ -53,7 +60,7 @@ class DetailsActivity : BaseActivity() {
         if (job == null) supportFinishAfterTransition()
 
         // Initial setup of content
-        setupInitialContent(job!!)
+        setupInitialContent(job)
 
         // Bind ViewModel
         viewModel = viewModelProvider(this, viewModelFactory)
@@ -84,24 +91,26 @@ class DetailsActivity : BaseActivity() {
      * Helper function to fetch jobs
      */
     private fun fetchJobInfo() {
-        // Show loading
-        showLoadingView()
-        // Fetch jobs
-        viewModel.fetchJobInfo(job!!)
+        if (job != null) {
+            // Show loading
+            showLoadingView()
+            // Fetch jobs
+            viewModel.getJobInfo(job!!.id)
+        }
     }
 
     /**
      * Helper function to observe job LiveData
      */
     private fun observeJob() {
-        viewModel.job.observe(this, Observer { job ->
-            job?.let {
-                Timber.d("Job item: $it")
+        viewModel.jobResponse.observe(this, Observer { response ->
+            response?.let {
+                Timber.d("Response item: $it")
                 // Set initial content
-                setupContent(job)
+                setupContent(response)
+                // Show error if error is not null
+                showErrorView(response.error)
             }
-            // Hide loading
-            hideLoadingView()
         })
     }
 
@@ -132,28 +141,43 @@ class DetailsActivity : BaseActivity() {
      *
      * @param job       job item
      */
-    private fun setupInitialContent(job: Job) {
-        company_logo.load(job,
-                resources.getDimension(R.dimen.company_logo_width).toInt(),
-                resources.getDimension(R.dimen.company_logo_height).toInt(),
-                true)
-        toolbar_position_title.text = job.position
-        toolbar_posting_date_title.text = periodTillNow(this, job.postingTime)
-        company_name.text = job.company
+    private fun setupInitialContent(job: Job?) {
+        job?.let {
+            // Load company logo
+            with(company_logo) {
+                // Set transition name for SharedElement
+                ViewCompat.setTransitionName(this, it.id)
+                load(it,
+                        resources.getDimension(R.dimen.company_logo_width).toInt(),
+                        resources.getDimension(R.dimen.company_logo_height).toInt(),
+                        true)
+            }
+            // Setup toolbar
+            toolbar_position_title?.text = it.position
+            toolbar_posting_date_title?.text = periodTillNow(this, it.postingTime)
+            // Set company name
+            company_name?.text = it.company
+            // Set click listener for apply button
+            apply_btn.setOnClickListener { _ ->
+                openWebPage(it.url)
+            }
+        }
     }
 
     /**
-     * Helper function to setup content
-     * with initial job info
+     * Helper function to setup content with
+     * initial response info
      *
-     * @param job       job item
+     * @param response       response from DB & API call
      */
-    private fun setupContent(job: Job) {
-        setJobDescription(job)
-        setApplyInstructions(job)
-        apply_btn.setOnClickListener {
-            openWebPage(job.url)
+    private fun setupContent(response: DataResponse<Job>) {
+        val jobItem = response.data ?: job
+        if (jobItem != null) {
+            setJobDescription(jobItem)
+            setApplyInstructions(jobItem)
         }
+        // Hide loading anyway
+        if (!response.showLoading) hideLoadingView()
     }
 
     /**
@@ -166,12 +190,14 @@ class DetailsActivity : BaseActivity() {
         var jobDescription = job.additionalInfo?.jobDesc ?: job.description
         // If none of the descriptions available, then use predefined no description message
         if (jobDescription.isBlank()) jobDescription = getString(R.string.no_job_description)
-        // Decode job description and set description to the TextView
-        job_description.text = jobDescription.decodeFromHtml()
-        // Make the text visible
-        job_description.visibility = View.VISIBLE
-        // Add movement method
-        job_description.movementMethod = LinkMovementMethod.getInstance()
+        with(job_description) {
+            // Decode job description and set description to the TextView
+            text = jobDescription.decodeFromHtml()
+            // Make the text visible
+            visibility = View.VISIBLE
+            // Add movement method
+            movementMethod = LinkMovementMethod.getInstance()
+        }
     }
 
     /**
@@ -186,12 +212,14 @@ class DetailsActivity : BaseActivity() {
         val decodedText = instruction?.decodeFromHtml()
         // If decoded instructions are available
         if (decodedText != null && decodedText.isNotBlank()) {
-            // Set to the TextView
-            apply_instruction.text = decodedText
+            apply_instruction?.apply {
+                // Set to the TextView
+                text = decodedText
+                // Add movement method
+                movementMethod = LinkMovementMethod.getInstance()
+            }
             // Make the group visible
             apply_group.visibility = View.VISIBLE
-            // Add movement method
-            apply_instruction.movementMethod = LinkMovementMethod.getInstance()
         } else {
             // Make the group invisible
             apply_group.visibility = View.GONE
@@ -208,5 +236,38 @@ class DetailsActivity : BaseActivity() {
                 .progressBarColorRes(R.color.colorAccent)
                 .swipeRefreshColorsRes(R.array.swipeRefreshColorArray)
                 .show(url)
+    }
+
+    /**
+     * Helper function to setup UI when no error occurs
+     *
+     * @param exception     error occurred during the work of the app
+     */
+    private fun showErrorView(exception: Throwable?) {
+        if (exception != null) {
+            Timber.d(exception, "Received exception")
+            // Determine the appropriate {@link AppException} from Throwable
+            val error = when (exception) {
+                is HttpException -> GenericApiError()
+                is IOException -> ConnectionError()
+                is SocketTimeoutException -> TimeOutError()
+                else -> GenericError()
+            }
+            // Show error snack
+            showErrorSnack(error)
+        }
+    }
+
+    /**
+     * Helper method to show snackbar containing error message
+     *
+     * @param exception     {@link AppException} occurred in the app
+     */
+    private fun showErrorSnack(exception: AppException) {
+        val msg = exception.toMessage(this)
+        with(Snackbar.make(container, msg, Snackbar.LENGTH_LONG)) {
+            setAction(android.R.string.ok) { dismiss() }
+            show()
+        }
     }
 }

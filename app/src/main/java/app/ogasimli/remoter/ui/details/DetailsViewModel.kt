@@ -9,6 +9,7 @@ package app.ogasimli.remoter.ui.details
 
 import androidx.lifecycle.MutableLiveData
 import app.ogasimli.remoter.model.data.DataManager
+import app.ogasimli.remoter.model.models.DataResponse
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.ui.base.BaseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -23,60 +24,22 @@ import javax.inject.Inject
  */
 class DetailsViewModel @Inject constructor(private val dataManager: DataManager) : BaseViewModel() {
 
-    val job = MutableLiveData<Job>()
+    val jobResponse = MutableLiveData<DataResponse<Job>>()
 
     /**
-     * Helper method to set the value of the LiveData
+     * Request job's additional info by id from DB
      *
-     * @param job       job item to be set as the value of the LiveData
-     */
-    private fun setJob(job: Job?) {
-        if (job != null) this.job.value = job
-    }
-
-    /**
-     * Fetch additional job info from API
-     *
-     * @param job           job item
-     * @return              Observable holding additional job info from API
-     */
-    fun fetchJobInfo(job: Job) {
-        if (job.additionalInfo != null) {
-            getJobById(job.id)
-        } else {
-            disposable.add(dataManager.fetchJobInfo(job)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .map {
-                        getJobById(job.id)
-                        it
-                    }
-                    .subscribe(
-                            {
-                                // TODO: Handle network errors
-                            },
-                            {
-                                Timber.e(it)
-                            }
-                    )
-            )
-        }
-    }
-
-    /**
-     * Request job by id from DB
-     *
-     * @param jobId     id of the job to be deleted
+     * @param jobId     id of the job
      * @return          Observable holding job item retrieved from DB
      */
-    private fun getJobById(jobId: String) {
+    fun getJobInfo(jobId: String) {
         disposable.clear()
-        disposable.add(dataManager.getJobById(jobId)
+        disposable.add(dataManager.getJobInfo(jobId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         {
-                            setJob(it.data)
+                            jobResponse.value = it
                         },
                         {
                             Timber.e(it)

@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import app.ogasimli.remoter.R
 import app.ogasimli.remoter.helper.rx.EventType
@@ -48,10 +49,15 @@ class JobsAdapter : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
         with(holder) {
             // Get context
             val context = itemView.context
-            // Load company logo
-            itemView.company_logo.load(job,
-                    context.resources.getDimension(R.dimen.company_logo_width).toInt(),
-                    context.resources.getDimension(R.dimen.company_logo_height).toInt())
+
+            logo?.apply {
+                // Set transition name for SharedElement
+                ViewCompat.setTransitionName(this, job.id)
+                // Load company logo
+                load(job,
+                        context.resources.getDimension(R.dimen.company_logo_width).toInt(),
+                        context.resources.getDimension(R.dimen.company_logo_height).toInt())
+            }
             // Setup bookmark button
             bookmarkBtn?.apply {
                 // Set checked state of the view
