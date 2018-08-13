@@ -32,7 +32,7 @@ class DataManager @Inject constructor(
      *
      * @return          Observable holding list of jobs retrieved from API or DB
      */
-    fun getAllJobs() = jobRepository.getAllJobs(getAllSortOption())
+    fun getAllJobs(refreshData: Boolean) = jobRepository.getAllJobs(refreshData, getAllSortOption())
 
     /**
      * Request list of bookmarked jobs from DB

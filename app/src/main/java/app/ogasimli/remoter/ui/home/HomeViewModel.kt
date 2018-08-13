@@ -45,9 +45,9 @@ class HomeViewModel @Inject constructor(
     /**
      * Gets all jobs from DB and serves them
      */
-    fun getAllJobs() {
+    fun getAllJobs(refreshData: Boolean = false) {
         allJobsDisposable.clear()
-        allJobsDisposable.add(dataManager.getAllJobs()
+        allJobsDisposable.add(dataManager.getAllJobs(refreshData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -93,7 +93,7 @@ class HomeViewModel @Inject constructor(
         // Save option into SharedPreferences
         dataManager.saveAllSortOption(sortOption)
         // Reload data to apply the sorting option
-        getAllJobs()
+        getAllJobs(false)
     }
 
     /**

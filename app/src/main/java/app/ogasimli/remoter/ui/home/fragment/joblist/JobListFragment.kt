@@ -108,7 +108,7 @@ class JobListFragment : BaseFragment() {
         // Show loading
         showLoadingView()
         // Fetch jobs
-        viewModel.getAllJobs()
+        viewModel.getAllJobs(refreshData = true)
     }
 
     /**
@@ -119,7 +119,7 @@ class JobListFragment : BaseFragment() {
             response?.let {
                 val jobs = response.data
                 if (jobs != null && jobs.isNotEmpty()) {
-                    showResultView(jobs)
+                    showResultView(jobs, response.showLoading)
                 } else {
                     showEmptyView()
                 }
@@ -134,12 +134,12 @@ class JobListFragment : BaseFragment() {
      *
      * @param jobs      list of received job items
      */
-    private fun showResultView(jobs: List<Job>) {
+    private fun showResultView(jobs: List<Job>, showLoading: Boolean) {
         Timber.d("${jobs.size} jobs received")
         // Forward jobs to JobsAdapter
         jobsAdapter.jobs = jobs
         // Hide loading
-        hideLoadingView()
+        if (!showLoading) hideLoadingView()
         // Show RecyclerView
         jobs_recycler_view.visibility = View.VISIBLE
         // Hide empty view

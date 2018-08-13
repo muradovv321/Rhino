@@ -15,12 +15,10 @@ import app.ogasimli.remoter.model.models.DataSource
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.model.models.SortOption
 import io.reactivex.Flowable
-import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -31,19 +29,6 @@ import javax.inject.Inject
 @ApplicationScope
 class JobRepository @Inject constructor(private val apiService: JobsApiService,
                                         private val jobDao: JobDao) {
-    /**
-     * Request list of jobs from DB & API
-     *
-     * @param sortOption    {@link SortOptions} for indicating the order of the items
-     * @return              Observable holding list of jobs retrieved from API or DB
-     */
-    fun getAllJobs(sortOption: SortOption): Flowable<DataResponse<List<Job>>> =
-            Flowable.concatArrayEager(
-                    getAllJobsFromDb(sortOption),
-                    getAllJobsFromApi(sortOption)
-                    //Drop DB data if we can fetch item fast enough from the API
-                    //to avoid UI flickers
-                    .debounce(400, TimeUnit.MILLISECONDS))
 
     /**
      * Request list of jobs from API
@@ -51,14 +36,17 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
      * @param sortOption    {@link SortOptions} for indicating the order of the items
      * @return              Observable holding list of jobs retrieved from API
      */
-    private fun getAllJobsFromApi(sortOption: SortOption): Flowable<DataResponse<List<Job>>> =
+    private fun fetchAllJobs(sortOption: SortOption): Flowable<DataResponse<List<Job>>> =
             apiService.getJobList()
                     .map { response ->
+                        // If network error occurred then throw HttpException
+                        // This will forward the emission directly to onErrorReturn method
                         if (response.errorBody() != null) {
                             throw HttpException(response)
                         }
 
-                        Timber.d("Mapping items to JobResponse...")
+                        Timber.d("Mapping items to DataResponse...")
+
                         // Distinguish between cache response and network response
                         val source = if (response.raw().networkResponse() != null) {
                             DataSource.API
@@ -67,17 +55,33 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
                         }
 
                         // Get job list from response body
-                        var jobs = response.body()!!
+                        val jobs = response.body()!!
 
-                        // Sort list based on sort options
-                        jobs = when (sortOption) {
-                            SortOption.BY_POSTING_DATE -> jobs.sortedByDescending { it.postingTime }
-                            SortOption.BY_POSITION_NAME -> jobs.sortedBy { it.position }
-                            SortOption.BY_COMPANY_NAME -> jobs.sortedBy { it.company }
+                        // Map items to DataResponse
+                        DataResponse(data = jobs, source = source)
+                    }
+                    .flatMap { response ->
+                        val jobs = response.data
+                        // If response result is not null or empty, then insert results to DB
+                        if (response.source == DataSource.API && jobs != null && jobs.isNotEmpty()) {
+                            jobDao.insertJob(*(jobs.toTypedArray()))
+                            jobDao.deleteOldJobs(jobs.map { it.id })
                         }
 
-                        // Map items to JobResponse
-                        DataResponse(data = jobs, source = source)
+                        Flowable.just(response)
+                    }
+                    .map { response ->
+                        var jobs = response.data
+                        // If response result is not null or empty
+                        if (jobs != null && jobs.isNotEmpty()) {
+                            // Sort list based on sort options
+                            jobs = when (sortOption) {
+                                SortOption.BY_POSTING_DATE -> jobs.sortedByDescending { it.postingTime }
+                                SortOption.BY_POSITION_NAME -> jobs.sortedBy { it.position }
+                                SortOption.BY_COMPANY_NAME -> jobs.sortedBy { it.company }
+                            }
+                        }
+                        response.copy(data = jobs)
                     }
                     .onErrorReturn {
                         Timber.e(it, "Error occurred while fetching from API.")
@@ -86,18 +90,6 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
                                 message = "Error occurred while fetching from API.",
                                 error = it)
                     }
-                    .flatMap { response ->
-                        // If response returned from network, then insert results to DB
-                        if (response.source == DataSource.API && response.data != null &&
-                                response.data.isNotEmpty()) {
-                            jobDao.insertJob(*(response.data.toTypedArray()))
-                            jobDao.deleteOldJobs(response.data.map { it.id })
-                        }
-                        Flowable.just(response)
-                    }
-                    .doOnNext {
-                        Timber.d("Saving ${it.data?.size} jobs from API to DB...")
-                    }
 
     /**
      * Request list of jobs from DB
@@ -105,18 +97,34 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
      * @param sortOption    {@link SortOptions} for indicating the order of the items
      * @return              Observable holding list of jobs retrieved from DB
      */
-    private fun getAllJobsFromDb(sortOption: SortOption): Flowable<DataResponse<List<Job>>> {
+    fun getAllJobs(refreshData: Boolean, sortOption: SortOption): Flowable<DataResponse<List<Job>>> {
         val fetchMethod: () -> Flowable<List<Job>> = when (sortOption) {
             SortOption.BY_POSTING_DATE -> jobDao::getAllJobsByPostingDate
             SortOption.BY_POSITION_NAME -> jobDao::getAllJobsByPositionName
             SortOption.BY_COMPANY_NAME -> jobDao::getAllJobsByCompanyName
         }
+
+        var localRefreshData = refreshData
         return fetchMethod()
-                .filter { it.isNotEmpty() } // filter empty results
                 .map {
-                    Timber.d("Mapping items to JobResponse...")
-                    // Wrap list of jobs to JobResponse object
-                    DataResponse(data = it, source = DataSource.DB)
+                    Timber.d("Mapping items to DataResponse...")
+                    // Wrap list of jobs to DataResponse object
+                    DataResponse(
+                            data = it,
+                            showLoading = refreshData || it.isEmpty(),
+                            source = DataSource.DB
+                    )
+                }
+                .flatMap {
+                    if (it.data == null || it.data.isEmpty()) {
+                        localRefreshData = false
+                        fetchAllJobs(sortOption)
+                    } else if (localRefreshData) {
+                        localRefreshData = false
+                        fetchAllJobs(sortOption)
+                    } else {
+                        Flowable.just(it)
+                    }
                 }
                 .onErrorReturn {
                     Timber.e(it, "Error occurred while fetching from DB.")
@@ -124,9 +132,6 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
                             source = DataSource.DB,
                             message = "Error occurred while fetching from DB.",
                             error = it)
-                }
-                .doOnNext {
-                    Timber.d("Dispatching ${it.data?.size} jobs from DB...")
                 }
     }
 
@@ -159,8 +164,8 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
         }
         return fetchMethod()
                 .map {
-                    Timber.d("Mapping items to JobResponse...")
-                    // Wrap list of jobs to JobResponse object
+                    Timber.d("Mapping items to DataResponse...")
+                    // Wrap list of jobs to DataResponse object
                     DataResponse(data = it, source = DataSource.DB)
                 }
                 .onErrorReturn {
@@ -169,9 +174,6 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
                             source = DataSource.DB,
                             message = "Error occurred while fetching from DB.",
                             error = it)
-                }
-                .doOnNext {
-                    Timber.d("Dispatching ${it.data?.size} jobs from DB...")
                 }
     }
 
