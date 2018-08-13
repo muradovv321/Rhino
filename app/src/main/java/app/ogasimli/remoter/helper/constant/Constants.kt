@@ -50,7 +50,7 @@ object Constants {
      * Timeout limit of http requests in seconds
      */
     @JvmStatic
-    val OK_HTTP_TIMEOUT = 15L // 15 seconds
+    val OK_HTTP_TIMEOUT = 25L // 15 seconds
 
     /**
      * Folder firstName of OkHttp cache
