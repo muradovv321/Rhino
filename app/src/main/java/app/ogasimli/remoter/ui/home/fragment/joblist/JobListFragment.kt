@@ -117,8 +117,8 @@ class JobListFragment : BaseFragment() {
     private fun observeJobs() {
         viewModel.allJobs.observe(this, Observer { response ->
             response?.let {
-                val jobs = response.jobs
-                if (jobs.isNotEmpty()) {
+                val jobs = response.data
+                if (jobs != null && jobs.isNotEmpty()) {
                     showResultView(jobs)
                 } else {
                     showEmptyView()

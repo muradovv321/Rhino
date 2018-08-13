@@ -12,8 +12,8 @@ import app.ogasimli.remoter.helper.rx.EventType
 import app.ogasimli.remoter.helper.rx.JobsCount
 import app.ogasimli.remoter.helper.rx.JobsCountEvent
 import app.ogasimli.remoter.model.data.DataManager
+import app.ogasimli.remoter.model.models.DataResponse
 import app.ogasimli.remoter.model.models.Job
-import app.ogasimli.remoter.model.models.JobResponse
 import app.ogasimli.remoter.model.models.SortOption
 import app.ogasimli.remoter.ui.base.BaseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -32,9 +32,9 @@ class HomeViewModel @Inject constructor(
         private val allJobsDisposable: CompositeDisposable,
         private val bookmarkJobsDisposable: CompositeDisposable) : BaseViewModel() {
 
-    val allJobs = MutableLiveData<JobResponse>()
+    val allJobs = MutableLiveData<DataResponse<List<Job>>>()
 
-    val bookmarkedJobs = MutableLiveData<JobResponse>()
+    val bookmarkedJobs = MutableLiveData<DataResponse<List<Job>>>()
 
     val jobsCount = MutableLiveData<JobsCount>()
 
@@ -115,12 +115,13 @@ class HomeViewModel @Inject constructor(
      *
      * @param response      Response object containing job list and additional data
      */
-    private fun setAllJobs(response: JobResponse) {
+    private fun setAllJobs(response: DataResponse<List<Job>>) {
         // Set value of the LiveData
         val newData = if (response.error != null) {
-            JobResponse(
-                    jobs = allJobs.value?.jobs ?: emptyList(),
+            DataResponse(
+                    data = allJobs.value?.data ?: emptyList(),
                     source = response.source,
+                    showLoading = response.showLoading,
                     message = response.message,
                     error = response.error)
         } else {
@@ -128,7 +129,7 @@ class HomeViewModel @Inject constructor(
         }
         allJobs.value = newData
         // Set value of jobsCount LiveData
-        setJobsCount(JobsCountEvent(EventType.OPEN_JOBS_COUNT, newData.jobs.size))
+        setJobsCount(JobsCountEvent(EventType.OPEN_JOBS_COUNT, newData.data?.size ?: 0))
     }
 
     /**
@@ -136,12 +137,13 @@ class HomeViewModel @Inject constructor(
      *
      * @param response      Response object containing job list and additional data
      */
-    private fun setBookmarkedJobs(response: JobResponse) {
+    private fun setBookmarkedJobs(response: DataResponse<List<Job>>) {
         // Set value of the LiveData
         val newData = if (response.error != null) {
-            JobResponse(
-                    jobs = bookmarkedJobs.value?.jobs ?: emptyList(),
+            DataResponse(
+                    data = bookmarkedJobs.value?.data ?: emptyList(),
                     source = response.source,
+                    showLoading = response.showLoading,
                     message = response.message,
                     error = response.error)
         } else {
@@ -149,7 +151,7 @@ class HomeViewModel @Inject constructor(
         }
         bookmarkedJobs.value = newData
         // Set value of jobsCount LiveData
-        setJobsCount(JobsCountEvent(EventType.BOOKMARKED_JOBS_COUNT, newData.jobs.size))
+        setJobsCount(JobsCountEvent(EventType.BOOKMARKED_JOBS_COUNT, newData.data?.size ?: 0))
     }
 
     /**

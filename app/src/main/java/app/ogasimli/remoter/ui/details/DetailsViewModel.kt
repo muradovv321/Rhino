@@ -76,7 +76,7 @@ class DetailsViewModel @Inject constructor(private val dataManager: DataManager)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         {
-                            setJob(it.job)
+                            setJob(it.data)
                         },
                         {
                             Timber.e(it)
