@@ -11,7 +11,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.animation.DecelerateInterpolator
 import android.widget.RadioButton
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
@@ -22,6 +21,7 @@ import app.ogasimli.remoter.helper.exceptions.toMessage
 import app.ogasimli.remoter.helper.rx.*
 import app.ogasimli.remoter.helper.utils.getJobsCountText
 import app.ogasimli.remoter.helper.utils.launchActivity
+import app.ogasimli.remoter.helper.utils.rotateBy
 import app.ogasimli.remoter.helper.utils.viewModelProvider
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.model.models.SortOption
@@ -62,7 +62,7 @@ class HomeActivity : BaseActivity() {
 
         sort_btn.setOnClickListener {
             // Rotate button 180 degree
-            rotateBy(180F, it)
+            it.rotateBy(180F)
             // Show Popup Menu
             showSortPopup(it)
         }
@@ -77,15 +77,6 @@ class HomeActivity : BaseActivity() {
         observeJobsCount()
     }
 
-    private fun rotateBy(degree: Float, view: View?) {
-        view?.apply {
-            animate()
-                    .rotationBy(degree)
-                    .setInterpolator(DecelerateInterpolator())
-                    .start()
-        }
-    }
-
     /**
      * Helper function to display {@link SortPopupWindow}
      */
@@ -97,7 +88,7 @@ class HomeActivity : BaseActivity() {
         val popupWindow = SortPopupWindow(this, rootView)
         // Rotate sort button, when popup is dismissed
         popupWindow.setOnDismissListener {
-            rotateBy(180F, v)
+            v.rotateBy(180F)
         }
 
         // Create array of RadioButtons
