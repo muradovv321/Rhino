@@ -117,6 +117,7 @@ class JobListFragment : BaseFragment() {
     private fun observeJobs() {
         viewModel.allJobs.observe(this, Observer { response ->
             response?.let {
+                Timber.d("Response item: $it")
                 val jobs = response.data
                 if (jobs != null && jobs.isNotEmpty()) {
                     showResultView(jobs, response.showLoading)

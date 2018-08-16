@@ -22,6 +22,7 @@
         <item name="android:popupWindowStyle">@style/Widget.Remoter.Popup.Window</item>
         <item name="android:textAppearanceLargePopupMenu">@style/TextAppearance.Remoter.Popup.Large</item>
         <item name="android:textAppearanceSmallPopupMenu">@style/TextAppearance.Remoter.Popup.Small</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.Remoter.ActionOverflowButton</item>
     </style>
 
     <!-- Activity Themes -->
@@ -40,7 +41,7 @@
     <!-- Toolbar theme -->
     <style name="Widget.Remoter.Toolbar.Main" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:theme">@style/Theme.Remoter.Activity.Home</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="popupTheme">@style/ThemeOverlay.MaterialComponents.Light</item>
         <item name="titleTextAppearance">@style/TextAppearance.Remoter.Toolbar.Main</item>
         <item name="titleTextColor">@color/controlElementsTextColor</item>
     </style>
@@ -54,7 +55,12 @@
 
     <style name="Widget.Remoter.Toolbar.Secondary" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:theme">@style/Theme.Remoter.Activity.Details</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="popupTheme">@style/ThemeOverlay.MaterialComponents.Light</item>
+    </style>
+
+    <!-- Style of menu icon (3 vertical dots) -->
+    <style name="Widget.Remoter.ActionOverflowButton" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@color/controlElementsTextColor</item>
     </style>
 
     <!-- Popup menu style -->
@@ -97,6 +103,24 @@
     <style name="Widget.Remoter.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:fontFamily">@font/lato_bold</item>
+    </style>
+
+    <!-- Chip styles -->
+    <style name="Widget.Remoter.Chip.Base" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="chipCornerRadius">6dp</item>
+        <item name="chipIconVisible">true</item>
+        <item name="checkedIcon">@drawable/ic_chip_checked</item>
+        <item name="android:textAppearance">@style/TextAppearance.Remoter.Chip</item>
+    </style>
+
+    <style name="TextAppearance.Remoter.Chip" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="fontFamily">@font/montserrat_alternates</item>
+    </style>
+
+    <style name="Widget.Remoter.Chip.Default" parent="Widget.Remoter.Chip.Base"/>
+
+    <style name="Widget.Remoter.Chip.Additional" parent="Widget.Remoter.Chip.Base">
+        <item name="closeIconVisible">true</item>
     </style>
 
     <!-- TextAppearance themes -->

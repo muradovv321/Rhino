@@ -1,0 +1,123 @@
+{
+  "all": {
+    "name": "All Listings",
+    "include": [],
+    "exclude": []
+  },
+  "technical": {
+    "name": "Technical",
+    "include": [
+      "developer",
+      "engineer",
+      "frontend",
+      "backend",
+      "fullstack",
+      "front",
+      "develop",
+      "program",
+      "engine",
+      "dev",
+      "integration",
+      "data",
+      "tech",
+      "technical",
+      "cloud",
+      "microservice",
+      "query",
+      "maintenance",
+      "operation",
+      "ops",
+      "system",
+      "window",
+      "linux"
+    ],
+    "exclude": [
+      "sales"
+    ]
+  },
+  "design": {
+    "name": "Design",
+    "include": [
+      "design",
+      "ux",
+      "ui",
+      "interaction",
+      "visual",
+      "graphic",
+      "interface",
+      "illustrator",
+      "photoshop",
+      "sketch",
+      "adobe"
+    ],
+    "exclude": [
+      "engineer",
+      "developer",
+      "admin",
+      "devops",
+      "software",
+      "recruit",
+      "support",
+      "sales"
+    ]
+  },
+  "marketing": {
+    "name": "Marketing",
+    "include": [
+      "marketing",
+      "growth",
+      "sales",
+      "seo"
+    ],
+    "exclude": [
+      "support",
+      "recruit"
+    ]
+  },
+  "content": {
+    "name": "Content",
+    "include": [
+      "content",
+      "copy",
+      "article",
+      "writ",
+      "author",
+      "curric",
+      "publish"
+    ],
+    "exclude": [
+      "engineer",
+      "admin"
+    ]
+  },
+  "executive": {
+    "name": "Executive",
+    "include": [
+      "execut",
+      "manage",
+      "ceo",
+      "cto",
+      "cmo",
+      "cfo",
+      "vice",
+      "partner",
+      "president",
+      "lead",
+      "found",
+      "direct",
+      "head"
+    ],
+    "exclude": [
+      "support",
+      "recruit",
+      "junior"
+    ]
+  },
+  "support": {
+    "name": "Support",
+    "include": [
+      "support"
+    ],
+    "exclude": []
+  }
+}

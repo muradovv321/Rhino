@@ -10,6 +10,8 @@ package app.ogasimli.remoter.ui.home
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.RadioButton
 import androidx.core.view.ViewCompat
@@ -23,15 +25,19 @@ import app.ogasimli.remoter.helper.utils.getJobsCountText
 import app.ogasimli.remoter.helper.utils.launchActivity
 import app.ogasimli.remoter.helper.utils.rotateBy
 import app.ogasimli.remoter.helper.utils.viewModelProvider
+import app.ogasimli.remoter.model.models.FilterKeywords
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.model.models.SortOption
 import app.ogasimli.remoter.ui.base.BaseActivity
+import app.ogasimli.remoter.ui.custom.BackdropRevealListener
 import app.ogasimli.remoter.ui.custom.CustomPageChangeListener
+import app.ogasimli.remoter.ui.custom.ElasticInOutInterpolator
 import app.ogasimli.remoter.ui.custom.SortPopupWindow
 import app.ogasimli.remoter.ui.details.DetailsActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.backdrop_front.*
+import kotlinx.android.synthetic.main.backdrop_layout.*
 import kotlinx.android.synthetic.main.sort_popup_window.view.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -47,6 +53,9 @@ class HomeActivity : BaseActivity() {
 
     @Inject
     lateinit var pagerAdapter: HomePagerAdapter
+
+    @Inject
+    lateinit var mFilterKeywords: FilterKeywords
 
     private lateinit var jobsCount: JobsCount
 
@@ -76,6 +85,31 @@ class HomeActivity : BaseActivity() {
         // Observe count of jobs
         observeJobsCount()
     }
+
+    private lateinit var mBackdropRevealListener: BackdropRevealListener
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.home_menu, menu)
+        mBackdropRevealListener =
+                BackdropRevealListener(
+                        this,
+                        main_content,
+                        backdrop,
+                        ElasticInOutInterpolator(),
+                        R.drawable.ic_menu_filter,
+                        R.drawable.ic_menu_filter_close)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean =
+            when (item?.itemId) {
+                R.id.menu_search -> true
+                R.id.menu_filter -> {
+                    mBackdropRevealListener.toggle(item)
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
+            }
 
     /**
      * Helper function to display {@link SortPopupWindow}
@@ -245,9 +279,10 @@ class HomeActivity : BaseActivity() {
      */
     fun showErrorSnack(exception: AppException) {
         val msg = exception.toMessage(this)
-        val snackbar = Snackbar.make(container, msg, Snackbar.LENGTH_LONG)
-        snackbar.setAction(android.R.string.ok) { snackbar.dismiss() }
-        snackbar.show()
+        with(Snackbar.make(container, msg, Snackbar.LENGTH_LONG)) {
+            setAction(android.R.string.ok) { dismiss() }
+            show()
+        }
     }
 
     /**
@@ -258,8 +293,8 @@ class HomeActivity : BaseActivity() {
                 .subscribe { event ->
                     when (event.type) {
                         EventType.JOB_ITEM_CLICK -> {
-                            val job= (event.data as Pair<*, *>).first as Job
-                            val logo= event.data.second as View
+                            val job = (event.data as Pair<*, *>).first as Job
+                            val logo = event.data.second as View
                             val intent = Intent(this, DetailsActivity::class.java)
                             intent.putExtra(JOB_ITEM_BUNDLE_KEY, job)
                             launchActivity(intent, logo, ViewCompat.getTransitionName(logo))

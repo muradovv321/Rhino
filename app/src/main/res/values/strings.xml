@@ -70,5 +70,18 @@
     <string name="generic_error_msg">Error occurred while fetching the data</string>
     <string name="timeout_error_msg">Network call took too long to finish</string>
     <string name="connection_error_msg">Connection error occurred while fetching the data</string>
+    <string name="menu_filter_title">Filter</string>
+    <string name="menu_search_title">Search</string>
+
+    <!-- Filter & search resources -->
+    <string-array name="filter_categories">
+        <item>All Listings</item>
+        <item>Technical</item>
+        <item>Design</item>
+        <item>Marketing</item>
+        <item>Content</item>
+        <item>Executive</item>
+        <item>Support</item>
+    </string-array>
 
 </resources>

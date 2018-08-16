@@ -16,6 +16,13 @@
     android:background="@color/backDropColor"
     tools:context=".ui.home.HomeActivity">
 
+    <include
+        layout="@layout/backdrop_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/backdrop_margin_top"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

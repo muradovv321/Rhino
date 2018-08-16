@@ -9,8 +9,11 @@ package app.ogasimli.remoter.di.module
 
 import android.app.Application
 import android.content.Context
+import app.ogasimli.remoter.R
 import app.ogasimli.remoter.di.qualifier.ApplicationContext
 import app.ogasimli.remoter.di.scope.ApplicationScope
+import app.ogasimli.remoter.model.models.FilterKeywords
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
@@ -36,4 +39,15 @@ class AppModule {
      */
     @Provides
     fun provideCompositeDisposable() = CompositeDisposable()
+
+    /**
+     * Inject global CompositeDisposable
+     */
+    @ApplicationScope
+    @Provides
+    fun provideFilterKeywords(app: Application): FilterKeywords {
+        val data = app.resources.openRawResource(R.raw.filter_keywords)
+                .bufferedReader().use { it.readText() }
+        return Gson().fromJson(data, FilterKeywords::class.java)
+    }
 }

@@ -41,6 +41,18 @@ object Constants {
     val SORT_OPTION_BOOKMARKED_KEY = "$PACKAGE_NAME.SORT_OPTION_BOOKMARKED_KEY"
 
     /**
+     * SharedPreferences key for {@link FilterOption} of all jobs
+     */
+    @JvmStatic
+    val FILTER_OPTION_ALL_KEY = "$PACKAGE_NAME.FILTER_OPTION_ALL_KEY"
+
+    /**
+     * SharedPreferences key for {@link FilterOption} of bookmarked jobs
+     */
+    @JvmStatic
+    val FILTER_OPTION_BOOKMARKED_KEY = "$PACKAGE_NAME.FILTER_OPTION_BOOKMARKED_KEY"
+
+    /**
      * Key of the job item to pass between activities via the Bundle
      */
     @JvmStatic

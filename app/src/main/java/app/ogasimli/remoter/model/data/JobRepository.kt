@@ -105,6 +105,7 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
         }
 
         var localRefreshData = refreshData
+
         return fetchMethod()
                 .map {
                     Timber.d("Mapping items to DataResponse...")
@@ -121,7 +122,7 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
                         fetchAllJobs(sortOption)
                     } else if (localRefreshData) {
                         localRefreshData = false
-                        fetchAllJobs(sortOption)
+                        Flowable.just(it).mergeWith(fetchAllJobs(sortOption))
                     } else {
                         Flowable.just(it)
                     }
