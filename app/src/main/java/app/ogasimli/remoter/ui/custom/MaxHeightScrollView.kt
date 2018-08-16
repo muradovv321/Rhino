@@ -26,12 +26,6 @@ class MaxHeightScrollView @JvmOverloads constructor(
     private val defaultHeight = 200
 
     init {
-        if (!isInEditMode) {
-            init(context, attrs)
-        }
-    }
-
-    private fun init(context: Context, attrs: AttributeSet?) {
         if (attrs != null) {
             val styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.MaxHeightScrollView)
             //200 is a default value
