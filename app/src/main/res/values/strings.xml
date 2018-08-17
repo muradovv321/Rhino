@@ -75,7 +75,6 @@
 
     <!-- Filter & search resources -->
     <string-array name="filter_categories">
-        <item>All Listings</item>
         <item>Technical</item>
         <item>Design</item>
         <item>Marketing</item>

@@ -13,6 +13,7 @@ import app.ogasimli.remoter.helper.rx.JobsCount
 import app.ogasimli.remoter.helper.rx.JobsCountEvent
 import app.ogasimli.remoter.model.data.DataManager
 import app.ogasimli.remoter.model.models.DataResponse
+import app.ogasimli.remoter.model.models.FilterOption
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.model.models.SortOption
 import app.ogasimli.remoter.ui.base.BaseViewModel
@@ -41,6 +42,10 @@ class HomeViewModel @Inject constructor(
     var sortOptionAllJobs = dataManager.getAllSortOption()
 
     var sortOptionBookmarkedJobs = dataManager.getBookmarkedSortOption()
+
+    var filterOptionAllJobs = dataManager.getAllFilterOption()
+
+    var filterOptionBookmarkedJobs = dataManager.getBookmarkedFilterOption()
 
     /**
      * Gets all jobs from DB and serves them
@@ -108,6 +113,30 @@ class HomeViewModel @Inject constructor(
         dataManager.saveBookmarkedSortOption(sortOption)
         // Reload data to apply the sorting option
         getBookmarkedJobs()
+    }
+
+    /**
+     * Helper function to filter all jobs list
+     *
+     * @param filterOption    {@link FilterOption} for indicating the order of the items
+     */
+    fun filterAllJobs(filterOption: FilterOption) {
+        // Update local variable
+        filterOptionAllJobs = filterOption
+        // Save option into SharedPreferences
+        dataManager.saveAllFilterOption(filterOption)
+    }
+
+    /**
+     * Helper function to filter bookmarked jobs list
+     *
+     * @param filterOption    {@link FilterOption} for indicating the order of the items
+     */
+    fun filterBookmarkedJobs(filterOption: FilterOption) {
+        // Update local variable
+        filterOptionBookmarkedJobs = filterOption
+        // Save option into SharedPreferences
+        dataManager.saveBookmarkedFilterOption(filterOption)
     }
 
     /**

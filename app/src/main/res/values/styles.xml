@@ -119,7 +119,7 @@
 
     <style name="Widget.Remoter.Chip.Default" parent="Widget.Remoter.Chip.Base"/>
 
-    <style name="Widget.Remoter.Chip.Additional" parent="Widget.Remoter.Chip.Base">
+    <style name="Widget.Remoter.Chip.Closable" parent="Widget.Remoter.Chip.Base">
         <item name="closeIconVisible">true</item>
     </style>
 
