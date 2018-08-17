@@ -90,7 +90,7 @@ class HomeViewModel @Inject constructor(
     /**
      * Helper function to sort all jobs list
      *
-     * @param sortOption    {@link SortOptions} for indicating the order of the items
+     * @param sortOption    {@link SortOption} for indicating the order of the items
      */
     fun sortAllJobs(sortOption: SortOption) {
         // Update local variable
@@ -104,7 +104,7 @@ class HomeViewModel @Inject constructor(
     /**
      * Helper function to sort bookmarked jobs list
      *
-     * @param sortOption    {@link SortOptions} for indicating the order of the items
+     * @param sortOption    {@link SortOption} for indicating the order of the items
      */
     fun sortBookmarkedJobs(sortOption: SortOption) {
         // Update local variable

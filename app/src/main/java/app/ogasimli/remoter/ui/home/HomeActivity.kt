@@ -171,7 +171,7 @@ class HomeActivity : BaseActivity() {
     /**
      * Helper method to sort jobs
      *
-     * @param sortOption    {@link SortOptions} for indicating the order of the items
+     * @param sortOption    {@link SortOption} for indicating the order of the items
      */
     private fun sortJobs(sortOption: SortOption) {
         when (view_pager.currentItem) {
