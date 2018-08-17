@@ -9,6 +9,8 @@ package app.ogasimli.remoter.helper.utils
 
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 
 /**
  * Helper & extension functions for managing View related tasks
@@ -28,4 +30,15 @@ fun View?.rotateBy(degree: Float) {
                 .setInterpolator(DecelerateInterpolator())
                 .start()
     }
+}
+
+/**
+ * Extension function to find text of checked Chip
+ * within a ChipGroup
+ *
+ * @return          text of checked Chip
+ */
+fun ChipGroup.getCheckedChipsText(): String {
+    val checkedChip = getChildAt(checkedChipId - 1) as? Chip
+    return checkedChip?.text?.toString() ?: ""
 }

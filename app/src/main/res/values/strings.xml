@@ -28,23 +28,25 @@
     <string name="sort_btn_content_description">Sort Button</string>
 
     <!-- HomeActivity's string resources -->
-    <string name="backdrop_front_header_all_jobs_zero">No Open Jobs</string>
+    <string name="backdrop_front_header_all_jobs_zero">No Open Jobs %1$s</string>
     <plurals name="backdrop_front_header_all_jobs">
-        <item quantity="one">One Open Job</item>
-        <item quantity="other">%d Open Jobs</item>
+        <item quantity="one">One Open Job %2$s</item>
+        <item quantity="other">%1$d Open Jobs %2$s</item>
     </plurals>
-    <string name="backdrop_front_header_bookmarked_jobs_zero">No Bookmarked Jobs</string>
+    <string name="backdrop_front_header_bookmarked_jobs_zero">No Bookmarked Jobs %1$s</string>
     <plurals name="backdrop_front_header_bookmarked_jobs">
-        <item quantity="one">One Bookmarked Job</item>
-        <item quantity="other">%d Bookmarked Jobs</item>
+        <item quantity="one">One Bookmarked Job %2$s</item>
+        <item quantity="other">%1$d Bookmarked %2$s Jobs %2$s</item>
     </plurals>
-    <string name="backdrop_front_header_search_result_jobs_zero">No Job Found</string>
+    <string name="backdrop_front_header_search_result_jobs_zero">No Job Found %1$s</string>
+    <plurals name="backdrop_front_header_search_result_jobs">
+        <item quantity="one">One Job Found %2$s</item>
+        <item quantity="other">%1$d Jobs Found %2$s</item>
+    </plurals>
+
+    <!-- DetailsActivity's string resources -->
     <string name="how_to_apply_heading_text">How do you apply?</string>
     <string name="apply_btn_text">Apply Now</string>
-    <plurals name="backdrop_front_header_search_result_jobs">
-        <item quantity="one">One Job Found</item>
-        <item quantity="other">%d Jobs Found</item>
-    </plurals>
 
     <!-- Sort Popup Window -->
     <string name="sort_popup_group_title">Sort by</string>

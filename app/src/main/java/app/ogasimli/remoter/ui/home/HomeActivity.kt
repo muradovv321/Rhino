@@ -21,10 +21,7 @@ import app.ogasimli.remoter.helper.constant.Constants.JOB_ITEM_BUNDLE_KEY
 import app.ogasimli.remoter.helper.exceptions.AppException
 import app.ogasimli.remoter.helper.exceptions.toMessage
 import app.ogasimli.remoter.helper.rx.*
-import app.ogasimli.remoter.helper.utils.getJobsCountText
-import app.ogasimli.remoter.helper.utils.launchActivity
-import app.ogasimli.remoter.helper.utils.rotateBy
-import app.ogasimli.remoter.helper.utils.viewModelProvider
+import app.ogasimli.remoter.helper.utils.*
 import app.ogasimli.remoter.model.models.FilterKeywords
 import app.ogasimli.remoter.model.models.FilterOption
 import app.ogasimli.remoter.model.models.Job
@@ -252,8 +249,6 @@ class HomeActivity : BaseActivity() {
 
         // Add OnCheckedChangeListener to ChipGroup
         filter_chip_group.setOnCheckedChangeListener { _, checkedId ->
-            Timber.d("Checked chip: $checkedId")
-            Timber.d("chipStatusChecking: $chipStatusChecking")
             if (!chipStatusChecking) {
                 if (checkedId == -1) {
                     filterJobs(FilterOption.ALL_LISTINGS)
@@ -311,9 +306,9 @@ class HomeActivity : BaseActivity() {
 
     private val pageChangeListener = object : CustomPageChangeListener() {
         override fun onPageSelected(position: Int) {
+            setFilterChipsStatus()
             setBackdropHeaderText()
             setSortButtonsStatus()
-            setFilterChipsStatus()
         }
     }
 
@@ -325,8 +320,8 @@ class HomeActivity : BaseActivity() {
             count?.let {
                 Timber.d("${it.openJobs} open and ${it.bookmarkedJobs} bookmarked jobs received")
                 jobsCount = it
-                setBackdropHeaderText()
                 setSortButtonsStatus()
+                setBackdropHeaderText()
             }
         })
     }
@@ -336,20 +331,29 @@ class HomeActivity : BaseActivity() {
      * of Backdrop's front layer
      */
     private fun setBackdropHeaderText() {
+        val category = filter_chip_group.getCheckedChipsText()
         header_info_text_view.text = when (view_pager.currentItem) {
             0 -> if (jobsCount.isSearching) {
-                getJobsCountText(this, R.plurals.backdrop_front_header_search_result_jobs,
-                        R.string.backdrop_front_header_search_result_jobs_zero, jobsCount.openJobs)
+                getJobsCountText(this,
+                        R.plurals.backdrop_front_header_search_result_jobs,
+                        R.string.backdrop_front_header_search_result_jobs_zero,
+                        jobsCount.openJobs, category)
             } else {
-                getJobsCountText(this, R.plurals.backdrop_front_header_all_jobs,
-                        R.string.backdrop_front_header_all_jobs_zero, jobsCount.openJobs)
+                getJobsCountText(this,
+                        R.plurals.backdrop_front_header_all_jobs,
+                        R.string.backdrop_front_header_all_jobs_zero,
+                        jobsCount.openJobs, category)
             }
             1 -> if (jobsCount.isSearching) {
-                getJobsCountText(this, R.plurals.backdrop_front_header_search_result_jobs,
-                        R.string.backdrop_front_header_search_result_jobs_zero, jobsCount.bookmarkedJobs)
+                getJobsCountText(this,
+                        R.plurals.backdrop_front_header_search_result_jobs,
+                        R.string.backdrop_front_header_search_result_jobs_zero,
+                        jobsCount.bookmarkedJobs, category)
             } else {
-                getJobsCountText(this, R.plurals.backdrop_front_header_bookmarked_jobs,
-                        R.string.backdrop_front_header_bookmarked_jobs_zero, jobsCount.bookmarkedJobs)
+                getJobsCountText(this,
+                        R.plurals.backdrop_front_header_bookmarked_jobs,
+                        R.string.backdrop_front_header_bookmarked_jobs_zero,
+                        jobsCount.bookmarkedJobs, category)
             }
             else -> ""
         }

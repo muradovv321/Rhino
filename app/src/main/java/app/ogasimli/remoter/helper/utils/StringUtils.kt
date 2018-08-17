@@ -53,12 +53,20 @@ fun String.getFirstLetters(limit: Int): String {
 fun getJobsCountText(context: Context,
                      @PluralsRes resId: Int,
                      @StringRes zeroResId: Int,
-                     count: Int): String =
-        if (count == 0) {
-            context.getString(zeroResId)
-        } else {
-            context.resources.getQuantityString(resId, count, count)
-        }
+                     count: Int,
+                     category: String): Spanned {
+    val styledCategory = if (category.isEmpty() || category.isBlank()) {
+        category
+    } else {
+        "-> [$category]"
+    }
+    val text = if (count == 0) {
+        context.getString(zeroResId, styledCategory)
+    } else {
+        context.resources.getQuantityString(resId, count, count, styledCategory)
+    }
+    return text.decodeFromHtml()
+}
 
 /**
  * Extension function to decode HTML formatted text into Spanned
