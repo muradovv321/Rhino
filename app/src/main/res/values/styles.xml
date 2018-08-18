@@ -110,11 +110,7 @@
         <item name="chipCornerRadius">6dp</item>
         <item name="chipIconVisible">true</item>
         <item name="checkedIcon">@drawable/ic_chip_checked</item>
-        <item name="android:textAppearance">@style/TextAppearance.Remoter.Chip</item>
-    </style>
-
-    <style name="TextAppearance.Remoter.Chip" parent="TextAppearance.MaterialComponents.Body2">
-        <item name="fontFamily">@font/montserrat_alternates</item>
+        <item name="android:textAppearance">?textAppearanceBody2</item>
     </style>
 
     <style name="Widget.Remoter.Chip.Default" parent="Widget.Remoter.Chip.Base"/>
