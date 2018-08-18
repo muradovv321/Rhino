@@ -22,6 +22,7 @@ import app.ogasimli.remoter.helper.rx.EventType
 import app.ogasimli.remoter.helper.rx.RxBus
 import app.ogasimli.remoter.helper.rx.RxEvent
 import app.ogasimli.remoter.helper.rx.registerInBus
+import app.ogasimli.remoter.helper.utils.getColor
 import app.ogasimli.remoter.helper.utils.inflate
 import app.ogasimli.remoter.helper.utils.viewModelProvider
 import app.ogasimli.remoter.model.models.Job
@@ -93,12 +94,16 @@ class JobListFragment : BaseFragment() {
      * Helper method to setup SwipeRefreshLayout
      */
     private fun setupSwipeRefreshLayout() {
-        // Set refresh listener
-        swipe_refresh_layout.setOnRefreshListener {
-            fetchJobs()
+        with(swipe_refresh_layout) {
+            // Set color scheme for loading spinner
+            setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
+            // Set background color for progress
+            setProgressBackgroundColorSchemeColor(getColor(context!!, R.color.backDropFrontColor))
+            // Set refresh listener
+            setOnRefreshListener {
+                fetchJobs()
+            }
         }
-        // Set color scheme
-        swipe_refresh_layout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
     }
 
     /**
