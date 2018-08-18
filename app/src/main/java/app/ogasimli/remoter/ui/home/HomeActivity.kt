@@ -22,7 +22,6 @@ import app.ogasimli.remoter.helper.exceptions.AppException
 import app.ogasimli.remoter.helper.exceptions.toMessage
 import app.ogasimli.remoter.helper.rx.*
 import app.ogasimli.remoter.helper.utils.*
-import app.ogasimli.remoter.model.models.FilterKeywords
 import app.ogasimli.remoter.model.models.FilterOption
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.model.models.SortOption
@@ -54,9 +53,6 @@ class HomeActivity : BaseActivity() {
 
     @Inject
     lateinit var pagerAdapter: HomePagerAdapter
-
-    @Inject
-    lateinit var mFilterKeywords: FilterKeywords
 
     private lateinit var jobsCount: JobsCount
 
