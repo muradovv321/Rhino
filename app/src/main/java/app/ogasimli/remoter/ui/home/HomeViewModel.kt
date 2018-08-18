@@ -125,6 +125,8 @@ class HomeViewModel @Inject constructor(
         filterOptionAllJobs = filterOption
         // Save option into SharedPreferences
         dataManager.saveAllFilterOption(filterOption)
+        // Reload data to apply the filtering option
+        getAllJobs()
     }
 
     /**
@@ -137,6 +139,8 @@ class HomeViewModel @Inject constructor(
         filterOptionBookmarkedJobs = filterOption
         // Save option into SharedPreferences
         dataManager.saveBookmarkedFilterOption(filterOption)
+        // Reload data to apply the filtering option
+        getBookmarkedJobs()
     }
 
     /**

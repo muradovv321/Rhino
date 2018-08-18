@@ -7,13 +7,11 @@
 
 package app.ogasimli.remoter.model.data
 
+import androidx.sqlite.db.SimpleSQLiteQuery
 import app.ogasimli.remoter.di.scope.ApplicationScope
 import app.ogasimli.remoter.model.data.local.room.JobDao
 import app.ogasimli.remoter.model.data.remote.api.JobsApiService
-import app.ogasimli.remoter.model.models.DataResponse
-import app.ogasimli.remoter.model.models.DataSource
-import app.ogasimli.remoter.model.models.Job
-import app.ogasimli.remoter.model.models.SortOption
+import app.ogasimli.remoter.model.models.*
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -28,15 +26,17 @@ import javax.inject.Inject
  */
 @ApplicationScope
 class JobRepository @Inject constructor(private val apiService: JobsApiService,
-                                        private val jobDao: JobDao) {
+                                        private val jobDao: JobDao,
+                                        private val filterKeywords: FilterKeywords) {
 
     /**
      * Request list of jobs from API
      *
-     * @param sortOption    {@link SortOptions} for indicating the order of the items
+     * @param dbResponse    result of fetching DB
      * @return              Observable holding list of jobs retrieved from API
      */
-    private fun fetchAllJobs(sortOption: SortOption): Flowable<DataResponse<List<Job>>> =
+    private fun fetchAllJobs(dbResponse: DataResponse<List<Job>>):
+            Flowable<DataResponse<List<Job>>> =
             apiService.getJobList()
                     .map { response ->
                         // If network error occurred then throw HttpException
@@ -70,22 +70,11 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
 
                         Flowable.just(response)
                     }
-                    .map { response ->
-                        var jobs = response.data
-                        // If response result is not null or empty
-                        if (jobs != null && jobs.isNotEmpty()) {
-                            // Sort list based on sort options
-                            jobs = when (sortOption) {
-                                SortOption.BY_POSTING_DATE -> jobs.sortedByDescending { it.postingTime }
-                                SortOption.BY_POSITION_NAME -> jobs.sortedBy { it.position }
-                                SortOption.BY_COMPANY_NAME -> jobs.sortedBy { it.company }
-                            }
-                        }
-                        response.copy(data = jobs)
-                    }
+                    .map { it.copy(data = dbResponse.data) }
                     .onErrorReturn {
                         Timber.e(it, "Error occurred while fetching from API.")
                         DataResponse(
+                                data = dbResponse.data,
                                 source = DataSource.API,
                                 message = "Error occurred while fetching from API.",
                                 error = it)
@@ -94,19 +83,15 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
     /**
      * Request list of jobs from DB
      *
-     * @param sortOption    {@link SortOptions} for indicating the order of the items
+     * @param sortOption    {@link SortOption} for indicating the order of the items
+     * @param filterOption  {@link FilterOption} for indicating the order of the items
      * @return              Observable holding list of jobs retrieved from DB
      */
-    fun getAllJobs(refreshData: Boolean, sortOption: SortOption): Flowable<DataResponse<List<Job>>> {
-        val fetchMethod: () -> Flowable<List<Job>> = when (sortOption) {
-            SortOption.BY_POSTING_DATE -> jobDao::getAllJobsByPostingDate
-            SortOption.BY_POSITION_NAME -> jobDao::getAllJobsByPositionName
-            SortOption.BY_COMPANY_NAME -> jobDao::getAllJobsByCompanyName
-        }
-
+    fun getAllJobs(refreshData: Boolean, sortOption: SortOption,
+                   filterOption: FilterOption): Flowable<DataResponse<List<Job>>> {
         var localRefreshData = refreshData
-
-        return fetchMethod()
+        val query = getAllJobsQuery(sortOption, filterOption)
+        return jobDao.getAllJobs(query)
                 .map {
                     Timber.d("Mapping items to DataResponse...")
                     // Wrap list of jobs to DataResponse object
@@ -117,12 +102,9 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
                     )
                 }
                 .flatMap {
-                    if (it.data == null || it.data.isEmpty()) {
+                    if (it.data == null || it.data.isEmpty() || localRefreshData) {
                         localRefreshData = false
-                        fetchAllJobs(sortOption)
-                    } else if (localRefreshData) {
-                        localRefreshData = false
-                        Flowable.just(it).mergeWith(fetchAllJobs(sortOption))
+                        Flowable.just(it).mergeWith(fetchAllJobs(it))
                     } else {
                         Flowable.just(it)
                     }
@@ -134,6 +116,33 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
                             message = "Error occurred while fetching from DB.",
                             error = it)
                 }
+    }
+
+    /**
+     * Generates and returns {@Link SimpleSQLiteQuery}
+     * for querying jobs from DB
+     *
+     * @param sortOption    {@link SortOption} for indicating the order of the items
+     * @param filterOption  {@link FilterOption} for indicating the order of the items
+     * @return              SQLite query
+     */
+    private fun getAllJobsQuery(sortOption: SortOption, filterOption: FilterOption): SimpleSQLiteQuery {
+        val keywords = filterKeywords.getKeywordsByFilterOption(filterOption)
+        val include = keywords.include
+        val exclude = keywords.exclude
+        val columnName = SortOption.toColumnName(sortOption)
+        return SimpleSQLiteQuery("""
+            SELECT * FROM jobs
+            ${if (exclude.isNotEmpty() || include.isNotEmpty()) "WHERE" else ""}
+                ${exclude.mapIndexed { index, item ->
+            "tags NOT LIKE '%$item%' ${if (index < exclude.size - 1 || include.isNotEmpty()) "AND" else ""}"
+        }.joinToString(" ")}
+                ${include.mapIndexed { index, item ->
+            "${if (index == 0) "(" else ""} tags LIKE '%$item%' OR position LIKE '%$item%' " +
+                    if (index < include.size - 1) "OR" else ")"
+        }.joinToString(" ")}
+            ORDER BY $columnName ${if (sortOption.name == "BY_POSTING_DATE") "DESC" else "ASC"}
+            """.trimIndent())
     }
 
     /**
@@ -154,16 +163,13 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
     /**
      * Request list of bookmarked jobs from DB
      *
-     * @param sortOption    {@link SortOptions} for indicating the order of the items
+     * @param sortOption    {@link SortOption} for indicating the order of the items
      * @return              Observable holding list of bookmarked jobs retrieved from DB
      */
-    fun getBookmarkedJobs(sortOption: SortOption): Flowable<DataResponse<List<Job>>> {
-        val fetchMethod: () -> Flowable<List<Job>> = when (sortOption) {
-            SortOption.BY_POSTING_DATE -> jobDao::getBookmarkedJobsByPostingDate
-            SortOption.BY_POSITION_NAME -> jobDao::getBookmarkedJobsByPositionName
-            SortOption.BY_COMPANY_NAME -> jobDao::getBookmarkedJobsByCompanyName
-        }
-        return fetchMethod()
+    fun getBookmarkedJobs(sortOption: SortOption,
+                          filterOption: FilterOption): Flowable<DataResponse<List<Job>>> {
+        val query = getBookmarkedJobsQuery(sortOption, filterOption)
+        return jobDao.getBookmarkedJobs(query)
                 .map {
                     Timber.d("Mapping items to DataResponse...")
                     // Wrap list of jobs to DataResponse object
@@ -176,6 +182,35 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
                             message = "Error occurred while fetching from DB.",
                             error = it)
                 }
+    }
+
+    /**
+     * Generates and returns {@Link SimpleSQLiteQuery}
+     * for querying bookmarked jobs from DB
+     *
+     * @param sortOption    {@link SortOption} for indicating the order of the items
+     * @param filterOption  {@link FilterOption} for indicating the order of the items
+     * @return              SQLite query
+     */
+    private fun getBookmarkedJobsQuery(sortOption: SortOption, filterOption: FilterOption): SimpleSQLiteQuery {
+        val keywords = filterKeywords.getKeywordsByFilterOption(filterOption)
+        val include = keywords.include
+        val exclude = keywords.exclude
+        val columnName = SortOption.toColumnName(sortOption)
+        return SimpleSQLiteQuery("""
+            SELECT * FROM jobs
+            WHERE isBookmarked = 1
+            ${if (exclude.isNotEmpty() || include.isNotEmpty()) "AND" else ""}
+                ${exclude.mapIndexed { index, item ->
+            "tags NOT LIKE '%$item%' ${if (index < exclude.size - 1 || include.isNotEmpty()) "AND"
+            else ""}"
+        }.joinToString(" ")}
+                ${include.mapIndexed { index, item ->
+            "${if (index == 0) "(" else ""} tags LIKE '%$item%' OR position LIKE '%$item%' " +
+                    if (index < include.size - 1) "OR" else ")"
+        }.joinToString(" ")}
+            ORDER BY $columnName ${if (sortOption.name == "BY_POSTING_DATE") "DESC" else "ASC"}
+            """.trimIndent())
     }
 
     /**

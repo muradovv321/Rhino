@@ -7,6 +7,8 @@
 
 package app.ogasimli.remoter.model.models
 
+import app.ogasimli.remoter.model.models.FilterOption.*
+
 /**
  * Data class holding job filtering keywords
  *
@@ -19,8 +21,25 @@ data class FilterKeywords(
         val marketing: Keywords,
         val content: Keywords,
         val executive: Keywords,
-        val support: Keywords)
+        val support: Keywords) {
 
+    /**
+     * Returns appropriate keyword set based on FilterOption
+     *
+     * @param filterOption      {@link FilterOption} for indicating the order of the items
+     * @return                  returns appropriate {@link Keywords}
+     */
+    fun getKeywordsByFilterOption(filterOption: FilterOption): Keywords =
+            when (filterOption) {
+                ALL_LISTINGS -> all
+                TECHNICAL -> technical
+                DESIGN -> design
+                MARKETING -> marketing
+                CONTENT -> content
+                EXECUTIVE -> executive
+                SUPPORT -> support
+            }
+}
 
 
 /**
