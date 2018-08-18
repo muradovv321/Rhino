@@ -22,13 +22,35 @@ enum class FilterOption(val type: Int) {
     SUPPORT(6);
 
     companion object {
+
+        /**
+         * Get FilterOption based on int value
+         *
+         * @param type      int value of the FilterOption
+         * @return          appropriate FilterOption type
+         */
         fun getFromType(type: Int): FilterOption {
             FilterOption.values().forEach {
                 if (it.type == type) {
                     return it
                 }
             }
-            throw IllegalArgumentException("Unknown enum type: $type")
+            return FilterOption.ALL_LISTINGS
+        }
+
+        /**
+         * Get FilterOption based on name
+         *
+         * @param name      name of the FilterOption
+         * @return          appropriate FilterOption type
+         */
+        fun getFromName(name: String): FilterOption {
+            FilterOption.values().forEach {
+                if (it.name == name.replace(" ", "_").toUpperCase()) {
+                    return it
+                }
+            }
+            return FilterOption.ALL_LISTINGS
         }
     }
 }

@@ -249,7 +249,10 @@ class HomeActivity : BaseActivity() {
                 if (checkedId == -1) {
                     filterJobs(FilterOption.ALL_LISTINGS)
                 } else {
-                    filterJobs(FilterOption.getFromType(checkedId))
+                    // Get FilterOption based on the chip text instead of checkedId,
+                    // because checkedId is not resetting after configuration changes
+                    val checkedChipText = filter_chip_group.getCheckedChipsText()
+                    filterJobs(FilterOption.getFromName(checkedChipText))
                 }
             }
         }
