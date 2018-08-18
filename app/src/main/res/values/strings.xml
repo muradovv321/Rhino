@@ -36,7 +36,7 @@
     <string name="backdrop_front_header_bookmarked_jobs_zero">No Bookmarked Jobs %1$s</string>
     <plurals name="backdrop_front_header_bookmarked_jobs">
         <item quantity="one">One Bookmarked Job %2$s</item>
-        <item quantity="other">%1$d Bookmarked %2$s Jobs %2$s</item>
+        <item quantity="other">%1$d Bookmarked Jobs %2$s</item>
     </plurals>
     <string name="backdrop_front_header_search_result_jobs_zero">No Job Found %1$s</string>
     <plurals name="backdrop_front_header_search_result_jobs">
