@@ -30,12 +30,10 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll"
-            style="@style/Widget.Remoter.Toolbar.Secondary"
+            style="@style/Widget.Remoter.Toolbar.Details"
             app:navigationIcon="@drawable/ic_close"
-            android:background="#FFFFFF"
             app:contentInsetEnd="@dimen/activity_horizontal_margin"
-            app:contentInsetStartWithNavigation="0dp"
-            tools:ignore="RtlSymmetry">
+            app:contentInsetStartWithNavigation="0dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"

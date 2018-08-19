@@ -22,7 +22,7 @@
     </style>
 
     <!-- TextAppearance of Toolbar Title -->
-    <style name="TextAppearance.Remoter.Toolbar.Main" parent="TextAppearance.MaterialComponents.Button">
+    <style name="TextAppearance.Remoter.Toolbar.Home" parent="TextAppearance.MaterialComponents.Button">
         <item name="android:textColor">@color/controlElementsTextColor</item>
         <item name="fontFamily">@font/lato_bold</item>
         <item name="android:textStyle">bold</item>
