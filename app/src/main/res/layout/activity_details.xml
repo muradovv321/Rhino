@@ -31,7 +31,7 @@
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll"
             style="@style/Widget.Remoter.Toolbar.Secondary"
-            app:navigationIcon="@drawable/ic_clear"
+            app:navigationIcon="@drawable/ic_close"
             android:background="#FFFFFF"
             android:paddingEnd="@dimen/activity_horizontal_margin"
             app:contentInsetStartWithNavigation="0dp"
