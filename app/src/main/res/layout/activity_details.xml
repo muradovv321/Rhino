@@ -33,7 +33,7 @@
             style="@style/Widget.Remoter.Toolbar.Secondary"
             app:navigationIcon="@drawable/ic_close"
             android:background="#FFFFFF"
-            android:paddingEnd="@dimen/activity_horizontal_margin"
+            app:contentInsetEnd="@dimen/activity_horizontal_margin"
             app:contentInsetStartWithNavigation="0dp"
             tools:ignore="RtlSymmetry">
 
