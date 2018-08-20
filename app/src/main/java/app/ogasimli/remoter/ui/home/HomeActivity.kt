@@ -14,6 +14,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.RadioButton
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import app.ogasimli.remoter.R
@@ -26,10 +27,7 @@ import app.ogasimli.remoter.model.models.FilterOption
 import app.ogasimli.remoter.model.models.Job
 import app.ogasimli.remoter.model.models.SortOption
 import app.ogasimli.remoter.ui.base.BaseActivity
-import app.ogasimli.remoter.ui.custom.BackdropRevealListener
-import app.ogasimli.remoter.ui.custom.CustomPageChangeListener
-import app.ogasimli.remoter.ui.custom.ElasticInOutInterpolator
-import app.ogasimli.remoter.ui.custom.SortPopupWindow
+import app.ogasimli.remoter.ui.custom.*
 import app.ogasimli.remoter.ui.details.DetailsActivity
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
@@ -38,6 +36,7 @@ import kotlinx.android.synthetic.main.backdrop_front.*
 import kotlinx.android.synthetic.main.backdrop_layout.*
 import kotlinx.android.synthetic.main.sort_popup_window.view.*
 import org.jetbrains.anko.childrenSequence
+import org.jetbrains.anko.toast
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -61,6 +60,12 @@ class HomeActivity : BaseActivity() {
 
     // Listener for revealing backdrop
     private lateinit var mBackdropRevealListener: BackdropRevealListener
+
+    // SearchView element
+    private var searchView: RemoterSearchView? = null
+
+    // List of MenuItems that has visible icon, except search item
+    private lateinit var menuItems: List<MenuItem?>
 
     // Flag used to indicated whether the dynamic status check is started
     private var chipStatusChecking: Boolean = false
@@ -95,6 +100,27 @@ class HomeActivity : BaseActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         // Setup menu
         menuInflater.inflate(R.menu.home_menu, menu)
+        // Find filter MenuItem
+        val filterItem = menu?.findItem(R.id.menu_filter)
+        // Initialize BackdropRevealListener
+        mBackdropRevealListener =
+                BackdropRevealListener(
+                        this,
+                        main_content,
+                        backdrop,
+                        filterItem,
+                        ElasticInOutInterpolator(),
+                        R.drawable.ic_menu_filter,
+                        R.drawable.ic_menu_filter_close)
+
+        // Create list of MenuItems that has visible icon, except search item
+        menuItems = listOf(filterItem)
+
+        // Find search MenuItem
+        val searchItem = menu?.findItem(R.id.menu_search)
+        // Setup SearchView
+        searchView = initSearchView(searchItem, menuItems)
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -102,11 +128,59 @@ class HomeActivity : BaseActivity() {
             when (item?.itemId) {
                 R.id.menu_search -> true
                 R.id.menu_filter -> {
-                    mBackdropRevealListener.toggle(item)
+                    mBackdropRevealListener.toggle()
                     true
                 }
                 else -> super.onOptionsItemSelected(item)
             }
+
+    /**
+     * Helper function to setup and configure SearchView
+     *
+     * @param searchItem    MenuItem that should trigger search functionality
+     * @param menuItems     list of MenuItems that need to be hidden/shown during the animation
+     */
+    private fun initSearchView(searchItem: MenuItem?, menuItems: List<MenuItem?>): RemoterSearchView? {
+        // Get access to SearchView
+        val searchView = searchItem?.actionView as? RemoterSearchView
+
+        searchItem?.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                // Open SearchView
+                searchView?.open(this@HomeActivity, toolbar, menuItems)
+                // Close backdrop
+                mBackdropRevealListener.close()
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                // Cancel search results and reload full data
+                if (jobsCount.isSearching) {
+                    when (view_pager.currentItem) {
+                        0 -> viewModel.getAllJobs(true)
+                        1 -> viewModel.getBookmarkedJobs()
+                    }
+                }
+                // Close SearchView
+                searchView?.close(this@HomeActivity, toolbar, menuItems)
+                return true
+            }
+        })
+
+        // Add OnQueryTextListener to search when new search query is submitted
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                toast("Query: $newText")
+                return false
+            }
+        })
+
+        return searchView
+    }
 
     /**
      * Helper function to display {@link SortPopupWindow}
@@ -219,16 +293,6 @@ class HomeActivity : BaseActivity() {
      * chip group
      */
     private fun setupFilterGroup() {
-        // Initialize BackdropRevealListener
-        mBackdropRevealListener =
-                BackdropRevealListener(
-                        this,
-                        main_content,
-                        backdrop,
-                        ElasticInOutInterpolator(),
-                        R.drawable.ic_menu_filter,
-                        R.drawable.ic_menu_filter_close)
-
         // Get filter categories from string array
         val categories = resources.getStringArray(R.array.filter_categories)
         // Iterate over categories
@@ -305,6 +369,7 @@ class HomeActivity : BaseActivity() {
 
     private val pageChangeListener = object : CustomPageChangeListener() {
         override fun onPageSelected(position: Int) {
+            searchView?.close(this@HomeActivity, toolbar, menuItems)
             setFilterChipsStatus()
             setBackdropHeaderText()
             setSortButtonsStatus()

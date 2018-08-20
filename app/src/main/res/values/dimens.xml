@@ -15,6 +15,9 @@
     <dimen name="main_content_margin_top">16dp</dimen>
     <dimen name="view_pager_margin_top">@dimen/backdrop_front_header_height</dimen>
     <dimen name="jobs_recycler_views_padding">4dp</dimen>
+    <dimen name="action_button_min_width_overflow_material">36dp</dimen>
+    <dimen name="action_button_min_width_material">48dp</dimen>
+
 
     <!-- Dimens of BackDrop -->
     <dimen name="backdrop_margin_top">26dp</dimen>

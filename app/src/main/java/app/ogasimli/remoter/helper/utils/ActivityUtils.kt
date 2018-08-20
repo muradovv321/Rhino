@@ -7,16 +7,20 @@
 
 package app.ogasimli.remoter.helper.utils
 
+import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Handler
 import android.view.View
+import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import org.jetbrains.anko.bundleOf
+
 
 /**
  * Class holding static methods used by activities
@@ -125,4 +129,16 @@ fun Activity.launchActivity(intent: Intent, sharedElement: View? = null,
         ActivityOptionsCompat.makeSceneTransitionAnimation(this, sharedElement, sharedElementName)
     }
     startActivity(intent, options.toBundle())
+}
+
+/**
+ * Extension function to change statusbar color
+ *
+ * @param color             color of the statusbar
+ */
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+fun Activity.setStatusBarColor(@ColorInt color: Int) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        window.statusBarColor = color
+    }
 }

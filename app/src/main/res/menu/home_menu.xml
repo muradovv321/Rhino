@@ -13,7 +13,8 @@
         android:title="@string/menu_search_title"
         android:icon="@drawable/ic_menu_search"
         android:orderInCategory="100"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="app.ogasimli.remoter.ui.custom.RemoterSearchView"/>
 
     <item android:id="@+id/menu_filter"
         android:title="@string/menu_filter_title"

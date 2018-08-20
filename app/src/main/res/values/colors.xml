@@ -20,8 +20,10 @@
     <color name="backDropFrontHeaderColor">#FFFFFF</color>
     <color name="backDropFrontHeaderBottomBorderColor">@color/backDropFrontColor</color>
 
-    <!-- Color of control elements (i.e. buttons)located above colorPrimary -->
+    <!-- Color of control elements (i.e. buttons) located above colorPrimary -->
     <color name="controlElementsTextColor">#FFFFFF</color>
+    <color name="colorQuantumGrey">#EBE5E7</color>
+    <color name="colorIconLightToolbar">#757575</color>
 
     <!-- ShimmerLayout colors -->
     <color name="shimmerTextBackgroundColor">#EDB1B1B1</color>

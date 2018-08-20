@@ -13,6 +13,11 @@
     <string name="tab_jobs_title">Jobs</string>
     <string name="tab_bookmarks_title">Bookmarks</string>
 
+    <!-- Toolbar menu -->
+    <string name="menu_filter_title">Filter</string>
+    <string name="menu_search_title">Search</string>
+    <string name="menu_search_hint">Search jobs…</string>
+
     <!-- String resources for showing elapsed time since posting date -->
     <string name="posting_sec">"%ds+"</string>
     <string name="posting_min">"%dmin+"</string>
@@ -72,8 +77,6 @@
     <string name="generic_error_msg">Error occurred while fetching the data</string>
     <string name="timeout_error_msg">Network call took too long to finish</string>
     <string name="connection_error_msg">Connection error occurred while fetching the data</string>
-    <string name="menu_filter_title">Filter</string>
-    <string name="menu_search_title">Search</string>
 
     <!-- Filter & search resources -->
     <string-array name="filter_categories">

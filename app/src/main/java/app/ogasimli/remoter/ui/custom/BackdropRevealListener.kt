@@ -28,6 +28,7 @@ class BackdropRevealListener(
         private val context: Context,
         private val frontView: View,
         private val backdropView: View,
+        private val imageView: Any?,
         private val interpolator: TimeInterpolator? = null,
         @DrawableRes private val openIcon: Int? = null,
         @DrawableRes private val closeIcon: Int? = null) {
@@ -48,10 +49,8 @@ class BackdropRevealListener(
 
     /**
      * Slides front view up/down
-     *
-     * @param view      ImageView or MenuItem that received click event
      */
-    fun toggle(view: Any? = null) {
+    fun toggle() {
         backdropShown = !backdropShown
 
         // Cancel the existing animations
@@ -59,7 +58,7 @@ class BackdropRevealListener(
         animatorSet.end()
         animatorSet.cancel()
 
-        updateIcon(view)
+        updateIcon()
 
         val animator = ObjectAnimator
                 .ofFloat(frontView, "translationY", getTranslateY())
@@ -69,6 +68,20 @@ class BackdropRevealListener(
         animator.start()
 
         toggleListener()
+    }
+
+    /**
+     * Slides front view up only if it is open
+     */
+    fun close() {
+        if(backdropShown) toggle()
+    }
+
+    /**
+     * Slides front view down only if it is closed
+     */
+    fun open() {
+        if(!backdropShown) toggle()
     }
 
     /**
@@ -85,14 +98,12 @@ class BackdropRevealListener(
     /**
      * Helper function to set open/close
      * drawables/icons of the ImageView/MenuItem
-     *
-     * @param view      ImageView or MenuItem that received click event
      */
-    private fun updateIcon(view: Any?) {
-        if (view != null && openIcon != null && closeIcon != null) {
-            when (view) {
-                is ImageView -> view.setDrawable()
-                is MenuItem -> view.setIcon()
+    private fun updateIcon() {
+        if (imageView != null && openIcon != null && closeIcon != null) {
+            when (imageView) {
+                is ImageView -> imageView.setDrawable()
+                is MenuItem -> imageView.setIcon()
                 else -> throw IllegalArgumentException("updateIcon() must be called on an " +
                         "ImageView or MenuItem")
             }

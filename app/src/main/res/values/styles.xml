@@ -20,9 +20,7 @@
         <item name="textAppearanceBody2">@style/TextAppearance.Remoter.Body2</item>
         <item name="textAppearanceCaption">@style/TextAppearance.Remoter.Caption</item>
         <item name="android:popupWindowStyle">@style/Widget.Remoter.Popup.Window</item>
-        <item name="android:textAppearanceLargePopupMenu">@style/TextAppearance.Remoter.Popup.Large</item>
-        <item name="android:textAppearanceSmallPopupMenu">@style/TextAppearance.Remoter.Popup.Small</item>
-        <item name="android:actionOverflowButtonStyle">@style/Widget.Remoter.ActionOverflowButton</item>
+        <item name="searchViewStyle">@style/Widget.Remoter.SearchView</item>
     </style>
 
     <!-- Activity Themes -->
@@ -40,10 +38,11 @@
 
     <!-- Toolbar theme -->
     <style name="Widget.Remoter.Toolbar.Home" parent="Widget.MaterialComponents.Toolbar">
-        <item name="android:theme">@style/Theme.Remoter.Activity.Home</item>
+        <item name="android:theme">@style/ThemeOverlay.MaterialComponents.Light</item>
         <item name="popupTheme">@style/ThemeOverlay.MaterialComponents.Light</item>
         <item name="titleTextAppearance">@style/TextAppearance.Remoter.Toolbar.Home</item>
         <item name="titleTextColor">@color/controlElementsTextColor</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.Remoter.ActionOverflowButton</item>
     </style>
 
     <style name="TextAppearance.Remoter.Toolbar.Home" parent="TextAppearance.MaterialComponents.Button">
@@ -54,9 +53,9 @@
     </style>
 
     <style name="Widget.Remoter.Toolbar.Details" parent="Widget.MaterialComponents.Toolbar">
-        <item name="android:theme">@style/Theme.Remoter.Activity.Details</item>
+        <item name="android:theme">@style/ThemeOverlay.MaterialComponents.Light</item>
         <item name="popupTheme">@style/ThemeOverlay.MaterialComponents.Light</item>
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@android:color/white</item>
     </style>
 
     <!-- Style of menu icon (3 vertical dots) -->
@@ -64,19 +63,16 @@
         <item name="android:tint">@color/controlElementsTextColor</item>
     </style>
 
+    <!-- SearchView theme -->
+    <style name="Widget.Remoter.SearchView" parent="Widget.AppCompat.Light.SearchView">
+        <item name="queryBackground">@android:color/white</item>
+        <item name="closeIcon">@drawable/ic_close</item>
+        <item name="searchHintIcon">@null</item>
+    </style>
+
     <!-- Popup menu style -->
     <style name="Widget.Remoter.Popup.Window" parent="Widget.AppCompat.PopupWindow">
         <item name="android:popupBackground">@drawable/sort_popup_background</item>
-    </style>
-
-    <style name="TextAppearance.Remoter.Popup.Small"
-        parent="TextAppearance.AppCompat.Light.Widget.PopupMenu.Small">
-        <item name="android:fontFamily">@font/lato</item>
-    </style>
-
-    <style name="TextAppearance.Remoter.Popup.Large"
-        parent="TextAppearance.AppCompat.Light.Widget.PopupMenu.Large">
-        <item name="android:fontFamily">@font/lato</item>
     </style>
 
     <!-- TabLayout theme -->
