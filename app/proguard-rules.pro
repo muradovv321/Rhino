@@ -28,7 +28,7 @@
 }
 
 ### Keep model classes ###
-#-keep class app.ogasimli.remoter.model.models.* { *; }
+#-keep class rhinoodel.models.* { *; }
 
 ### Retrofit ###
 # Platform calls Class.forName on types which do not exist on Android to determine platform.

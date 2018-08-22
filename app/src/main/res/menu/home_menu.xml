@@ -14,7 +14,7 @@
         android:icon="@drawable/ic_menu_search"
         android:orderInCategory="100"
         app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="app.ogasimli.remoter.ui.custom.RemoterSearchView"/>
+        app:actionViewClass="app.ogasimli.rhino.ui.custom.RhinoSearchView"/>
 
     <item android:id="@+id/menu_filter"
         android:title="@string/menu_filter_title"

@@ -8,15 +8,14 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:128005929221:android:f637cbde55bd6178",
+        "mobilesdk_app_id": "1:128005929221:android:942d14f0de14cc43",
         "android_client_info": {
-          "package_name": "app.ogasimli.remoter.debug"
+          "package_name": "app.ogasimli.rhino.debug"
         }
       },
       "oauth_client": [
         {
-          "client_id":
-            "128005929221-2mu46plki7i3l0um50l9cv8iq54lklmh.apps.googleusercontent.com",
+          "client_id": "128005929221-2mu46plki7i3l0um50l9cv8iq54lklmh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

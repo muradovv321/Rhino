@@ -8,24 +8,24 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="app.ogasimli.remoter">
+    package="app.ogasimli.rhino">
 
     <!-- TODO: Fix app backup -->
     <!-- TODO: Fix app indexing -->
     <application
-        android:name=".app.RemoterApp"
+        android:name="app.ogasimli.rhino.app.RhinoApp"
         android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Remoter"
+        android:theme="@style/Theme.Rhino"
         android:allowBackup="false"
         tools:ignore="GoogleAppIndexingWarning">
 
         <!-- HomeActivity -->
         <activity
-            android:name=".ui.home.HomeActivity"
-            android:theme="@style/Theme.Remoter.Activity.Home"
+            android:name="app.ogasimli.rhino.ui.home.HomeActivity"
+            android:theme="@style/Theme.Rhino.Activity.Home"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -35,15 +35,15 @@
 
         <!-- DetailsActivity -->
         <activity
-            android:name=".ui.details.DetailsActivity"
-            android:parentActivityName=".ui.home.HomeActivity"
-            android:theme="@style/Theme.Remoter.Activity.Details"/>
+            android:name="app.ogasimli.rhino.ui.details.DetailsActivity"
+            android:parentActivityName="app.ogasimli.rhino.ui.home.HomeActivity"
+            android:theme="@style/Theme.Rhino.Activity.Details"/>
 
         <!-- FinestWebView -->
         <activity
             android:name="com.thefinestartist.finestwebview.FinestWebViewActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/Theme.Remoter.Activity.WebView"/>
+            android:theme="@style/Theme.Rhino.Activity.WebView"/>
 
         <!-- Metadata to download preloaded fonts -->
         <meta-data android:name="preloaded_fonts" android:resource="@array/preloaded_fonts"/>

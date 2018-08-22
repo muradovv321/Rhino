@@ -34,14 +34,14 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
-            style="@style/Widget.Remoter.Toolbar.Home"
+            style="@style/Widget.Rhino.Toolbar.Home"
             app:title="@string/app_name"/>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.Remoter.TabLayout"/>
+            style="@style/Widget.Rhino.TabLayout"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

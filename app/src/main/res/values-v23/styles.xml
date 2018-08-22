@@ -8,7 +8,7 @@
 
 <resources>
     <!-- Activity Themes -->
-    <style name="Theme.Remoter.Activity.Details" parent="Theme.Remoter">
+    <style name="Theme.Rhino.Activity.Details" parent="Theme.Rhino">
         <item name="colorPrimaryDark">#EBE5E7</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>

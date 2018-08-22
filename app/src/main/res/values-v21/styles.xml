@@ -8,13 +8,13 @@
 
 <resources>
     <!-- Activity Themes -->
-    <style name="Theme.Remoter.Activity.Home" parent="Theme.Remoter">
+    <style name="Theme.Rhino.Activity.Home" parent="Theme.Rhino">
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowReturnTransition">@android:transition/slide_bottom</item>
         <item name="android:windowExitTransition">@android:transition/slide_top</item>
     </style>
 
-    <style name="Theme.Remoter.Activity.Details" parent="Theme.Remoter">
+    <style name="Theme.Rhino.Activity.Details" parent="Theme.Rhino">
         <item name="colorPrimaryDark">#EBE5E7</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowEnterTransition">@android:transition/slide_top</item>
@@ -22,7 +22,7 @@
     </style>
 
     <!-- TextAppearance of Toolbar Title -->
-    <style name="TextAppearance.Remoter.Toolbar.Home" parent="TextAppearance.MaterialComponents.Button">
+    <style name="TextAppearance.Rhino.Toolbar.Home" parent="TextAppearance.MaterialComponents.Button">
         <item name="android:textColor">@color/controlElementsTextColor</item>
         <item name="fontFamily">@font/lato_bold</item>
         <item name="android:textStyle">bold</item>
@@ -32,7 +32,7 @@
     </style>
 
     <!-- Popup menu style -->
-    <style name="Widget.Remoter.Popup.Window" parent="android:Widget.PopupWindow">
+    <style name="Widget.Rhino.Popup.Window" parent="android:Widget.PopupWindow">
         <item name="android:overlapAnchor">false</item>
         <item name="android:popupElevation">30dp</item>
         <item name="android:popupBackground">@drawable/sort_popup_background</item>

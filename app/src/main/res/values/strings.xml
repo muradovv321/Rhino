@@ -6,7 +6,7 @@
   -->
 
 <resources>
-    <string name="app_name">Remoter</string>
+    <string name="app_name">Rhino</string>
     <string name="company_logo_content_description">Company Logo</string>
 
     <!-- TabLayout string resources -->
