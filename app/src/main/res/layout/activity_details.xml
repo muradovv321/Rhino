@@ -16,68 +16,67 @@
     android:background="#FFFFFF"
     tools:context=".ui.details.DetailsActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:elevation="@dimen/activity_details_appbar_elevation"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll"
-            style="@style/Widget.Remoter.Toolbar.Details"
-            app:navigationIcon="@drawable/ic_close"
-            app:contentInsetEnd="@dimen/activity_horizontal_margin"
-            app:contentInsetStartWithNavigation="0dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/toolbar_position_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@+id/toolbar_posting_date_title"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:textAppearance="?attr/textAppearanceBody2"
-                    android:textColor="?android:textColorSecondary"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    tools:text="Experienced C# Engineer"/>
-
-                <TextView
-                    android:id="@+id/toolbar_posting_date_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:textAppearance="?attr/textAppearanceBody2"
-                    android:textColor="?attr/colorAccent"
-                    tools:text="1m+"/>
-
-            </RelativeLayout>
-
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:elevation="@dimen/activity_details_appbar_elevation"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    style="@style/Widget.Remoter.Toolbar.Details"
+                    app:navigationIcon="@drawable/ic_close"
+                    android:background="#FFFFFF"
+                    app:contentInsetEnd="@dimen/activity_horizontal_margin"
+                    app:contentInsetStartWithNavigation="0dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/toolbar_position_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_toStartOf="@+id/toolbar_posting_date_title"
+                            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="?android:textColorSecondary"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            tools:text="Experienced C# Engineer"/>
+
+                        <TextView
+                            android:id="@+id/toolbar_posting_date_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="?attr/colorAccent"
+                            tools:text="1m+"/>
+
+                    </RelativeLayout>
+
+                </androidx.appcompat.widget.Toolbar>
+
+            </com.google.android.material.appbar.AppBarLayout>
 
             <ImageView
                 android:id="@+id/company_logo"
@@ -85,12 +84,12 @@
                 android:layout_height="@dimen/company_logo_height"
                 android:scaleType="centerInside"
                 android:contentDescription="@string/company_logo_content_description"
+                app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
                 tools:src="@tools:sample/avatars"/>
 
             <TextView
@@ -192,6 +191,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
