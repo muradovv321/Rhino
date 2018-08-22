@@ -35,7 +35,7 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
      * @param dbResponse    result of fetching DB
      * @return              Observable holding list of jobs retrieved from API
      */
-    private fun fetchAllJobs(dbResponse: DataResponse<List<Job>>):
+    private fun fetchAllJobs(dbResponse: DataResponse<List<Job>>? = null):
             Flowable<DataResponse<List<Job>>> =
             apiService.getJobList()
                     .map { response ->
@@ -70,11 +70,18 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
 
                         Flowable.just(response)
                     }
-                    .map { it.copy(data = dbResponse.data) }
+                    .map { response ->
+                        val jobs = if (dbResponse?.data == null) {
+                            response.data?.sortedByDescending { it.postingTime }
+                        } else {
+                            dbResponse.data
+                        }
+                        response.copy(data = jobs)
+                    }
                     .onErrorReturn {
                         Timber.e(it, "Error occurred while fetching from API.")
                         DataResponse(
-                                data = dbResponse.data,
+                                data = dbResponse?.data,
                                 source = DataSource.API,
                                 message = "Error occurred while fetching from API.",
                                 error = it)
@@ -97,16 +104,21 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
                     // Wrap list of jobs to DataResponse object
                     DataResponse(
                             data = it,
-                            showLoading = refreshData || it.isEmpty(),
+                            showLoading = refreshData,
                             source = DataSource.DB
                     )
                 }
                 .flatMap {
-                    if (it.data == null || it.data.isEmpty() || localRefreshData) {
+                    if (it.data == null || it.data.isEmpty()) {
                         localRefreshData = false
-                        Flowable.just(it).mergeWith(fetchAllJobs(it))
+                        fetchAllJobs()
                     } else {
-                        Flowable.just(it)
+                        if (localRefreshData) {
+                            localRefreshData = false
+                            Flowable.just(it).mergeWith(fetchAllJobs(it))
+                        } else {
+                            Flowable.just(it)
+                        }
                     }
                 }
                 .onErrorReturn {
