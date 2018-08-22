@@ -29,4 +29,9 @@
         layout="@layout/empty_bookmarked_jobs_layout"
         android:visibility="gone"/>
 
+    <include
+        android:id="@+id/no_search_result_view"
+        layout="@layout/empty_search_results_layout"
+        android:visibility="gone"/>
+
 </FrameLayout>

@@ -14,10 +14,10 @@ package app.ogasimli.remoter.helper.rx
  */
 open class RxEvent(val type: EventType, val message: String = "", val data: Any? = null)
 
-class JobsCountEvent(type: EventType, val count: Int, var isSearching: Boolean = false) : RxEvent(type)
+class JobsCountEvent(type: EventType, val count: Int, var query: String? = null) : RxEvent(type)
 
 class JobsCount {
     var openJobs = 0
     var bookmarkedJobs = 0
-    var isSearching = false
+    var query: String? = null
 }

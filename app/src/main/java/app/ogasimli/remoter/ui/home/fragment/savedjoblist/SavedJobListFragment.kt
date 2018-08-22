@@ -63,7 +63,7 @@ class SavedJobListFragment : BaseFragment() {
         viewModel = viewModelProvider(activity!!, viewModelFactory)
 
         // Fetch bookmarked jobs
-        viewModel.getBookmarkedJobs()
+        fetchBookmarkedJobs()
 
         // Observe jobs LiveData
         observeJobs()
@@ -81,6 +81,17 @@ class SavedJobListFragment : BaseFragment() {
     }
 
     /**
+     * Helper function to fetch bookmarked jobs
+     */
+    private fun fetchBookmarkedJobs() {
+        // Fetch only if the last operation was not search
+        if (viewModel.bookmarkedSearchQuery.value == null) {
+            // Fetch jobs
+            viewModel.getBookmarkedJobs()
+        }
+    }
+
+    /**
      * Helper function to observe jobs LiveData
      */
     private fun observeJobs() {
@@ -90,7 +101,11 @@ class SavedJobListFragment : BaseFragment() {
                 if (jobs != null && jobs.isNotEmpty()) {
                     showResultView(jobs)
                 } else {
-                    showEmptyView()
+                    if (!response.query.isNullOrBlank()) {
+                        showNoSearchResultView()
+                    } else {
+                        showEmptyView()
+                    }
                 }
 
                 showErrorView(response.error)
@@ -111,6 +126,8 @@ class SavedJobListFragment : BaseFragment() {
         jobs_recycler_view.visibility = View.VISIBLE
         // Hide empty view
         empty_view.visibility = View.GONE
+        // Hide empty search view
+        no_search_result_view.visibility = View.GONE
     }
 
     /**
@@ -120,10 +137,27 @@ class SavedJobListFragment : BaseFragment() {
         Timber.d("No jobs received")
         // Forward empty list to JobsAdapter
         jobsAdapter.jobs = emptyList()
-        // Hide RecyclerView
-        jobs_recycler_view.visibility = View.GONE
         // Show empty view
         empty_view.visibility = View.VISIBLE
+        // Hide RecyclerView
+        jobs_recycler_view.visibility = View.GONE
+        // Hide empty search view
+        no_search_result_view.visibility = View.GONE
+    }
+
+    /**
+     * Helper function to setup UI when no search result received
+     */
+    private fun showNoSearchResultView() {
+        Timber.d("No jobs received matching the search query")
+        // Forward empty list to JobsAdapter
+        jobsAdapter.jobs = emptyList()
+        // Show no search result view
+        no_search_result_view.visibility = View.VISIBLE
+        // Hide RecyclerView
+        jobs_recycler_view.visibility = View.GONE
+        // Hide empty view
+        empty_view.visibility = View.GONE
     }
 
     /**

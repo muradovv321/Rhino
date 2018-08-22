@@ -110,10 +110,13 @@ class JobListFragment : BaseFragment() {
      * Helper function to fetch jobs
      */
     private fun fetchJobs() {
-        // Show loading
-        showLoadingView()
-        // Fetch jobs
-        viewModel.getAllJobs(refreshData = true)
+        // Fetch only if the last operation was not search
+        if (viewModel.allSearchQuery.value == null) {
+            // Show loading
+            showLoadingView()
+            // Fetch jobs
+            viewModel.getAllJobs(refreshData = true)
+        }
     }
 
     /**
@@ -127,7 +130,11 @@ class JobListFragment : BaseFragment() {
                 if (jobs != null && jobs.isNotEmpty()) {
                     showResultView(jobs, response.showLoading)
                 } else {
-                    showEmptyView()
+                    if (!response.query.isNullOrBlank()) {
+                        showNoSearchResultView()
+                    } else {
+                        showEmptyView()
+                    }
                 }
 
                 showErrorView(response.error)
@@ -150,6 +157,8 @@ class JobListFragment : BaseFragment() {
         jobs_recycler_view.visibility = View.VISIBLE
         // Hide empty view
         empty_view.visibility = View.GONE
+        // Hide empty search view
+        no_search_result_view.visibility = View.GONE
     }
 
     /**
@@ -161,10 +170,29 @@ class JobListFragment : BaseFragment() {
         jobsAdapter.jobs = emptyList()
         // Hide loading
         hideLoadingView()
-        // Hide RecyclerView
-        jobs_recycler_view.visibility = View.GONE
         // Show empty view
         empty_view.visibility = View.VISIBLE
+        // Hide RecyclerView
+        jobs_recycler_view.visibility = View.GONE
+        // Hide empty search view
+        no_search_result_view.visibility = View.GONE
+    }
+
+    /**
+     * Helper function to setup UI when no search result received
+     */
+    private fun showNoSearchResultView() {
+        Timber.d("No jobs received matching the search query")
+        // Forward empty list to JobsAdapter
+        jobsAdapter.jobs = emptyList()
+        // Hide loading
+        hideLoadingView()
+        // Show no search result view
+        no_search_result_view.visibility = View.VISIBLE
+        // Hide RecyclerView
+        jobs_recycler_view.visibility = View.GONE
+        // Hide empty view
+        empty_view.visibility = View.GONE
     }
 
     /**

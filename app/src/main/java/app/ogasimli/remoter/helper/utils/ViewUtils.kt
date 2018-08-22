@@ -43,9 +43,24 @@ fun View?.rotateBy(degree: Float) {
  * @return          text of checked Chip
  */
 fun ChipGroup.getCheckedChipsText(): String {
-    val checkedChip = getChildAt(checkedChipId - 1) as? Chip
+    val checkedChip = getChildAt(findCheckedChipId() - 1) as? Chip
     return checkedChip?.text?.toString() ?: ""
 }
+
+/**
+ * Extension function to find correct value of checkedChipId
+ * within a ChipGroup. Currently ChipGroup has bug, which
+ * doesn't reset and instead increases the checkedChipId
+ * each time when new CHips are inflated into the ViewGroup.
+ *
+ * @return          order id of checked Chip starting from 1
+ */
+fun ChipGroup.findCheckedChipId(): Int =
+    if (checkedChipId > childCount) {
+        val mod = checkedChipId % childCount
+        if (mod == 0) childCount
+        else mod
+    } else checkedChipId
 
 /**
  * Extension function to make statusbar icons darker

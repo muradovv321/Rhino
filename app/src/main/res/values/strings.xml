@@ -67,9 +67,12 @@
     <string name="no_jobs_main_message">Looks like our rhino is ashamed and not able to retrieve
         the data. Try to poke him again&#8230;
     </string>
+    <string name="poke_btn_text">Poke</string>
     <string name="no_bookmarked_jobs_main_message">No bookmarked job available. Try to
         bookmark at least on job before heading up here&#8230;</string>
-    <string name="poke_btn_text">Poke</string>
+    <string name="no_search_result_main_message">Rhino is very sad, because he wasn\'t able to find
+        any position matching your search. Please help him to help you and refine your
+        search&#8230;</string>
 
     <!-- Error messages -->
     <string name="db_error_msg">Error occurred while working with database</string>

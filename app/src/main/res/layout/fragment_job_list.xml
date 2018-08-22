@@ -34,6 +34,11 @@
             layout="@layout/empty_jobs_layout"
             android:visibility="gone"/>
 
+        <include
+            android:id="@+id/no_search_result_view"
+            layout="@layout/empty_search_results_layout"
+            android:visibility="gone"/>
+
     </FrameLayout>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

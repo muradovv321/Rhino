@@ -14,6 +14,7 @@ package app.ogasimli.remoter.model.models
  */
 data class DataResponse<T>(
         val data: T? = null,
+        val query: String? = null,
         val showLoading: Boolean = false,
         val source: DataSource,
         val message: String = "",

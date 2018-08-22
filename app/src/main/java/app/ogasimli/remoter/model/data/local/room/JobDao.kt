@@ -30,13 +30,54 @@ interface JobDao {
     fun getAllJobs(query: SupportSQLiteQuery): Flowable<List<Job>>
 
     /**
-     * Get all bookmarked job items
+     * Get all bookmarked job items.
      *
      * @param query         custom {@link SimpleSQLiteQuery}
      * @return              the list of bookmarked jobs retrieved from the table
      */
     @RawQuery(observedEntities = [Job::class])
     fun getBookmarkedJobs(query: SupportSQLiteQuery): Flowable<List<Job>>
+
+    /**
+     * Retrieve all jobs that match the given query text from the table.
+     *
+     * @param sortOption    column name for SQLite's ORDER BY command
+     * @param query         query text
+     * @return              the list of jobs retrieved from the table
+     */
+    @Query("""SELECT * FROM jobs
+        WHERE position LIKE '%' || :query  || '%' OR tags LIKE '%' || :query  || '%'
+        ORDER BY
+        CASE :sortOption
+        WHEN 'postingTime' THEN postingTime
+        END DESC,
+        CASE :sortOption
+        WHEN 'position' THEN position
+        WHEN 'company' THEN company
+        END asc
+        """)
+    fun searchAllJobs(sortOption: String, query: String): Flowable<List<Job>>
+
+    /**
+     * Retrieve all bookmarked jobs that match the given query text from the table.
+     *
+     * @param sortOption    column name for SQLite's ORDER BY command
+     * @param query         query text
+     * @return              the list of bookmarked jobs retrieved from the table
+     */
+    @Query("""SELECT * FROM jobs
+        WHERE isBookmarked = 1 AND
+        (position LIKE '%' || :query  || '%' OR tags LIKE '%' || :query || '%')
+        ORDER BY
+        CASE :sortOption
+        WHEN 'postingTime' THEN postingTime
+        END DESC,
+        CASE :sortOption
+        WHEN 'position' THEN position
+        WHEN 'company' THEN company
+        END asc
+        """)
+    fun searchBookmarkedJobs(sortOption: String, query: String): Flowable<List<Job>>
 
     /**
      * Get data of a specific job from the table.

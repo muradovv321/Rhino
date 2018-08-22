@@ -61,6 +61,24 @@ class DataManager @Inject constructor(
      */
     fun updateJob(vararg job: Job) = jobRepository.updateJob(*job)
 
+    /**
+     * Retrieve all jobs that match the given query text from the table
+     *
+     * @param query         query text
+     * @return              Observable holding list of jobs that match the given query text
+     */
+    fun searchAllJobs(query: String) = jobRepository.searchAllJobs(
+            getAllSortOption(), query)
+
+    /**
+     * Retrieve bookmarked jobs that match the given query text from the table
+     *
+     * @param query         query text
+     * @return              Observable holding list of bookmarked jobs that match the given query
+     */
+    fun searchBookmarkedJobs(query: String) = jobRepository.searchBookmarkedJobs(
+            getBookmarkedSortOption(), query)
+
     /* ___________________ SharedPreferences ___________________*/
 
     /**

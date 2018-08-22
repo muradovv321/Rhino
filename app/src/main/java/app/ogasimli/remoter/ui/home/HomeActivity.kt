@@ -14,7 +14,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.RadioButton
-import androidx.appcompat.widget.SearchView
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import app.ogasimli.remoter.R
@@ -31,12 +30,14 @@ import app.ogasimli.remoter.ui.custom.*
 import app.ogasimli.remoter.ui.details.DetailsActivity
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.backdrop_front.*
 import kotlinx.android.synthetic.main.backdrop_layout.*
 import kotlinx.android.synthetic.main.sort_popup_window.view.*
 import org.jetbrains.anko.childrenSequence
-import org.jetbrains.anko.toast
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -53,6 +54,9 @@ class HomeActivity : BaseActivity() {
     @Inject
     lateinit var pagerAdapter: HomePagerAdapter
 
+    @Inject
+    lateinit var disposable: CompositeDisposable
+
     private lateinit var jobsCount: JobsCount
 
     // Tab Icons
@@ -64,8 +68,8 @@ class HomeActivity : BaseActivity() {
     // SearchView element
     private var searchView: RemoterSearchView? = null
 
-    // List of MenuItems that has visible icon, except search item
-    private lateinit var menuItems: List<MenuItem?>
+    // Search MenuItem
+    private var searchItem: MenuItem? = null
 
     // Flag used to indicated whether the dynamic status check is started
     private var chipStatusChecking: Boolean = false
@@ -97,6 +101,11 @@ class HomeActivity : BaseActivity() {
         observeJobsCount()
     }
 
+    override fun onDestroy() {
+        disposable.clear()
+        super.onDestroy()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         // Setup menu
         menuInflater.inflate(R.menu.home_menu, menu)
@@ -114,10 +123,10 @@ class HomeActivity : BaseActivity() {
                         R.drawable.ic_menu_filter_close)
 
         // Create list of MenuItems that has visible icon, except search item
-        menuItems = listOf(filterItem)
+        val menuItems = listOf(filterItem)
 
         // Find search MenuItem
-        val searchItem = menu?.findItem(R.id.menu_search)
+        searchItem = menu?.findItem(R.id.menu_search)
         // Setup SearchView
         searchView = initSearchView(searchItem, menuItems)
 
@@ -155,29 +164,43 @@ class HomeActivity : BaseActivity() {
 
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
                 // Cancel search results and reload full data
-                if (jobsCount.isSearching) {
-                    when (view_pager.currentItem) {
-                        0 -> viewModel.getAllJobs(true)
-                        1 -> viewModel.getBookmarkedJobs()
-                    }
+                if (viewModel.allSearchQuery.value != null) {
+                    viewModel.getAllJobs()
+                } else if (viewModel.bookmarkedSearchQuery.value != null) {
+                    viewModel.getBookmarkedJobs()
                 }
                 // Close SearchView
                 searchView?.close(this@HomeActivity, toolbar, menuItems)
-                return true
-            }
-        })
-
-        // Add OnQueryTextListener to search when new search query is submitted
-        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                toast("Query: $newText")
                 return false
             }
         })
+
+        // Hook into RxSearchObservable to observe new search queries
+        val queryObservable = searchView?.queryObservable
+        queryObservable?.apply {
+            disposable.add(queryObservable
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { query ->
+                        Timber.d("Query: $query")
+
+                        // Search for query
+                        if (searchItem.isActionViewExpanded) {
+                            when (view_pager.currentItem) {
+                                0 -> viewModel.searchAllJobs(query)
+                                1 -> viewModel.searchBookmarkedJobs(query)
+                            }
+                        }
+                    }
+            )
+        }
+
+        // Restore SearchView on config changes
+        searchView?.restore(when (view_pager.currentItem) {
+            0 -> viewModel.allSearchQuery.value
+            1 -> viewModel.bookmarkedSearchQuery.value
+            else -> null
+        }, searchItem)
 
         return searchView
     }
@@ -313,10 +336,8 @@ class HomeActivity : BaseActivity() {
                 if (checkedId == -1) {
                     filterJobs(FilterOption.ALL_LISTINGS)
                 } else {
-                    // Get FilterOption based on the chip text instead of checkedId,
-                    // because checkedId is not resetting after configuration changes
-                    val checkedChipText = filter_chip_group.getCheckedChipsText()
-                    filterJobs(FilterOption.getFromName(checkedChipText))
+                    // Get FilterOption based on checkedChipId,
+                    filterJobs(FilterOption.getFromType(filter_chip_group.findCheckedChipId()))
                 }
             }
         }
@@ -369,7 +390,9 @@ class HomeActivity : BaseActivity() {
 
     private val pageChangeListener = object : CustomPageChangeListener() {
         override fun onPageSelected(position: Int) {
-            searchView?.close(this@HomeActivity, toolbar, menuItems)
+            if (searchItem?.isActionViewExpanded == true) {
+                searchItem?.collapseActionView()
+            }
             setFilterChipsStatus()
             setBackdropHeaderText()
             setSortButtonsStatus()
@@ -396,23 +419,24 @@ class HomeActivity : BaseActivity() {
      */
     private fun setBackdropHeaderText() {
         val category = filter_chip_group.getCheckedChipsText()
+        val query = jobsCount.query
         header_info_text_view.text = when (view_pager.currentItem) {
-            0 -> if (jobsCount.isSearching) {
+            0 -> if (query != null) {
                 getJobsCountText(this,
                         R.plurals.backdrop_front_header_search_result_jobs,
                         R.string.backdrop_front_header_search_result_jobs_zero,
-                        jobsCount.openJobs, category)
+                        jobsCount.openJobs, query)
             } else {
                 getJobsCountText(this,
                         R.plurals.backdrop_front_header_all_jobs,
                         R.string.backdrop_front_header_all_jobs_zero,
                         jobsCount.openJobs, category)
             }
-            1 -> if (jobsCount.isSearching) {
+            1 -> if (query != null) {
                 getJobsCountText(this,
                         R.plurals.backdrop_front_header_search_result_jobs,
                         R.string.backdrop_front_header_search_result_jobs_zero,
-                        jobsCount.bookmarkedJobs, category)
+                        jobsCount.bookmarkedJobs, query)
             } else {
                 getJobsCountText(this,
                         R.plurals.backdrop_front_header_bookmarked_jobs,

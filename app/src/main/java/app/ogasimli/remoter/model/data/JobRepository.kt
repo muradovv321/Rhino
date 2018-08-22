@@ -298,4 +298,52 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
                                 message = "Error occurred while fetching from DB.",
                                 error = it)
                     }
+
+    /**
+     * Retrieve all jobs that match the given query text from the table
+     *
+     * @param sortOption    {@link SortOption} for indicating the order of the items
+     * @param query         query text
+     * @return              Observable holding list of jobs that match the given query text
+     */
+    fun searchAllJobs(sortOption: SortOption, query: String): Flowable<DataResponse<List<Job>>> {
+        return jobDao.searchAllJobs(SortOption.toColumnName(sortOption), query)
+                .map {
+                    Timber.d("Mapping items to DataResponse...")
+                    // Wrap list of jobs to DataResponse object
+                    DataResponse(data = it, query = query, source = DataSource.DB)
+                }
+                .onErrorReturn {
+                    Timber.e(it, "Error occurred while fetching from DB.")
+                    DataResponse(
+                            query = query,
+                            source = DataSource.DB,
+                            message = "Error occurred while fetching from DB.",
+                            error = it)
+                }
+    }
+
+    /**
+     * Retrieve bookmarked jobs that match the given query text from the table
+     *
+     * @param sortOption    {@link SortOption} for indicating the order of the items
+     * @param query         query text
+     * @return              Observable holding list of bookmarked jobs that match the given query
+     */
+    fun searchBookmarkedJobs(sortOption: SortOption, query: String): Flowable<DataResponse<List<Job>>> {
+        return jobDao.searchBookmarkedJobs(SortOption.toColumnName(sortOption), query)
+                .map {
+                    Timber.d("Mapping items to DataResponse...")
+                    // Wrap list of jobs to DataResponse object
+                    DataResponse(data = it, query = query, source = DataSource.DB)
+                }
+                .onErrorReturn {
+                    Timber.e(it, "Error occurred while fetching from DB.")
+                    DataResponse(
+                            query = query,
+                            source = DataSource.DB,
+                            message = "Error occurred while fetching from DB.",
+                            error = it)
+                }
+    }
 }

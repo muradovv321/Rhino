@@ -39,6 +39,10 @@ class HomeViewModel @Inject constructor(
 
     val jobsCount = MutableLiveData<JobsCount>()
 
+    var allSearchQuery = MutableLiveData<String>()
+
+    var bookmarkedSearchQuery = MutableLiveData<String>()
+
     var sortOptionAllJobs = dataManager.getAllSortOption()
 
     var sortOptionBookmarkedJobs = dataManager.getBookmarkedSortOption()
@@ -51,6 +55,7 @@ class HomeViewModel @Inject constructor(
      * Gets all jobs from DB and serves them
      */
     fun getAllJobs(refreshData: Boolean = false) {
+        allSearchQuery.value = null
         allJobsDisposable.clear()
         allJobsDisposable.add(dataManager.getAllJobs(refreshData)
                 .subscribeOn(Schedulers.io())
@@ -66,8 +71,45 @@ class HomeViewModel @Inject constructor(
      * Gets bookmarked jobs from DB and serves them
      */
     fun getBookmarkedJobs() {
+        bookmarkedSearchQuery.value = null
         bookmarkJobsDisposable.clear()
         bookmarkJobsDisposable.add(dataManager.getBookmarkedJobs()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        this::setBookmarkedJobs,
+                        Timber::e
+                )
+        )
+    }
+
+    /**
+     * Gets jobs matching the query text from DB and serves them
+     *
+     * @param query     query string
+     */
+    fun searchAllJobs(query: String) {
+        allSearchQuery.value =  query
+        allJobsDisposable.clear()
+        allJobsDisposable.add(dataManager.searchAllJobs(query)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        this::setAllJobs,
+                        Timber::e
+                )
+        )
+    }
+
+    /**
+     * Gets bookmarked jobs matching the query text from DB and serves them
+     *
+     * @param query     query string
+     */
+    fun searchBookmarkedJobs(query: String) {
+        bookmarkedSearchQuery.value =  query
+        bookmarkJobsDisposable.clear()
+        bookmarkJobsDisposable.add(dataManager.searchBookmarkedJobs(query)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -98,7 +140,12 @@ class HomeViewModel @Inject constructor(
         // Save option into SharedPreferences
         dataManager.saveAllSortOption(sortOption)
         // Reload data to apply the sorting option
-        getAllJobs(false)
+        val query = allSearchQuery.value
+        if (query == null || query.isBlank()) {
+            getAllJobs()
+        } else {
+            searchAllJobs(query)
+        }
     }
 
     /**
@@ -112,7 +159,12 @@ class HomeViewModel @Inject constructor(
         // Save option into SharedPreferences
         dataManager.saveBookmarkedSortOption(sortOption)
         // Reload data to apply the sorting option
-        getBookmarkedJobs()
+        val query = bookmarkedSearchQuery.value
+        if (query == null || query.isBlank()) {
+            getBookmarkedJobs()
+        } else {
+            searchBookmarkedJobs(query)
+        }
     }
 
     /**
@@ -162,7 +214,10 @@ class HomeViewModel @Inject constructor(
         }
         allJobs.value = newData
         // Set value of jobsCount LiveData
-        setJobsCount(JobsCountEvent(EventType.OPEN_JOBS_COUNT, newData.data?.size ?: 0))
+        setJobsCount(JobsCountEvent(EventType.OPEN_JOBS_COUNT,
+                newData.data?.size ?: 0,
+                response.query)
+        )
     }
 
     /**
@@ -184,7 +239,10 @@ class HomeViewModel @Inject constructor(
         }
         bookmarkedJobs.value = newData
         // Set value of jobsCount LiveData
-        setJobsCount(JobsCountEvent(EventType.BOOKMARKED_JOBS_COUNT, newData.data?.size ?: 0))
+        setJobsCount(JobsCountEvent(EventType.BOOKMARKED_JOBS_COUNT,
+                newData.data?.size ?: 0,
+                response.query)
+        )
     }
 
     /**
@@ -201,7 +259,7 @@ class HomeViewModel @Inject constructor(
             EventType.BOOKMARKED_JOBS_COUNT -> tempJobsCount.bookmarkedJobs = event.count
             else -> return
         }
-        tempJobsCount.isSearching = event.isSearching
+        tempJobsCount.query = event.query
         // Set value of the LiveData
         jobsCount.value = tempJobsCount
     }

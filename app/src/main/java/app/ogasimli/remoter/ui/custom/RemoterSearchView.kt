@@ -18,12 +18,14 @@ import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationSet
 import android.view.animation.TranslateAnimation
-import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import app.ogasimli.remoter.R
+import app.ogasimli.remoter.helper.rx.RxSearchObservable
 import app.ogasimli.remoter.helper.utils.*
+import io.reactivex.Observable
+import java.util.concurrent.TimeUnit
 
 /**
  * Custom SearchView
@@ -36,12 +38,18 @@ class RemoterSearchView @JvmOverloads constructor(
 
     private val revealDuration = 300L
     private val translateDuration = 270L
+    private val debounceTimeout = 300L
+
+    // Rx Observable that emits search queries into Observer
+    val queryObservable: Observable<String> = RxSearchObservable.fromView(this)
+            .debounce(debounceTimeout, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
 
     init {
         // Set query hint
         queryHint = context.getString(R.string.menu_search_hint)
         // Change font of the TextView
-        val searchText = findViewById(R.id.search_src_text) as? TextView
+        val searchText = findViewById<SearchAutoComplete>(R.id.search_src_text)
         searchText?.apply {
             typeface = ResourcesCompat.getFont(context, R.font.lato)
             setTextColor(getColor(context, R.color.textColorPrimary))
@@ -187,6 +195,20 @@ class RemoterSearchView @JvmOverloads constructor(
                 })
                 toolbar.startAnimation(animationSet)
             }
+        }
+    }
+
+    /**
+     * Helper function to restore view after config changes
+     *
+     * @param query         query string
+     * @param searchItem    MenuItem of the search
+     */
+    fun restore(query: String?, searchItem: MenuItem?) {
+        if (query != null) {
+            searchItem?.expandActionView()
+            setQuery(query, true)
+            clearFocus()
         }
     }
 }
