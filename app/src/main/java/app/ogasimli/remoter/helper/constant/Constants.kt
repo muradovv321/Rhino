@@ -62,7 +62,7 @@ object Constants {
      * Timeout limit of http requests in seconds
      */
     @JvmStatic
-    val OK_HTTP_TIMEOUT = 25L // 15 seconds
+    val OK_HTTP_TIMEOUT = 15L // 15 seconds
 
     /**
      * Folder firstName of OkHttp cache
@@ -86,5 +86,5 @@ object Constants {
      * Base URL for fetching coin data
      */
     @JvmStatic
-    val API_BASE_URL = "https://remote-job.herokuapp.com/v1/"
+    val API_BASE_URL = "https://rhino-app.herokuapp.com/v1/"
 }
