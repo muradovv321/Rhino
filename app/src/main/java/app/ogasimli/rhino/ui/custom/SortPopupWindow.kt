@@ -13,6 +13,7 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup.LayoutParams
 import android.widget.PopupWindow
 import app.ogasimli.rhino.R
 import app.ogasimli.rhino.helper.utils.getDrawable
@@ -31,6 +32,8 @@ class SortPopupWindow @JvmOverloads constructor(
 
     init {
         contentView = root
+        width = LayoutParams.WRAP_CONTENT
+        height = LayoutParams.WRAP_CONTENT
         isOutsideTouchable = true
         isFocusable = true
         // The below parameters were also set via the style
