@@ -90,7 +90,7 @@
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
-                tools:src="@tools:sample/avatars"/>
+                tools:srcCompat="@tools:sample/avatars"/>
 
             <TextView
                 android:id="@+id/company_name"

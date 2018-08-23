@@ -30,7 +30,7 @@
             android:id="@+id/company_logo"
             android:layout_width="@dimen/company_logo_width"
             android:layout_height="@dimen/company_logo_height"
-            tools:src="@tools:sample/avatars"
+            tools:srcCompat="@tools:sample/avatars"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/job_item_card_horizontal_margin_from_borders"
             app:layout_constraintTop_toTopOf="parent"

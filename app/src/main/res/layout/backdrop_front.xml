@@ -39,7 +39,7 @@
             android:layout_height="@dimen/sort_btn_width"
             android:background="?selectableItemBackgroundBorderless"
             app:srcCompat="@drawable/ic_sort"
-            android:tint="@color/sort_btn_color_state_list"
+            app:tint="@color/sort_btn_color_state_list"
             android:scaleType="center"
             android:enabled="false"
             android:contentDescription="@string/sort_btn_content_description"

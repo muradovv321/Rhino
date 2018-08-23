@@ -9,6 +9,7 @@ package app.ogasimli.rhino.app
 
 import android.app.Activity
 import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDexApplication
 import app.ogasimli.rhino.BuildConfig
 import app.ogasimli.rhino.di.component.AppComponent
@@ -58,6 +59,9 @@ class RhinoApp : MultiDexApplication(), HasActivityInjector {
 
         //Initialize LeakCanary
         initLeakCanary()
+
+        // Enable vector drawables
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
     }
 
     /**
