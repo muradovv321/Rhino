@@ -15,7 +15,7 @@
     </style>
 
     <style name="Theme.Rhino.Activity.Details" parent="Theme.Rhino">
-        <item name="colorPrimaryDark">#EBE5E7</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowEnterTransition">@android:transition/slide_top</item>
         <item name="android:windowReturnTransition">@android:transition/slide_bottom</item>

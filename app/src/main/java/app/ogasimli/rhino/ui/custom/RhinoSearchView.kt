@@ -91,10 +91,12 @@ class RhinoSearchView @JvmOverloads constructor(
                     override fun onAnimationStart(animation: Animator?) {
                         // Set background color of toolbar to white
                         toolbar.background = getDrawable(context, R.drawable.toolbar_search_background)
-                        // Set background color of statusbar to grey
-                        activity.setStatusBarColor(getColor(context, R.color.colorQuantumGrey))
-                        // Make statusbar icons darker
-                        toolbar.setLightStatusBar()
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            // Set background color of statusbar to grey
+                            activity.setStatusBarColor(getColor(context, R.color.colorQuantumGrey))
+                            // Make statusbar icons darker
+                            toolbar.setLightStatusBar()
+                        }
                     }
 
                     override fun onAnimationEnd(animation: Animator?) {
@@ -160,10 +162,12 @@ class RhinoSearchView @JvmOverloads constructor(
                     override fun onAnimationEnd(animation: Animator) {
                         // Restore background color of toolbar
                         toolbar.setBackgroundColor(context.getThemeColor(R.attr.colorPrimary))
-                        // Make statusbar icons lighter
-                        toolbar.clearLightStatusBar()
-                        // Restore background color of statusbar
-                        activity.setStatusBarColor(context.getThemeColor(R.attr.colorPrimaryDark))
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            // Make statusbar icons lighter
+                            toolbar.clearLightStatusBar()
+                            // Restore background color of statusbar
+                            activity.setStatusBarColor(context.getThemeColor(R.attr.colorPrimaryDark))
+                        }
                         // Make menu items visible
                         menuItems.filterNotNull().forEach { it.isVisible = true }
                         // Invalidate menu
