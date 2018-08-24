@@ -7,8 +7,10 @@
 
 package app.ogasimli.rhino.ui.details
 
+import android.os.Build
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
+import android.transition.TransitionInflater
 import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
@@ -22,6 +24,7 @@ import app.ogasimli.rhino.helper.utils.viewModelProvider
 import app.ogasimli.rhino.model.models.DataResponse
 import app.ogasimli.rhino.model.models.Job
 import app.ogasimli.rhino.ui.base.BaseActivity
+import app.ogasimli.rhino.ui.custom.ElasticDragDismissFrameLayout
 import com.google.android.material.snackbar.Snackbar
 import com.thefinestartist.finestwebview.FinestWebView
 import kotlinx.android.synthetic.main.activity_details.*
@@ -30,13 +33,39 @@ import timber.log.Timber
 import java.io.IOException
 import java.net.SocketTimeoutException
 
-
 /**
 Job details screen activity
  *
  * @author Orkhan Gasimli on 02.08.2018.
  */
 class DetailsActivity : BaseActivity() {
+
+    private val dragListener by lazy {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            object : ElasticDragDismissFrameLayout.SystemChromeFader(this) {
+                override fun onDragDismissed() {
+                    // if we drag dismiss upward
+                    if (draggable_frame.translationY < 0) {
+                        // the reversal of the enter transition would slide content downwards
+                        // which looks weird. So reverse it.
+                        window.returnTransition = TransitionInflater.from(this@DetailsActivity)
+                                .inflateTransition(android.R.transition.slide_top)
+                        // the reversal of the shared element transition would looks weird if the
+                        // shared element no more visible. So we need to disable it.
+                        window.sharedElementReturnTransition = null
+                        ViewCompat.setTransitionName(company_logo, null)
+                    }
+                    super.onDragDismissed()
+                }
+            }
+        } else {
+            object : ElasticDragDismissFrameLayout.ElasticDragDismissCallback() {
+                override fun onDragDismissed() {
+                    supportFinishAfterTransition()
+                }
+            }
+        }
+    }
 
     private lateinit var viewModel: DetailsViewModel
 
@@ -75,6 +104,16 @@ class DetailsActivity : BaseActivity() {
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.putParcelable(JOB_ITEM_BUNDLE_KEY, job)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        draggable_frame.addListener(dragListener)
+    }
+
+    override fun onPause() {
+        draggable_frame.removeListener(dragListener)
+        super.onPause()
     }
 
     /**

@@ -37,3 +37,14 @@ fun Context.getThemeColor(@ColorRes id: Int): Int {
     a.recycle()
     return result
 }
+
+/**
+ * Determine if the navigation bar will be on the bottom of the screen, based on logic in
+ * PhoneWindowManager.
+ */
+fun Context.isNavBarOnBottom(): Boolean {
+    val cfg = resources.configuration
+    val dm = resources.displayMetrics
+    val canMove = dm.widthPixels != dm.heightPixels && cfg.smallestScreenWidthDp < 600
+    return !canMove || dm.widthPixels < dm.heightPixels
+}

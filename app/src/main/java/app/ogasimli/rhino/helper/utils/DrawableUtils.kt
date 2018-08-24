@@ -58,16 +58,6 @@ fun getColoredDrawable(context: Context?, @DrawableRes drawableResId: Int, @Colo
 }
 
 /**
- * Helper method to get color resource
- *
- * @param context       the context
- * @param colorResId    resource id of color
- * @return              return the color
- */
-fun getColor(context: Context, @ColorRes colorResId: Int) =
-        ResourcesCompat.getColor(context.resources, colorResId, context.theme)
-
-/**
  * Helper method to set color to drawable
  *
  * @param context       the context

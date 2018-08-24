@@ -8,8 +8,10 @@
 
 <resources>
     <!-- Activity Themes -->
-    <style name="Theme.Rhino.Activity.Details" parent="Theme.Rhino">
+    <style name="Theme.Rhino.Activity.Details" parent="Theme.Rhino.Translucent">
         <item name="colorPrimaryDark">#EBE5E7</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowEnterTransition">@android:transition/slide_bottom</item>
     </style>
 </resources>

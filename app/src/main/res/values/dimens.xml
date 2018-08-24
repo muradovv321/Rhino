@@ -18,7 +18,6 @@
     <dimen name="action_button_min_width_overflow_material">36dp</dimen>
     <dimen name="action_button_min_width_material">48dp</dimen>
 
-
     <!-- Dimens of BackDrop -->
     <dimen name="backdrop_margin_top">26dp</dimen>
     <dimen name="filter_chip_group_padding">8dp</dimen>
@@ -58,6 +57,7 @@
     <dimen name="details_activity_small_vertical_margin">8dp</dimen>
     <dimen name="apply_btn_height">54dp</dimen>
     <dimen name="apply_btn_vertical_margin">14dp</dimen>
+    <dimen name="details_activity_drag_dismiss_distance">200dp</dimen>
 
     <!-- Dimens of ShimmerLayout items -->
     <dimen name="shimmer_text_height">16dp</dimen>

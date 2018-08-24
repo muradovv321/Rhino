@@ -33,6 +33,10 @@
     <color name="btnBackEnabledColor">@color/colorPrimary</color>
     <color name="btnBackDisabledColor">#b1acae</color>
 
+    <!-- Background scrim of draggable activity -->
+    <color name="detailsActivityBackground">#FFFFFF</color>
+    <color name="draggableWindowBackgroundColor">#50878686</color>
+
     <!-- SwipeRefreshLayout color resource array -->
     <array name="swipeRefreshColorArray">
         <item>@color/colorPrimary</item>
