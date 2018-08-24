@@ -28,6 +28,8 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/backdrop_front_header_height"
             android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@id/sort_btn"
             android:singleLine="true"
             android:ellipsize="end"
             android:textAppearance="?attr/textAppearanceCaption"
@@ -44,8 +46,7 @@
             android:enabled="false"
             android:contentDescription="@string/sort_btn_content_description"
             android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignEnd="@+id/header_info_text_view"/>
+            android:layout_alignParentEnd="true"/>
 
     </RelativeLayout>
 
