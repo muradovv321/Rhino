@@ -28,7 +28,7 @@ interface JobsApiService {
      * @return              Observable holding the job list retrieved from API
      */
     @GET("jobs")
-    fun getJobList(@Query("from") from: String = "workaline"): Flowable<Response<List<Job>>>
+    fun getJobList(@Query("from") from: String): Flowable<Response<List<Job>>>
 
     /**
      * Request the additional job info
@@ -38,6 +38,6 @@ interface JobsApiService {
      * @return              Observable holding the additional job info retrieved from API
      */
     @GET("job")
-    fun getJobInfo(@Query("id") id: String, @Query("from") from: String = "workaline"):
+    fun getJobInfo(@Query("id") id: String, @Query("from") from: String):
             Flowable<Response<JobInfo>>
 }

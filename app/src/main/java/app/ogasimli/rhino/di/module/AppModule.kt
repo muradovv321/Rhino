@@ -23,7 +23,10 @@ import io.reactivex.disposables.CompositeDisposable
  *
  * @author Orkhan Gasimli on 16.07.2018.
  */
-@Module(includes = [NetworkServiceModule::class, RoomModule::class])
+@Module(includes = [
+    NetworkServiceModule::class,
+    RoomModule::class,
+    FirebaseModule::class])
 class AppModule {
 
     /**

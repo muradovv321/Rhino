@@ -9,9 +9,11 @@ package app.ogasimli.rhino.model.data
 
 import androidx.sqlite.db.SimpleSQLiteQuery
 import app.ogasimli.rhino.di.scope.ApplicationScope
+import app.ogasimli.rhino.helper.constant.Constants.DATA_SOURCE_KEY
 import app.ogasimli.rhino.model.data.local.room.JobDao
 import app.ogasimli.rhino.model.data.remote.api.JobsApiService
 import app.ogasimli.rhino.model.models.*
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -27,7 +29,8 @@ import javax.inject.Inject
 @ApplicationScope
 class JobRepository @Inject constructor(private val apiService: JobsApiService,
                                         private val jobDao: JobDao,
-                                        private val filterKeywords: FilterKeywords) {
+                                        private val filterKeywords: FilterKeywords,
+                                        private val firebaseRemoteConfig: FirebaseRemoteConfig) {
 
     /**
      * Request list of jobs from API
@@ -36,56 +39,58 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
      * @return              Observable holding list of jobs retrieved from API
      */
     private fun fetchAllJobs(dbResponse: DataResponse<List<Job>>? = null):
-            Flowable<DataResponse<List<Job>>> =
-            apiService.getJobList()
-                    .map { response ->
-                        // If network error occurred then throw HttpException
-                        // This will forward the emission directly to onErrorReturn method
-                        if (response.errorBody() != null) {
-                            throw HttpException(response)
-                        }
-
-                        Timber.d("Mapping items to DataResponse...")
-
-                        // Distinguish between cache response and network response
-                        val source = if (response.raw().networkResponse() != null) {
-                            DataSource.API
-                        } else {
-                            DataSource.CACHE
-                        }
-
-                        // Get job list from response body
-                        val jobs = response.body()!!
-
-                        // Map items to DataResponse
-                        DataResponse(data = jobs, source = source)
+            Flowable<DataResponse<List<Job>>> {
+        val dataSource = firebaseRemoteConfig.getString(DATA_SOURCE_KEY)
+         return apiService.getJobList(dataSource)
+                .map { response ->
+                    // If network error occurred then throw HttpException
+                    // This will forward the emission directly to onErrorReturn method
+                    if (response.errorBody() != null) {
+                        throw HttpException(response)
                     }
-                    .flatMap { response ->
-                        val jobs = response.data
-                        // If response result is not null or empty, then insert results to DB
-                        if (response.source == DataSource.API && jobs != null && jobs.isNotEmpty()) {
-                            jobDao.insertJob(*(jobs.toTypedArray()))
-                            jobDao.deleteOldJobs(jobs.map { it.id })
-                        }
 
-                        Flowable.just(response)
+                    Timber.d("Mapping items to DataResponse...")
+
+                    // Distinguish between cache response and network response
+                    val source = if (response.raw().networkResponse() != null) {
+                        DataSource.API
+                    } else {
+                        DataSource.CACHE
                     }
-                    .map { response ->
-                        val jobs = if (dbResponse?.data == null) {
-                            response.data?.sortedByDescending { it.postingTime }
-                        } else {
-                            dbResponse.data
-                        }
-                        response.copy(data = jobs)
+
+                    // Get job list from response body
+                    val jobs = response.body()!!
+
+                    // Map items to DataResponse
+                    DataResponse(data = jobs, source = source)
+                }
+                .flatMap { response ->
+                    val jobs = response.data
+                    // If response result is not null or empty, then insert results to DB
+                    if (response.source == DataSource.API && jobs != null && jobs.isNotEmpty()) {
+                        jobDao.insertJob(*(jobs.toTypedArray()))
+                        jobDao.deleteOldJobs(jobs.map { it.id })
                     }
-                    .onErrorReturn {
-                        Timber.e(it, "Error occurred while fetching from API.")
-                        DataResponse(
-                                data = dbResponse?.data,
-                                source = DataSource.API,
-                                message = "Error occurred while fetching from API.",
-                                error = it)
+
+                    Flowable.just(response)
+                }
+                .map { response ->
+                    val jobs = if (dbResponse?.data == null) {
+                        response.data?.sortedByDescending { it.postingTime }
+                    } else {
+                        dbResponse.data
                     }
+                    response.copy(data = jobs)
+                }
+                .onErrorReturn {
+                    Timber.e(it, "Error occurred while fetching from API.")
+                    DataResponse(
+                            data = dbResponse?.data,
+                            source = DataSource.API,
+                            message = "Error occurred while fetching from API.",
+                            error = it)
+                }
+    }
 
     /**
      * Request list of jobs from DB
@@ -231,52 +236,54 @@ class JobRepository @Inject constructor(private val apiService: JobsApiService,
      * @param job           job item
      * @return              Observable holding additional job info from API
      */
-    private fun fetchJobInfo(job: Job): Flowable<DataResponse<Job>> =
-            apiService.getJobInfo(job.id)
-                    .map { response ->
-                        // If network error occurred then throw HttpException
-                        // This will forward the emission directly to onErrorReturn method
-                        if (response.errorBody() != null) {
-                            throw HttpException(response)
-                        }
-
-                        Timber.d("Mapping item to DataResponse...")
-
-                        // Distinguish between cache response and network response
-                        val source = if (response.raw().networkResponse() != null) {
-                            DataSource.API
-                        } else {
-                            DataSource.CACHE
-                        }
-
-                        // Get job info from response body
-                        val newJob = job.copy(additionalInfo = response.body()!!)
-
-                        DataResponse(data = newJob, source = source)
+    private fun fetchJobInfo(job: Job): Flowable<DataResponse<Job>> {
+        val dataSource = firebaseRemoteConfig.getString(DATA_SOURCE_KEY)
+        return apiService.getJobInfo(job.id, dataSource)
+                .map { response ->
+                    // If network error occurred then throw HttpException
+                    // This will forward the emission directly to onErrorReturn method
+                    if (response.errorBody() != null) {
+                        throw HttpException(response)
                     }
-                    .flatMap { response ->
-                        Timber.d("Saving new job from API to DB: $response")
-                        // If response is not null, then insert results to DB
-                        if (response.data != null) {
-                            updateJob(response.data).subscribe(
-                                    {
-                                        Timber.d("Updated ${it.size} jobs in DB...")
-                                    },
-                                    {
-                                        Timber.e(it)
-                                    }
-                            )
-                        }
-                        val newResponse = response.copy(data = null)
-                        Flowable.just(newResponse)
+
+                    Timber.d("Mapping item to DataResponse...")
+
+                    // Distinguish between cache response and network response
+                    val source = if (response.raw().networkResponse() != null) {
+                        DataSource.API
+                    } else {
+                        DataSource.CACHE
                     }
-                    .onErrorReturn {
-                        Timber.e(it, "Error occurred while fetching from API.")
-                        DataResponse(
-                                source = DataSource.API,
-                                message = "Error occurred while fetching from API.",
-                                error = it)
+
+                    // Get job info from response body
+                    val newJob = job.copy(additionalInfo = response.body()!!)
+
+                    DataResponse(data = newJob, source = source)
+                }
+                .flatMap { response ->
+                    Timber.d("Saving new job from API to DB: $response")
+                    // If response is not null, then insert results to DB
+                    if (response.data != null) {
+                        updateJob(response.data).subscribe(
+                                {
+                                    Timber.d("Updated ${it.size} jobs in DB...")
+                                },
+                                {
+                                    Timber.e(it)
+                                }
+                        )
                     }
+                    val newResponse = response.copy(data = null)
+                    Flowable.just(newResponse)
+                }
+                .onErrorReturn {
+                    Timber.e(it, "Error occurred while fetching from API.")
+                    DataResponse(
+                            source = DataSource.API,
+                            message = "Error occurred while fetching from API.",
+                            error = it)
+                }
+    }
 
     /**
      * Request job's additional info by id from DB

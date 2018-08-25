@@ -10,13 +10,20 @@ package app.ogasimli.rhino.model.data
 import app.ogasimli.rhino.di.scope.ApplicationScope
 import app.ogasimli.rhino.helper.constant.Constants.FILTER_OPTION_ALL_KEY
 import app.ogasimli.rhino.helper.constant.Constants.FILTER_OPTION_BOOKMARKED_KEY
+import app.ogasimli.rhino.helper.constant.Constants.FIREBASE_REMOTE_CACHE_EXPIRATION
 import app.ogasimli.rhino.helper.constant.Constants.SORT_OPTION_ALL_KEY
 import app.ogasimli.rhino.helper.constant.Constants.SORT_OPTION_BOOKMARKED_KEY
+import app.ogasimli.rhino.helper.rx.EventType
+import app.ogasimli.rhino.helper.rx.RxBus
+import app.ogasimli.rhino.helper.rx.RxEvent
 import app.ogasimli.rhino.model.data.local.PreferencesHelper
 import app.ogasimli.rhino.model.models.FilterOption
 import app.ogasimli.rhino.model.models.Job
 import app.ogasimli.rhino.model.models.SortOption
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import timber.log.Timber
 import javax.inject.Inject
+
 
 /**
  * Single access point to saving/retrieve data from SharedPreferences, API & DB
@@ -26,7 +33,8 @@ import javax.inject.Inject
 @ApplicationScope
 class DataManager @Inject constructor(
         private val jobRepository: JobRepository,
-        private val prefsHelper: PreferencesHelper) {
+        private val prefsHelper: PreferencesHelper,
+        private val firebaseRemoteConfig: FirebaseRemoteConfig) {
 
     /* ___________________ Jobs Table ___________________*/
 
@@ -78,6 +86,27 @@ class DataManager @Inject constructor(
      */
     fun searchBookmarkedJobs(query: String) = jobRepository.searchBookmarkedJobs(
             getBookmarkedSortOption(), query)
+
+    /* ___________________ Firebase Remote Config ___________________*/
+
+    /**
+     * Retrieve remote configs from Firebase
+     */
+    fun fetchRemoteConfigs() {
+        firebaseRemoteConfig.fetch(FIREBASE_REMOTE_CACHE_EXPIRATION)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Timber.i("Remote configs fetched successfully.")
+                        // After config data is successfully fetched, it must be
+                        // activated before newly fetched values are returned.
+                        firebaseRemoteConfig.activateFetched()
+                    } else {
+                        Timber.e("Failed to fetch remote configs.")
+                    }
+                    // Notify any interested parties about the completion
+                    RxBus.publish(RxEvent(EventType.REMOTE_CONFIG_FETCH_COMPLETE))
+                }
+    }
 
     /* ___________________ SharedPreferences ___________________*/
 

@@ -16,6 +16,7 @@ import app.ogasimli.rhino.di.component.AppComponent
 import app.ogasimli.rhino.di.component.DaggerAppComponent
 import app.ogasimli.rhino.helper.timber.DebugLogTree
 import app.ogasimli.rhino.helper.timber.ReleaseLogTree
+import app.ogasimli.rhino.model.data.DataManager
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 import dagger.android.AndroidInjector
@@ -33,6 +34,9 @@ class RhinoApp : MultiDexApplication(), HasActivityInjector {
 
     @Inject
     lateinit var activityInjector: DispatchingAndroidInjector<Activity>
+
+    @Inject
+    lateinit var dataManager: DataManager
 
     private lateinit var refWatcher: RefWatcher
 
@@ -62,6 +66,10 @@ class RhinoApp : MultiDexApplication(), HasActivityInjector {
 
         // Enable vector drawables
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
+
+        // TODO: Move this into intro screen
+        // Fetch and update remote configs
+        dataManager.fetchRemoteConfigs()
     }
 
     /**

@@ -83,6 +83,19 @@ object Constants {
     val OK_HTTP_MAX_AGE = 10
 
     /**
+     * Cache expiration time for
+     * Firebase Remote Config in seconds
+     */
+    @JvmStatic
+    val FIREBASE_REMOTE_CACHE_EXPIRATION = if(BuildConfig.DEBUG) 0 else 6 * 3600L
+
+    /**
+     * Remote config key for fetching 'from' query parameter
+     */
+    @JvmStatic
+    val DATA_SOURCE_KEY = "data_source"
+
+    /**
      * Base URL for fetching coin data
      */
     @JvmStatic
