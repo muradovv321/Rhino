@@ -28,7 +28,10 @@
 }
 
 ### Keep model classes ###
-#-keep class rhinoodel.models.* { *; }
+-keep class app.ogasimli.rhino.model.models.* { *; }
+
+### Keep AndroidX CoreComponentFactory classes ###
+-keep class androidx.core.app.CoreComponentFactory { *; }
 
 ### Retrofit ###
 # Platform calls Class.forName on types which do not exist on Android to determine platform.

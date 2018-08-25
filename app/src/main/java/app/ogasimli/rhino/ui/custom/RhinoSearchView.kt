@@ -18,6 +18,7 @@ import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationSet
 import android.view.animation.TranslateAnimation
+import androidx.annotation.Keep
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
@@ -32,6 +33,7 @@ import java.util.concurrent.TimeUnit
  *
  * @author Orkhan Gasimli on 20.08.2018.
  */
+@Keep
 class RhinoSearchView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null) : SearchView(context, attrs) {
