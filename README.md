@@ -1,4 +1,6 @@
-<p align="center"><img src="./misc/images/logo/256px_w.png" alt="app logo" height="200px" align="center"></p>
+<p align="center">
+  <img src="https://github.com/muradovv321/Rhino/blob/master/logo/rhino.svg" height="30%" width="40%">
+</p>
 
 # Rhino - Remote Jobs
 
